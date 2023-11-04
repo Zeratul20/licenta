@@ -2,7 +2,9 @@ import { engine, producers, pathFn } from "@c11/engine.runtime";
 import { render } from "@c11/engine.react";
 import { App } from "./App";
 
-const state: State = {};
+const state: State = {
+  userId: 1,
+};
 
 export const createApp = () => {
   const app = engine({
