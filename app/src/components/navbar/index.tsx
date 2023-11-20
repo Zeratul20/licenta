@@ -47,6 +47,18 @@ export const NavBar: view = ({
       case "Home":
         navigate("/");
         break;
+      case "General":
+        navigate("/general");
+        break;
+      case "Orar":
+        navigate("/orar");
+        break;
+      case "Catalog":
+        navigate("/catalog");
+        break;
+      case "Teme":
+        navigate("/teme");
+        break;
       default:
         navigate("/");
         break;
@@ -74,7 +86,12 @@ export const NavBar: view = ({
   };
 
   return (
-    <AppBar position="static" style={{ background: "linear-gradient(to right, purple, indigo, purple)" }}>
+    <AppBar
+      position="static"
+      style={{
+        background: "linear-gradient(to bottom right, blue, #8AAAE5, blue)",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -121,7 +138,13 @@ export const NavBar: view = ({
                 key={page}
                 onClick={() => handleCloseNavMenu(page)}
                 sx={{ my: 2, color: "white", display: "block" }}
-                style={{paddingLeft: "2rem", fontSize: "1rem", fontFamily: "ibarra-regular", fontWeight: "bold", textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)"}}
+                style={{
+                  paddingLeft: "2rem",
+                  fontSize: "1rem",
+                  fontFamily: "ibarra-regular",
+                  fontWeight: "bold",
+                  textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                }}
               >
                 {page}
               </Button>
