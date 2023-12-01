@@ -26,5 +26,5 @@ dist
 .history
 /.gtm/
 .infra
-app-structure.json
+.app-structure.json
 

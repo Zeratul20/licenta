@@ -22,5 +22,13 @@ app.use(function (req, res, next) {
 });
 
 app.use("/api", require("./users"));
+app.use("/api", require("./classes"));
+app.use("/api", require("./requests"));
+app.use("/api", require("./absences"));
+app.use("/api", require("./subjects"));
+app.use("/api", require("./schedules"));
+app.use("/api", require("./teachers"));
+app.use("/api", require("./students"));
+app.use("/api", require("./parents"));
 
 module.exports = app;

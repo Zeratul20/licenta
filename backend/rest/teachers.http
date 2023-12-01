@@ -1,0 +1,26 @@
+@api = http://localhost:5000/api
+
+### POST
+POST {{api}}/teachers
+Content-Type: application/json
+
+{
+    "email": "radu.dumitrescu@gmail.com",
+    "subjectName": "Matematica",
+    "classes": ["5B", "7B", "10A", "10D", "11E", "6A", "6B"]
+}
+
+### PUT
+PUT {{api}}/users/705068c4-1276-4aa7-8173-a7ffdc85fece
+Content-Type: application/json
+
+{
+    "cnp": "1234569871234"
+}
+
+### GET
+GET {{api}}/teachers
+
+### GET teacher by email
+GET {{api}}/users/3
+

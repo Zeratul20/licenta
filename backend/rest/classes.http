@@ -1,0 +1,17 @@
+@api = http://localhost:5000/api
+
+### POST
+POST {{api}}/classes
+Content-Type: application/json
+
+{
+    "name": "10A",
+    "professorEmail": "radu.dumitrescu@gmail.com"
+}
+
+### GET
+GET {{api}}/classes
+
+### GET user by id
+GET {{api}}/users/3
+

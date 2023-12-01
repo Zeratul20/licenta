@@ -1,0 +1,41 @@
+@api = http://localhost:5000/api
+
+### POST
+POST {{api}}/users/login/vlad
+Content-Type: application/json
+
+{
+    "password": "123456"
+}
+
+### POST
+POST {{api}}/users/signUp
+Content-Type: application/json
+
+{
+    "firstName": "Ionescu",
+    "lastName": "Dragos",
+    "cnp": "1890101123456",
+    "email": "dragos.ionescu@gmail.com",
+    "password": "DragosIonescu(12)",
+    "phoneNumber": "0732345678"
+}
+
+### POST Population
+POST {{api}}/users/population
+Content-Type: application/json
+
+### PUT
+PUT {{api}}/users/radu.dumitrescu@gmail.com
+Content-Type: application/json
+
+{
+    "role": "teacher"
+}
+
+### GET
+GET {{api}}/users
+
+### GET user by email
+GET {{api}}/users/dragos.ionescu@gmail.com
+

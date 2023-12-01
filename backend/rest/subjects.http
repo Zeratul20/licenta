@@ -1,0 +1,32 @@
+@api = http://localhost:5000/api
+
+### POST
+POST {{api}}/users/login/vlad
+Content-Type: application/json
+
+{
+    "password": "123456"
+}
+
+### POST
+POST {{api}}/subjects
+Content-Type: application/json
+
+{
+    "name": "Chimie"
+}
+
+### PUT
+PUT {{api}}/users/705068c4-1276-4aa7-8173-a7ffdc85fece
+Content-Type: application/json
+
+{
+    "cnp": "1234569871234"
+}
+
+### GET
+GET {{api}}/subjects
+
+### GET user by id
+GET {{api}}/users/3
+

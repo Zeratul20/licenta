@@ -1,6 +1,6 @@
 {
  "/home/vlad/facultate/licenta/app/src/views/home/index.tsx": {
-  "palUhmdXwvPiSVn": {
+  "jAmKCVFJtWkepEv": {
    "type": "view",
    "meta": {
     "name": "Home",
@@ -19,14 +19,14 @@
     "relativeFilePath": "src/views/home/index.tsx"
    },
    "sourceId": "/home/vlad/facultate/licenta/app/src/views/home/index.tsx:Home",
-   "buildId": "palUhmdXwvPiSVn",
+   "buildId": "jAmKCVFJtWkepEv",
    "params": {
     "type": "PASSTHROUGH"
    }
   }
  },
  "/home/vlad/facultate/licenta/app/src/components/navbar/index.tsx": {
-  "XrApmpzAmEFNhzi": {
+  "ulaAEhqm_QloUCL": {
    "type": "view",
    "meta": {
     "name": "NavBar",
@@ -45,7 +45,7 @@
     "relativeFilePath": "src/components/navbar/index.tsx"
    },
    "sourceId": "/home/vlad/facultate/licenta/app/src/components/navbar/index.tsx:NavBar",
-   "buildId": "XrApmpzAmEFNhzi",
+   "buildId": "ulaAEhqm_QloUCL",
    "params": {
     "type": "STRUCT",
     "value": {
@@ -71,34 +71,8 @@
    }
   }
  },
- "/home/vlad/facultate/licenta/app/src/views/general/index.tsx": {
-  "FnkhsMncflNbwmN": {
-   "type": "view",
-   "meta": {
-    "name": "General",
-    "location": {
-     "start": {
-      "line": 3,
-      "column": 13
-     },
-     "end": {
-      "line": 7,
-      "column": 1
-     }
-    },
-    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/views/general/index.tsx",
-    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
-    "relativeFilePath": "src/views/general/index.tsx"
-   },
-   "sourceId": "/home/vlad/facultate/licenta/app/src/views/general/index.tsx:General",
-   "buildId": "FnkhsMncflNbwmN",
-   "params": {
-    "type": "PASSTHROUGH"
-   }
-  }
- },
  "/home/vlad/facultate/licenta/app/src/views/orar/index.tsx": {
-  "dFJp_rKkSYhAXbJ": {
+  "ugsLhzAfslfmRxV": {
    "type": "view",
    "meta": {
     "name": "Orar",
@@ -117,14 +91,14 @@
     "relativeFilePath": "src/views/orar/index.tsx"
    },
    "sourceId": "/home/vlad/facultate/licenta/app/src/views/orar/index.tsx:Orar",
-   "buildId": "dFJp_rKkSYhAXbJ",
+   "buildId": "ugsLhzAfslfmRxV",
    "params": {
     "type": "PASSTHROUGH"
    }
   }
  },
  "/home/vlad/facultate/licenta/app/src/views/catalog/index.tsx": {
-  "juXuZHIruwbORNM": {
+  "GVFnZZWKlOY_Jdk": {
    "type": "view",
    "meta": {
     "name": "Catalog",
@@ -143,14 +117,40 @@
     "relativeFilePath": "src/views/catalog/index.tsx"
    },
    "sourceId": "/home/vlad/facultate/licenta/app/src/views/catalog/index.tsx:Catalog",
-   "buildId": "juXuZHIruwbORNM",
+   "buildId": "GVFnZZWKlOY_Jdk",
+   "params": {
+    "type": "PASSTHROUGH"
+   }
+  }
+ },
+ "/home/vlad/facultate/licenta/app/src/views/general/index.tsx": {
+  "UXkaYSXmKeUJrEU": {
+   "type": "view",
+   "meta": {
+    "name": "General",
+    "location": {
+     "start": {
+      "line": 3,
+      "column": 13
+     },
+     "end": {
+      "line": 7,
+      "column": 1
+     }
+    },
+    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/views/general/index.tsx",
+    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
+    "relativeFilePath": "src/views/general/index.tsx"
+   },
+   "sourceId": "/home/vlad/facultate/licenta/app/src/views/general/index.tsx:General",
+   "buildId": "UXkaYSXmKeUJrEU",
    "params": {
     "type": "PASSTHROUGH"
    }
   }
  },
  "/home/vlad/facultate/licenta/app/src/views/teme/index.tsx": {
-  "ZwRDaaGIahLvYIF": {
+  "itBoI_EDcRvmLzc": {
    "type": "view",
    "meta": {
     "name": "Teme",
@@ -169,7 +169,7 @@
     "relativeFilePath": "src/views/teme/index.tsx"
    },
    "sourceId": "/home/vlad/facultate/licenta/app/src/views/teme/index.tsx:Teme",
-   "buildId": "ZwRDaaGIahLvYIF",
+   "buildId": "itBoI_EDcRvmLzc",
    "params": {
     "type": "PASSTHROUGH"
    }
