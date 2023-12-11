@@ -1,6 +1,6 @@
 {
  "/home/vlad/facultate/licenta/app/src/views/home/index.tsx": {
-  "jAmKCVFJtWkepEv": {
+  "EKCeYeidQSyLqxl": {
    "type": "view",
    "meta": {
     "name": "Home",
@@ -19,14 +19,14 @@
     "relativeFilePath": "src/views/home/index.tsx"
    },
    "sourceId": "/home/vlad/facultate/licenta/app/src/views/home/index.tsx:Home",
-   "buildId": "jAmKCVFJtWkepEv",
+   "buildId": "EKCeYeidQSyLqxl",
    "params": {
     "type": "PASSTHROUGH"
    }
   }
  },
  "/home/vlad/facultate/licenta/app/src/components/navbar/index.tsx": {
-  "ulaAEhqm_QloUCL": {
+  "psPAfOGcGpUHnLs": {
    "type": "view",
    "meta": {
     "name": "NavBar",
@@ -36,7 +36,7 @@
       "column": 13
      },
      "end": {
-      "line": 269,
+      "line": 291,
       "column": 1
      }
     },
@@ -45,16 +45,16 @@
     "relativeFilePath": "src/components/navbar/index.tsx"
    },
    "sourceId": "/home/vlad/facultate/licenta/app/src/components/navbar/index.tsx:NavBar",
-   "buildId": "ulaAEhqm_QloUCL",
+   "buildId": "psPAfOGcGpUHnLs",
    "params": {
     "type": "STRUCT",
     "value": {
-     "userId": {
+     "user": {
       "type": "OBSERVE",
       "path": [
        {
         "type": "CONST",
-        "value": "userId"
+        "value": "user"
        }
       ]
      },
@@ -71,60 +71,8 @@
    }
   }
  },
- "/home/vlad/facultate/licenta/app/src/views/orar/index.tsx": {
-  "ugsLhzAfslfmRxV": {
-   "type": "view",
-   "meta": {
-    "name": "Orar",
-    "location": {
-     "start": {
-      "line": 3,
-      "column": 13
-     },
-     "end": {
-      "line": 7,
-      "column": 1
-     }
-    },
-    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/views/orar/index.tsx",
-    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
-    "relativeFilePath": "src/views/orar/index.tsx"
-   },
-   "sourceId": "/home/vlad/facultate/licenta/app/src/views/orar/index.tsx:Orar",
-   "buildId": "ugsLhzAfslfmRxV",
-   "params": {
-    "type": "PASSTHROUGH"
-   }
-  }
- },
- "/home/vlad/facultate/licenta/app/src/views/catalog/index.tsx": {
-  "GVFnZZWKlOY_Jdk": {
-   "type": "view",
-   "meta": {
-    "name": "Catalog",
-    "location": {
-     "start": {
-      "line": 3,
-      "column": 13
-     },
-     "end": {
-      "line": 7,
-      "column": 1
-     }
-    },
-    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/views/catalog/index.tsx",
-    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
-    "relativeFilePath": "src/views/catalog/index.tsx"
-   },
-   "sourceId": "/home/vlad/facultate/licenta/app/src/views/catalog/index.tsx:Catalog",
-   "buildId": "GVFnZZWKlOY_Jdk",
-   "params": {
-    "type": "PASSTHROUGH"
-   }
-  }
- },
  "/home/vlad/facultate/licenta/app/src/views/general/index.tsx": {
-  "UXkaYSXmKeUJrEU": {
+  "SbNwvWDSAKrsmXg": {
    "type": "view",
    "meta": {
     "name": "General",
@@ -143,14 +91,114 @@
     "relativeFilePath": "src/views/general/index.tsx"
    },
    "sourceId": "/home/vlad/facultate/licenta/app/src/views/general/index.tsx:General",
-   "buildId": "UXkaYSXmKeUJrEU",
+   "buildId": "SbNwvWDSAKrsmXg",
    "params": {
     "type": "PASSTHROUGH"
    }
   }
  },
+ "/home/vlad/facultate/licenta/app/src/views/schedule/index.tsx": {
+  "KqsDyiWCXXoIxIN": {
+   "type": "view",
+   "meta": {
+    "name": "Schedule",
+    "location": {
+     "start": {
+      "line": 5,
+      "column": 13
+     },
+     "end": {
+      "line": 30,
+      "column": 1
+     }
+    },
+    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/views/schedule/index.tsx",
+    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
+    "relativeFilePath": "src/views/schedule/index.tsx"
+   },
+   "sourceId": "/home/vlad/facultate/licenta/app/src/views/schedule/index.tsx:Schedule",
+   "buildId": "KqsDyiWCXXoIxIN",
+   "params": {
+    "type": "STRUCT",
+    "value": {
+     "user": {
+      "type": "OBSERVE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "user"
+       }
+      ]
+     }
+    }
+   }
+  }
+ },
+ "/home/vlad/facultate/licenta/app/src/views/catalog/index.tsx": {
+  "vh_WXPwtHGIPGfl": {
+   "type": "view",
+   "meta": {
+    "name": "Catalog",
+    "location": {
+     "start": {
+      "line": 3,
+      "column": 13
+     },
+     "end": {
+      "line": 7,
+      "column": 1
+     }
+    },
+    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/views/catalog/index.tsx",
+    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
+    "relativeFilePath": "src/views/catalog/index.tsx"
+   },
+   "sourceId": "/home/vlad/facultate/licenta/app/src/views/catalog/index.tsx:Catalog",
+   "buildId": "vh_WXPwtHGIPGfl",
+   "params": {
+    "type": "PASSTHROUGH"
+   }
+  }
+ },
+ "/home/vlad/facultate/licenta/app/src/views/login/index.tsx": {
+  "nVNG_TbkKiJgPTm": {
+   "type": "view",
+   "meta": {
+    "name": "Login",
+    "location": {
+     "start": {
+      "line": 8,
+      "column": 13
+     },
+     "end": {
+      "line": 79,
+      "column": 1
+     }
+    },
+    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/views/login/index.tsx",
+    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
+    "relativeFilePath": "src/views/login/index.tsx"
+   },
+   "sourceId": "/home/vlad/facultate/licenta/app/src/views/login/index.tsx:Login",
+   "buildId": "nVNG_TbkKiJgPTm",
+   "params": {
+    "type": "STRUCT",
+    "value": {
+     "updateUser": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "user"
+       }
+      ]
+     }
+    }
+   }
+  }
+ },
  "/home/vlad/facultate/licenta/app/src/views/teme/index.tsx": {
-  "itBoI_EDcRvmLzc": {
+  "MtHF_afCgjxQqMJ": {
    "type": "view",
    "meta": {
     "name": "Teme",
@@ -169,7 +217,350 @@
     "relativeFilePath": "src/views/teme/index.tsx"
    },
    "sourceId": "/home/vlad/facultate/licenta/app/src/views/teme/index.tsx:Teme",
-   "buildId": "itBoI_EDcRvmLzc",
+   "buildId": "MtHF_afCgjxQqMJ",
+   "params": {
+    "type": "PASSTHROUGH"
+   }
+  }
+ },
+ "/home/vlad/facultate/licenta/app/src/producers/initState.ts": {
+  "ci_TlzFjTjXKSlZ": {
+   "type": "producer",
+   "meta": {
+    "name": "initState",
+    "location": {
+     "start": {
+      "line": 3,
+      "column": 13
+     },
+     "end": {
+      "line": 20,
+      "column": 1
+     }
+    },
+    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/producers/initState.ts",
+    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
+    "relativeFilePath": "src/producers/initState.ts"
+   },
+   "sourceId": "/home/vlad/facultate/licenta/app/src/producers/initState.ts:initState",
+   "buildId": "ci_TlzFjTjXKSlZ",
+   "params": {
+    "type": "STRUCT",
+    "value": {
+     "updateMovies": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "movies"
+       }
+      ]
+     },
+     "updateMovieId": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "movieId"
+       }
+      ]
+     },
+     "updateUserId": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "userId"
+       }
+      ]
+     },
+     "updateUser": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "user"
+       }
+      ]
+     },
+     "updateComments": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "comments"
+       }
+      ]
+     }
+    }
+   }
+  }
+ },
+ "/home/vlad/facultate/licenta/app/src/producers/logout.ts": {
+  "SOusqoEXRhDCYuy": {
+   "type": "producer",
+   "meta": {
+    "name": "Logout",
+    "location": {
+     "start": {
+      "line": 1,
+      "column": 13
+     },
+     "end": {
+      "line": 11,
+      "column": 1
+     }
+    },
+    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/producers/logout.ts",
+    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
+    "relativeFilePath": "src/producers/logout.ts"
+   },
+   "sourceId": "/home/vlad/facultate/licenta/app/src/producers/logout.ts:Logout",
+   "buildId": "SOusqoEXRhDCYuy",
+   "params": {
+    "type": "STRUCT",
+    "value": {
+     "isLogoutPressed": {
+      "type": "OBSERVE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "isLogoutPressed"
+       }
+      ]
+     },
+     "updateIsLogoutPressed": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "isLogoutPressed"
+       }
+      ]
+     },
+     "updateUser": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "user"
+       }
+      ]
+     }
+    }
+   }
+  }
+ },
+ "/home/vlad/facultate/licenta/app/src/views/schedule/table.tsx": {
+  "qeDP_ZlPBnKgNdj": {
+   "type": "view",
+   "meta": {
+    "name": "Table",
+    "location": {
+     "start": {
+      "line": 13,
+      "column": 13
+     },
+     "end": {
+      "line": 282,
+      "column": 1
+     }
+    },
+    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/views/schedule/table.tsx",
+    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
+    "relativeFilePath": "src/views/schedule/table.tsx"
+   },
+   "sourceId": "/home/vlad/facultate/licenta/app/src/views/schedule/table.tsx:Table",
+   "buildId": "qeDP_ZlPBnKgNdj",
+   "params": {
+    "type": "STRUCT",
+    "value": {
+     "classChosen": {
+      "type": "OBSERVE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "schedule"
+       },
+       {
+        "type": "CONST",
+        "value": "class"
+       }
+      ]
+     },
+     "updateIsModalOpen": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "modal"
+       },
+       {
+        "type": "CONST",
+        "value": "isOpen"
+       }
+      ]
+     },
+     "updateModalFormData": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "modal"
+       },
+       {
+        "type": "CONST",
+        "value": "formData"
+       }
+      ]
+     }
+    }
+   }
+  }
+ },
+ "/home/vlad/facultate/licenta/app/src/components/modals/modalForm/index.tsx": {
+  "ddiVstjbTmaYh_J": {
+   "type": "view",
+   "meta": {
+    "name": "Modal",
+    "location": {
+     "start": {
+      "line": 6,
+      "column": 13
+     },
+     "end": {
+      "line": 46,
+      "column": 1
+     }
+    },
+    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/components/modals/modalForm/index.tsx",
+    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
+    "relativeFilePath": "src/components/modals/modalForm/index.tsx"
+   },
+   "sourceId": "/home/vlad/facultate/licenta/app/src/components/modals/modalForm/index.tsx:Modal",
+   "buildId": "ddiVstjbTmaYh_J",
+   "params": {
+    "type": "STRUCT",
+    "value": {
+     "title": {
+      "type": "VALUE",
+      "value": {
+       "type": "EXTERNAL",
+       "path": [
+        "title"
+       ]
+      }
+     },
+     "fields": {
+      "type": "VALUE",
+      "value": {
+       "type": "EXTERNAL",
+       "path": [
+        "fields"
+       ]
+      }
+     },
+     "updateIsModalOpen": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "modal"
+       },
+       {
+        "type": "CONST",
+        "value": "isOpen"
+       }
+      ]
+     }
+    }
+   }
+  }
+ },
+ "/home/vlad/facultate/licenta/app/src/components/form/modalForm.tsx": {
+  "VRJUEyQrvPYJwLW": {
+   "type": "view",
+   "meta": {
+    "name": "ModalForm",
+    "location": {
+     "start": {
+      "line": 5,
+      "column": 13
+     },
+     "end": {
+      "line": 47,
+      "column": 1
+     }
+    },
+    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/components/form/modalForm.tsx",
+    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
+    "relativeFilePath": "src/components/form/modalForm.tsx"
+   },
+   "sourceId": "/home/vlad/facultate/licenta/app/src/components/form/modalForm.tsx:ModalForm",
+   "buildId": "VRJUEyQrvPYJwLW",
+   "params": {
+    "type": "STRUCT",
+    "value": {
+     "fields": {
+      "type": "VALUE",
+      "value": {
+       "type": "EXTERNAL",
+       "path": [
+        "fields"
+       ]
+      }
+     },
+     "updateModalFormData": {
+      "type": "UPDATE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "modal"
+       },
+       {
+        "type": "CONST",
+        "value": "formData"
+       }
+      ]
+     },
+     "modalFormData": {
+      "type": "OBSERVE",
+      "path": [
+       {
+        "type": "CONST",
+        "value": "modal"
+       },
+       {
+        "type": "CONST",
+        "value": "formData"
+       }
+      ]
+     }
+    }
+   }
+  }
+ },
+ "/home/vlad/facultate/licenta/app/src/App.tsx": {
+  "JzMxMiPnPRmGvrn": {
+   "type": "view",
+   "meta": {
+    "name": "App",
+    "location": {
+     "start": {
+      "line": 12,
+      "column": 13
+     },
+     "end": {
+      "line": 29,
+      "column": 1
+     }
+    },
+    "absoluteFilePath": "/home/vlad/facultate/licenta/app/src/App.tsx",
+    "absoluteRootPath": "/home/vlad/facultate/licenta/app",
+    "relativeFilePath": "src/App.tsx"
+   },
+   "sourceId": "/home/vlad/facultate/licenta/app/src/App.tsx:App",
+   "buildId": "JzMxMiPnPRmGvrn",
    "params": {
     "type": "PASSTHROUGH"
    }

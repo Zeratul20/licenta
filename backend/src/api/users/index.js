@@ -12,16 +12,17 @@ router.get("/users", async (req, res, next) => {
   }
 });
 
-router.get("/users/:email", async (req, res, next) => {
+router.get("/users/:userId", async (req, res, next) => {
   try {
-    const { email } = req.params;
-    const users = await knex("users").where({ email });
+    const { userId } = req.params;
+    const users = await knex("users").where({ userId });
     if (users.length === 0) {
       res.status(400);
       throw new Error("User not found");
     }
-    console.log(`>>> user in get by email ${email}: `, users);
-    res.send(users);
+    const user = users[0];
+    console.log(`>>> user in get by userId ${userId}: `, user);
+    res.send(user);
   } catch (error) {
     next(error);
   }
@@ -39,42 +40,49 @@ router.post("/users/signUp", async (req, res, next) => {
     }
     data.userId = uuid.v4();
     data.role = "user";
-    const users = await knex("users").insert({ ...data });
-    console.log(">>> user in post: ", users);
-    res.send(users);
+    await knex("users").insert({ ...data });
+    const usersData = await knex("users").where({ userId: data.userId });
+    const user = usersData[0];
+    console.log(">>> user in post: ", user);
+    res.send(user);
   } catch (error) {
     next(error);
   }
 });
 
-router.post("/users/login/:username", async (req, res, next) => {
-  try {
-    const { username } = req.params;
-    const { password } = req.body;
-    const users = await knex("users").where({ username, password });
-    if (users.length === 0) {
-      res.status(400);
-      throw new Error("User not found");
-    }
-    console.log(">>> user in login: ", users);
-    res.send(users);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/users/:email", async (req, res, next) => {
+router.post("/users/login/:email", async (req, res, next) => {
   try {
     const { email } = req.params;
-    const data = { ...req.body };
-    const users = await knex("users").where({ email });
+    const { password } = req.body;
+    console.log(">>> email: ", email);
+    console.log(">>> password: ", password)
+    const users = await knex("users").where({ email, password });
     if (users.length === 0) {
       res.status(400);
       throw new Error("User not found");
     }
-    const updatedUser = await knex("users").where({ email }).update(data);
-    console.log(">>> user in put: ", updatedUser);
-    res.send(users);
+    const user = users[0];
+    console.log(">>> user in login: ", user);
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/users/:userId", async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const data = { ...req.body };
+    const users = await knex("users").where({ userId });
+    if (users.length === 0) {
+      res.status(400);
+      throw new Error("User not found");
+    }
+    const updatedUser = await knex("users").where({ userId }).update(data);
+    const userData = await knex("users").where({ userId });
+    const user = userData[0];
+    console.log(">>> user in put: ", user);
+    res.send(user);
   } catch (error) {
     next(error);
   }

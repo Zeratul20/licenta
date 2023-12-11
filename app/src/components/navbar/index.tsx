@@ -18,13 +18,15 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const studentPages = ["Acasa", "General", "Orar", "Catalog", "Teme"];
-const anonymPages = ["Sign Up", "Login"];
+const guestPages = ["Sign Up", "Login"];
 const settings = ["Profile", "Account", "Logout"];
 
 export const NavBar: view = ({
-  userId = observe.userId,
+  user = observe.user,
   updateIsLogoutPressed = update.isLogoutPressed,
 }) => {
+  const {userId} = user;
+  console.log(">>>user in nav: ", user)
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -58,6 +60,12 @@ export const NavBar: view = ({
         break;
       case "Teme":
         navigate("/teme");
+        break;
+      case "Sign Up":
+        navigate("/sign-up");
+        break;
+      case "Login":
+        navigate("/login");
         break;
       default:
         navigate("/");
@@ -186,13 +194,20 @@ export const NavBar: view = ({
             </Menu>
           </Box> */}
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          {userId === 2 ? (
+          {!userId ? (
             <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-              {anonymPages.map((page) => (
+              {guestPages.map((page) => (
                 <Button
                   key={page}
                   onClick={() => handleCloseNavMenu(page)}
                   sx={{ my: 2, color: "white", display: "block" }}
+                  style={{
+                    paddingLeft: "2rem",
+                    fontSize: "1rem",
+                    fontFamily: "ibarra-regular",
+                    fontWeight: "bold",
+                    textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                  }}
                 >
                   {page}
                 </Button>
@@ -205,6 +220,13 @@ export const NavBar: view = ({
                 sx={{
                   display: { xs: "none", md: "flex" },
                   paddingRight: "1rem",
+                }}
+                style={{
+                  paddingLeft: "2rem",
+                  fontSize: "1rem",
+                  fontFamily: "ibarra-regular",
+                  fontWeight: "bold",
+                  textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                 }}
               >
                 <IconButton

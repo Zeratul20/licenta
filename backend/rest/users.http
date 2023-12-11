@@ -26,11 +26,11 @@ POST {{api}}/users/population
 Content-Type: application/json
 
 ### PUT
-PUT {{api}}/users/radu.dumitrescu@gmail.com
+PUT {{api}}/users/8829654f-c574-4975-97e0-472227a95152
 Content-Type: application/json
 
 {
-    "role": "teacher"
+    "role": "director"
 }
 
 ### GET
