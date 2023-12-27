@@ -5,22 +5,21 @@ POST {{api}}/teachers
 Content-Type: application/json
 
 {
-    "email": "radu.dumitrescu@gmail.com",
-    "subjectName": "Matematica",
-    "classes": ["5B", "7B", "10A", "10D", "11E", "6A", "6B"]
+    "userId": "e21205d4-8d96-4866-95d9-04bf521ae89f",
+    "subjectId": "e726e4a0-f0e4-4c1f-acfd-60c8748a90f0"
 }
 
 ### PUT
-PUT {{api}}/users/705068c4-1276-4aa7-8173-a7ffdc85fece
+PUT {{api}}/teachers/3a197924-f9df-41bd-afbd-dc4cb36fc0e1
 Content-Type: application/json
 
 {
-    "cnp": "1234569871234"
+    "classes": ["26fd33c4-e8a3-4c24-8f75-434e3cbc39eb"]
 }
 
 ### GET
 GET {{api}}/teachers
 
-### GET teacher by email
-GET {{api}}/users/3
-
+### DELETE
+DELETE {{api}}/teachers/55b01d35-7179-444c-a4a5-8b74127f0a13
+Content-Type: application/json

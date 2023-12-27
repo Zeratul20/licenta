@@ -5,13 +5,22 @@ POST {{api}}/classes
 Content-Type: application/json
 
 {
-    "name": "10A",
-    "professorEmail": "radu.dumitrescu@gmail.com"
+    "name": "7C",
+    "teacherId": "ecf0c7bd-dafb-4fe9-8430-bcc1ae290036",
+    "subjects": ["e726e4a0-f0e4-4c1f-acfd-60c8748a90f0", "4592947b-5f40-419e-9ee3-5001fce6a505", "cf6b413f-a7b4-4243-aaaf-27c363f22c19", "c1a6a33b-32f7-4071-8cbd-58f267fdac8a", "1cbbcbb4-fd2f-4028-bfe5-049357e497a4", "a0cf9585-0e59-4130-b42b-2c41610acd34"]
 }
 
 ### GET
 GET {{api}}/classes
 
-### GET user by id
-GET {{api}}/users/3
+### PUT
+PUT {{api}}/classes/606ca4d8-30ec-4ce2-b0d2-db400f58c693
+Content-Type: application/json
+
+{
+    "name": "7B"
+}
+
+### DELETE
+DELETE {{api}}/classes/01cde1f3-6847-4a22-b671-53cb1ace0e55
 

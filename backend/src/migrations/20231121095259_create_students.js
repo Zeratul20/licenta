@@ -4,7 +4,7 @@ exports.up = function (knex) {
         table.string("studentId").primary();
         table.string("userId").notNullable();
         table.string("classId").notNullable();
-        table.specificType("grades", "integer ARRAY");
+        table.specificType("grades", "text ARRAY");
   
         table.foreign("userId").references("userId").inTable("users");
         table.foreign("classId").references("classId").inTable("classes");

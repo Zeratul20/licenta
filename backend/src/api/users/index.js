@@ -55,7 +55,7 @@ router.post("/users/login/:email", async (req, res, next) => {
     const { email } = req.params;
     const { password } = req.body;
     console.log(">>> email: ", email);
-    console.log(">>> password: ", password)
+    console.log(">>> password: ", password);
     const users = await knex("users").where({ email, password });
     if (users.length === 0) {
       res.status(400);
@@ -88,50 +88,80 @@ router.put("/users/:userId", async (req, res, next) => {
   }
 });
 
+router.put("/users/director/:userId", async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const users = await knex("users").where({ userId });
+    if (users.length === 0) {
+      res.status(400);
+      throw new Error("User not found");
+    }
+    const updatedUser = await knex("users")
+      .where({ userId })
+      .update({ role: "director" });
+    const userData = await knex("users").where({ userId });
+    const user = userData[0];
+    console.log(">>> user in put: ", user);
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/users/director", async (req, res, next) => {
+  try {
+    const users = await knex("users").where("role", "=", "director");
+    console.log(">>> user in get director: ", users[0]);
+    res.send(users[0]);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // >>>>> Population purposes >>>>>
 
 router.post("/users/population", async (req, res, next) => {
   try {
     const users = [
       {
-        firstName: "Ioana",
-        lastName: "Popescu",
-        cnp: "1980715123456",
-        email: "ioana.popescu@student.com",
-        password: "IoanaPopescu(2023)",
-        phoneNumber: "0712233445",
+        firstName: "Gabriel",
+        lastName: "Stan",
+        cnp: "1990915123456",
+        email: "gabriel.stan@gmail.com",
+        password: "GabrielStan(2023)",
+        phoneNumber: "0761122334",
       },
       {
-        firstName: "Alex",
-        lastName: "Ionescu",
-        cnp: "2870416123456",
-        email: "alex.ionescu@student.com",
-        password: "AlexIonescu(2023)",
-        phoneNumber: "0723344556",
+        firstName: "Cristina",
+        lastName: "Radu",
+        cnp: "2880516123456",
+        email: "cristina.radu@gmail.com",
+        password: "CristinaRadu(2023)",
+        phoneNumber: "0772233445",
       },
       {
-        firstName: "Andreea",
-        lastName: "Dumitrescu",
-        cnp: "1961127123456",
-        email: "andreea.dumitrescu@student.com",
-        password: "AndreeaDumitrescu(2023)",
-        phoneNumber: "0734455667",
+        firstName: "Andrei",
+        lastName: "Munteanu",
+        cnp: "1970327123456",
+        email: "andrei.munteanu@gmail.com",
+        password: "AndreiMunteanu(2023)",
+        phoneNumber: "0783344556",
       },
       {
-        firstName: "Ion",
-        lastName: "Vasilescu",
-        cnp: "2950828123456",
-        email: "ion.vasilescu@student.com",
-        password: "IonVasilescu(2023)",
-        phoneNumber: "0745566778",
+        firstName: "Elena",
+        lastName: "Popa",
+        cnp: "2960728123456",
+        email: "elena.popa@gmail.com",
+        password: "ElenaPopa(2023)",
+        phoneNumber: "0794455667",
       },
       {
-        firstName: "Raluca",
-        lastName: "Gheorghescu",
-        cnp: "1840101123456",
-        email: "raluca.gheorghescu@student.com",
-        password: "RalucaGheorghescu(2023)",
-        phoneNumber: "0756677889",
+        firstName: "Lucian",
+        lastName: "Georgescu",
+        cnp: "1850411123456",
+        email: "lucian.georgescu@gmail.com",
+        password: "LucianGeorgescu(2023)",
+        phoneNumber: "0805566778",
       },
     ];
     for (const user of users) {

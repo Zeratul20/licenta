@@ -5,12 +5,18 @@ export type State = {
   user: any;
   isLogoutPressed: boolean;
   schedule: {
-    isEditPressed: boolean;
     class: any;
+    schedule: any;
   };
   modal: {
     isOpen: boolean;
     formData: any;
+    isSavePressed: boolean;
   };
   teachers: any;
+  subjects: any;
+  classes: any;
+  schedules: any;
+  users: any;
+  isStateInitiated: boolean;
 };

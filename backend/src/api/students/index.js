@@ -3,15 +3,13 @@ const { knex } = require("../../services/pg");
 const uuid = require("uuid");
 
 const getStudentResponse = async (studentData) => {
-  const { userId, classId, grades } = studentData;
-  const studentInfoData = await knex("users")
-    .where({ userId })
-    .select("email", "firstName", "lastName");
-  const classNameData = await knex("classes").where({ classId }).select("name");
-  const { email, firstName, lastName } = studentInfoData[0];
-  const { name: className } = classNameData[0];
-  const student = { email, firstName, lastName, className, grades };
-  console.log(`>>> student in get by studentId ${userId}: `, student);
+  const { studentId, userId, classId, grades } = studentData;
+  const student = { studentId, userId, classId };
+  student.grades = [];
+  for (let grade of grades) {
+    student.grades.push(grade);
+  }
+  console.log(`>>> student in get by id ${studentId}: `, student);
   return student;
 };
 
@@ -30,12 +28,10 @@ router.get("/students", async (req, res, next) => {
   }
 });
 
-router.get("/students/:email", async (req, res, next) => {
+router.get("/students/:studentId", async (req, res, next) => {
   try {
-    const { email } = req.params;
-    const studentsData = await knex("students")
-      .join("users", "students.userId", "users.userId")
-      .where("users.email", "=", email);
+    const { studentId } = req.params;
+    const studentsData = await knex("students").where({ studentId });
 
     if (studentsData.length === 0) {
       res.status(400);
@@ -43,23 +39,18 @@ router.get("/students/:email", async (req, res, next) => {
     }
     const studentData = studentsData[0];
     const studentResponse = await getStudentResponse(studentData);
-    console.log(
-      `>>> student in get by email ${email}: `,
-      studentResponse
-    );
+    console.log(`>>> student in get by id ${studentId}: `, studentResponse);
     res.send(studentResponse);
   } catch (error) {
     next(error);
   }
 });
 
-router.put("/students/:email", async (req, res, next) => {
+router.put("/students/:studentId", async (req, res, next) => {
   try {
-    const { email } = req.params;
+    const { studentId } = req.params;
     const data = { ...req.body };
-    const studentsData = await knex("students")
-      .join("users", "students.userId", "users.userId")
-      .where("users.email", "=", email);
+    const studentsData = await knex("students").where({ studentId });
     if (studentsData.length === 0) {
       res.status(400);
       throw new Error("Student not found");
@@ -74,8 +65,11 @@ router.put("/students/:email", async (req, res, next) => {
     }
     if (data.grades) studentToUpdate.grades = data.grades;
     await knex("students").where({ studentId }).update(studentToUpdate);
-    console.log(`>>> Student in put by studentId ${studentId}: `, students);
-    res.send(students);
+    console.log(
+      `>>> Student in put by studentId ${studentId}: `,
+      studentToUpdate
+    );
+    res.send(studentToUpdate);
   } catch (error) {
     next(error);
   }
@@ -84,21 +78,32 @@ router.put("/students/:email", async (req, res, next) => {
 router.post("/students", async (req, res, next) => {
   try {
     const data = { ...req.body };
-    const { email, className } = data;
+    const { userId, classId } = data;
     const newStudent = {};
     newStudent.studentId = uuid.v4();
     newStudent.grades = [];
-    const userIdData = await knex("users").where({ email }).select("userId");
-    const { userId } = userIdData[0];
-    const classIdData = await knex("classes")
-      .where({ name: className })
-      .select("classId");
-    const { classId } = classIdData[0];
     newStudent.userId = userId;
     newStudent.classId = classId;
     const students = await knex("students").insert(newStudent);
     await knex("users").where({ userId }).update({ role: "student" });
     console.log(">>> student in post: ", students);
+    res.send(students);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/students/:studentId", async (req, res, next) => {
+  try {
+    const { studentId } = req.params;
+    const userIdData = await knex("students")
+      .where({ studentId })
+      .select("userId");
+    console.log("userIdData: ", userIdData);
+    const { userId } = userIdData[0];
+    const students = await knex("students").where({ studentId }).del();
+    await knex("users").where({ userId }).update({ role: "user" });
+    console.log(`>>> student in delete by studentId ${studentId}: `, students);
     res.send(students);
   } catch (error) {
     next(error);

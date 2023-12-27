@@ -3,23 +3,13 @@ const { knex } = require("../../services/pg");
 const uuid = require("uuid");
 
 const getParentResponse = async (parentData) => {
-  const { userId, students } = parentData;
-  const parentInfoData = await knex("users")
-    .where({ userId })
-    .select("email", "firstName", "lastName");
-  const { email, firstName, lastName } = parentInfoData[0];
+  const { parentId, userId, students } = parentData;
   const parent = {};
-  parent.email = email;
-  parent.firstName = firstName;
-  parent.lastName = lastName;
+  parent.parentId = parentId;
+  parent.userId = userId;
   parent.students = [];
   for (let studentId of students) {
-    const studentData = await knex("students")
-      .join("users", "students.userId", "users.userId")
-      .where("students.userId", "=", studentId)
-      .select("users.email", "users.firstName", "users.lastName");
-    const student = studentData[0];
-    parent.students.push(student);
+    parent.students.push(studentId);
   }
   console.log(`>>> parent in get by parentId ${userId}: `, parent);
   return parent;
@@ -40,32 +30,28 @@ router.get("/parents", async (req, res, next) => {
   }
 });
 
-router.get("/parents/:email", async (req, res, next) => {
+router.get("/parents/:parentId", async (req, res, next) => {
   try {
-    const { email } = req.params;
-    const parentsData = await knex("parents")
-      .join("users", "parents.userId", "users.userId")
-      .where("users.email", "=", email);
+    const { parentId } = req.params;
+    const parentsData = await knex("parents").where({parentId});
     if (parentsData.length === 0) {
       res.status(400);
       throw new Error("parent not found");
     }
     const parentData = parentsData[0];
     const parentResponse = await getParentResponse(parentData);
-    console.log(`>>> parent in get by email ${email}: `, parentResponse);
+    console.log(`>>> parent in get by id ${parentId}: `, parentResponse);
     res.send(parentResponse);
   } catch (error) {
     next(error);
   }
 });
 
-router.put("/parents/:email", async (req, res, next) => {
+router.put("/parents/:parentId", async (req, res, next) => {
   try {
-    const { email } = req.params;
+    const { parentId } = req.params;
     const data = { ...req.body };
-    const parentsData = await knex("parents")
-      .join("users", "parents.userId", "users.userId")
-      .where("users.email", "=", email);
+    const parentsData = await knex("parents").where({parentId});
     if (parentsData.length === 0) {
       res.status(400);
       throw new Error("parent not found");
@@ -74,16 +60,12 @@ router.put("/parents/:email", async (req, res, next) => {
     parentToUpdate.students = [];
     if (data.students) {
       for (let student of data.students) {
-        const { stuedntEmail } = student;
-        const studentData = await knex("students")
-          .join("users", "students.userId", "users.userId")
-          .where("users.email", "=", stuedntEmail)
-          .select("students.studentId");
+        const { studentId } = student;
+        const studentData = await knex("students").where({studentId});
         if (studentData.length === 0) {
           res.status(400);
           throw new Error("student not found");
         }
-        const { studentId } = studentData[0];
         parentToUpdate.students.push(studentId);
       }
     }
@@ -137,20 +119,23 @@ router.put("/parents/:email/student/:studentEmail", async (req, res, next) => {
 router.post("/parents", async (req, res, next) => {
   try {
     const data = { ...req.body };
-    const { email } = data;
+    const { userId, students } = data;
     const newParent = {};
     newParent.parentId = uuid.v4();
     newParent.students = [];
-    const users = await knex("users").where({ email }).select("userId");
+    for (let studentId of students) {
+      newParent.students.push(studentId);
+    }
+
+    const users = await knex("users").where({userId});
     if (users.length === 0) {
       res.status(400);
       throw new Error("User not found");
     }
-    const { userId } = users[0];
     newParent.userId = userId;
-    const parents = await knex("parents").insert(newParent);
-    console.log(">>> parent in post: ", parents);
-    res.send(parents);
+    await knex("parents").insert(newParent);
+    console.log(">>> parent in post: ", newParent);
+    res.send(newParent);
   } catch (error) {
     next(error);
   }

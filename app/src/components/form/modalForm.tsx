@@ -4,12 +4,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export const ModalForm: view = ({
   fields,
+  type,
   updateModalFormData = update.modal.formData,
   modalFormData = observe.modal.formData,
+  isModalOpen = observe.modal.isOpen,
 }: any) => {
+  if (!isModalOpen) return null;
   console.log(">>>formData: ", modalFormData);
   const handleChange = (value: string, field: string) => {
     modalFormData[field] = value;
+    modalFormData.type = type;
     updateModalFormData.set(modalFormData);
   };
 
@@ -18,18 +22,21 @@ export const ModalForm: view = ({
     label: string,
     className: string = "",
     placeholder: string = "",
-    type = "text"
+    type = "text",
+    disabled = false
   ) => {
     console.log(">>>Form field: ", field);
+    console.log(">>>Modal form data field", modalFormData[field]);
     return (
       <div className={className}>
         <Input
           field={field}
           className="form-control"
-          val={modalFormData[field] || ""}
+          value={modalFormData[field] || ""}
           type={type}
           placeholder={placeholder}
           handleChange={handleChange}
+          disabled={disabled}
         />
         <label className="form-label ps-4">{label}</label>
       </div>
@@ -38,9 +45,16 @@ export const ModalForm: view = ({
   return (
     <div className="row">
       {fields.map((field: any) => {
-        const { field: fieldName, label, className, placeholder, type } = field;
+        const {
+          field: fieldName,
+          label,
+          className,
+          placeholder,
+          type,
+          disabled,
+        } = field;
         console.log(">>>field: ", field);
-        return input(fieldName, label, className, placeholder, type);
+        return input(fieldName, label, className, placeholder, type, disabled);
       })}
     </div>
   );

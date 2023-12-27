@@ -58,4 +58,20 @@ router.post("/subjects", async (req, res, next) => {
   }
 });
 
+router.delete("/subjects/:subjectId", async (req, res, next) => {
+  try {
+    const { subjectId } = req.params;
+    const subjects = await knex("subjects").where({ subjectId });
+    if (subjects.length === 0) {
+      res.status(400);
+      throw new Error("subject not found");
+    }
+    await knex("subjects").where({ subjectId }).del();
+    console.log(`>>> subject in delete by subjectId ${subjectId}: `, subjects);
+    res.send(subjects);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

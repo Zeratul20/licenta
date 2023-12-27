@@ -1,0 +1,16 @@
+@api = http://localhost:5000/api
+
+### GET 
+GET {{api}}/students
+
+### POST
+POST {{api}}/students
+Content-Type: application/json
+
+{
+    "userId": "16f642dc-5a48-455b-9bdb-90ec967362b0",
+    "classId": "ecfe315d-afef-4360-9970-ec26dff18702"
+}
+
+### DELETE
+DELETE {{api}}/students/21f4e3db-b0ca-486d-9061-2807f0f08493

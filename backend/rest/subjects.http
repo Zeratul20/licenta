@@ -13,7 +13,7 @@ POST {{api}}/subjects
 Content-Type: application/json
 
 {
-    "name": "Chimie"
+    "name": "Fizica"
 }
 
 ### PUT
@@ -27,6 +27,6 @@ Content-Type: application/json
 ### GET
 GET {{api}}/subjects
 
-### GET user by id
-GET {{api}}/users/3
+### DELETE
+DELETE {{api}}/subjects/76ffaeed-0ad9-4562-9a6d-9299d7ff4679
 

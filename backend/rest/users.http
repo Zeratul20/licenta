@@ -36,6 +36,15 @@ Content-Type: application/json
 ### GET
 GET {{api}}/users
 
+### POST
+POST {{api}}/users/population
+
 ### GET user by email
 GET {{api}}/users/dragos.ionescu@gmail.com
+
+### PUT director
+PUT {{api}}/users/director/253dcfca-48e6-4b4d-b5c2-f791b3b7eb7a
+
+### GET director
+GET {{api}}/users/director
 

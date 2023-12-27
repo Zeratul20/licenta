@@ -1,7 +1,11 @@
-import React from 'react'
+import React from "react";
+import { Table } from "./table";
 
 export const Catalog: view = () => {
   return (
-    <div>Catalog</div>
-  )
-}
+    <>
+      <h1>Catalog</h1>
+      <Table />
+    </>
+  );
+};

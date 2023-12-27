@@ -3,23 +3,9 @@ const { knex } = require("../../services/pg");
 const uuid = require("uuid");
 
 const getClassResponse = async (classData) => {
-  const { teacherId, name } = classData;
-  const teacherData = await knex("teachers")
-    .join("users", "teachers.userId", "users.userId")
-    .join("subjects", "teachers.subjectId", "subjects.subjectId")
-    .where("teachers.teacherId", "=", teacherId)
-    .select(
-      "users.email",
-      "users.firstName",
-      "users.lastName",
-      "subjects.name"
-    );
-  const teacher = { teacher: teacherData[0] };
-  const classResponse = { ...teacher, name };
-  console.log(
-    `>>> classResponse in get by class name ${name}: `,
-    classResponse
-  );
+  const { classId, teacherId, name, subjects } = classData;
+  const classResponse = { classId, teacherId, name, subjects };
+  console.log(`>>> classResponse in get by id ${classId}: `, classResponse);
   return classResponse;
 };
 
@@ -38,10 +24,10 @@ router.get("/classes", async (req, res, next) => {
   }
 });
 
-router.get("/classes/:name", async (req, res, next) => {
+router.get("/classes/:classId", async (req, res, next) => {
   try {
-    const { name } = req.params;
-    const classesData = await knex("classes").where({ name });
+    const { classId } = req.params;
+    const classesData = await knex("classes").where({ classId });
     if (classesData.length === 0) {
       res.status(400);
       throw new Error("Class not found");
@@ -54,26 +40,20 @@ router.get("/classes/:name", async (req, res, next) => {
   }
 });
 
-router.put("/classes/:name", async (req, res, next) => {
+router.put("/classes/:classId", async (req, res, next) => {
   try {
-    const { name } = req.params;
+    const { classId } = req.params;
     const data = { ...req.body };
-    const { teacherEmail } = data;
-    const classesData = await knex("classes").where({ name });
+    const classesData = await knex("classes").where({ classId });
     if (classesData.length === 0) {
       res.status(400);
       throw new Error("Class not found");
     }
-    const teacherIdData = await knex("teachers")
-      .where("email", "=", teacherEmail)
-      .select("teacherId");
-    const teacherId = teacherIdData[0].teacherId;
-    data.teacherId = teacherId;
-    await knex("classes").where({ name }).update(data);
-    const newClassesData = await knex("classes").where({ name });
+    await knex("classes").where({ classId }).update(data);
+    const newClassesData = await knex("classes").where({ classId });
     const newClassData = newClassesData[0];
     const newClassResponse = await getClassResponse(newClassData);
-    console.log(`>>> class in put by name ${name}: `, newClassResponse);
+    console.log(`>>> class in put by id ${classId}: `, newClassResponse);
     res.send(newClassResponse);
   } catch (error) {
     next(error);
@@ -83,7 +63,7 @@ router.put("/classes/:name", async (req, res, next) => {
 router.post("/classes", async (req, res, next) => {
   try {
     const data = { ...req.body };
-    const { name, professorEmail } = data;
+    const { name, teacherId, subjects } = data;
     const existingClasses = await knex("classes").where({ name });
     if (existingClasses.length > 0) {
       res.status(400);
@@ -92,16 +72,27 @@ router.post("/classes", async (req, res, next) => {
     const newClass = {};
     newClass.name = name;
     newClass.classId = uuid.v4();
-    const teacherIdData = await knex("teachers")
-      .join("users", "teachers.userId", "users.userId")
-      .where("users.email", "=", professorEmail)
-      .select("teachers.teacherId");
-    const teacherId = teacherIdData[0].teacherId;
-    console.log(">>> teacherId in post: ", teacherId);
     newClass.teacherId = teacherId;
+    newClass.subjects = subjects;
     console.log(">>> newClass in post: ", newClass);
-    const classes = await knex("classes").insert(newClass);
+    await knex("classes").insert(newClass);
     res.send(newClass);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/classes/:classId", async (req, res, next) => {
+  try {
+    const { classId } = req.params;
+    const classes = await knex("classes").where({ classId });
+    if (classes.length === 0) {
+      res.status(400);
+      throw new Error("Class not found");
+    }
+    await knex("classes").where({ classId }).del();
+    console.log(`>>> class in delete by classId ${classId}: `, classes);
+    res.send(classes);
   } catch (error) {
     next(error);
   }

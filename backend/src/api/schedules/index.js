@@ -2,8 +2,11 @@ const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
 
-const getScheduleResponse = async (scheduleData) => {
-  const { scheduleId, classId, subjects, hours } = scheduleData;
+const getScheduleForStudentResponse = async (studentId) => {
+  const scheduleData = await knex("schedules")
+    .join("students", "schedules.classId", "students.classId")
+    .where("students.studentId", "=", studentId);
+  const { scheduleId, classId, subjects } = scheduleData[0];
   const classData = await knex("classes")
     .where("classes.classId", "=", classId)
     .select("classes.name");
@@ -11,27 +14,108 @@ const getScheduleResponse = async (scheduleData) => {
   const scheduleResponse = {};
   scheduleResponse.className = className;
   scheduleResponse.scheduleId = scheduleId;
-  const schedule = [];
+  const parsedSubjects = [];
+
   for (let index = 0; index < subjects.length; index++) {
-    const subjectId = subjects[index];
-    const subjectData = await knex("subjects")
-      .where("subjects.subjectId", "=", subjectId)
-      .select("subjects.name");
-    const { name: subjectName } = subjectData[0];
-    const hour = hours[index];
-    const teachersClassesData = await knex("teachers")
-      .join("users", "teachers.userId", "users.userId")
+    const subject = subjects[index];
+    const subjectList = subject.split(" ");
+    const subjectId = subjectList[0];
+    const hour = subjectList[1];
+    const day = subjectList[2];
+
+    const teacherIdData = await knex("teachers")
       .where({ subjectId })
-      .where("classes", "@>", `{${classId}}`)
-      .select("users.firstName", "users.lastName");
-    const { firstName, lastName } = teachersClassesData[0];
-    const teacherName = `${firstName} ${lastName}`;
-    const scheduleItem = { subjectName, hour, teacherName };
-    schedule.push(scheduleItem);
+      .select("teacherId", "classes");
+
+    let subjTeacherId = null;
+
+    for (let teacher of teacherIdData) {
+      if (teacher.classes.includes(classId)) {
+        subjTeacherId = teacher.teacherId;
+      }
+    }
+
+    const parsedSubject = {
+      subjectId,
+      teacherId: subjTeacherId,
+      hour,
+      day,
+    };
+    parsedSubjects.push(parsedSubject);
   }
 
-  scheduleResponse.schedule = schedule;
+  scheduleResponse.subjects = parsedSubjects;
   return scheduleResponse;
+};
+
+const getScheduleForClassResponse = async (classId) => {
+  const scheduleData = await knex("schedules").where({ classId });
+  const { scheduleId, subjects } = scheduleData[0];
+  const scheduleResponse = {};
+  scheduleResponse.scheduleId = scheduleId;
+  scheduleResponse.classId = classId;
+  const parsedSubjects = [];
+  if (subjects === null) return scheduleResponse;
+  for (let index = 0; index < subjects.length; index++) {
+    const subject = subjects[index];
+    const subjectList = subject.split(" ");
+    const subjectId = subjectList[0];
+    const hour = subjectList[1];
+    const day = subjectList[2];
+
+    const teacherIdData = await knex("teachers")
+      .where({ subjectId })
+      .select("teacherId", "classes");
+
+    let teacherId = null;
+
+    for (let teacher of teacherIdData) {
+      if (teacher.classes.includes(classId)) {
+        teacherId = teacher.teacherId;
+      }
+    }
+
+    const parsedSubject = {
+      subjectId,
+      teacherId,
+      hour,
+      day,
+    };
+    parsedSubjects.push(parsedSubject);
+  }
+
+  scheduleResponse.subjects = parsedSubjects;
+  return scheduleResponse;
+};
+
+const getScheduleForTeacherResponse = async (teacherId) => {
+  const teacherData = await knex("teachers")
+    .where({ teacherId })
+    .select("classes", "subjectId");
+  const { classes, subjectId } = teacherData[0];
+  const schedulesData = await knex("schedules")
+    .whereIn("classId", classes)
+    .select("subjects", "classId");
+  const teacherSchedule = [];
+  scheduleLabel: for (let scheduleData of schedulesData) {
+    const { subjects, classId } = scheduleData;
+    for (let subject of subjects) {
+      const subjectList = subject.split(" ");
+      const currentSubjectId = subjectList[0];
+      if (subjectId === currentSubjectId) {
+        const hour = subjectList[1];
+        const day = subjectList[2];
+        const teacherHour = {
+          classId,
+          hour,
+          day,
+        };
+        teacherSchedule.push(teacherHour);
+        continue scheduleLabel;
+      }
+    }
+  }
+  return teacherSchedule;
 };
 
 router.get("/schedules", async (req, res, next) => {
@@ -39,7 +123,9 @@ router.get("/schedules", async (req, res, next) => {
     const schedulesData = await knex("schedules");
     const schedules = [];
     for (let scheduleData of schedulesData) {
-      const scheduleResponse = await getScheduleResponse(scheduleData);
+      const scheduleResponse = await getScheduleForClassResponse(
+        scheduleData.classId
+      );
       schedules.push(scheduleResponse);
     }
     console.log(">>> schedules in get: ", schedules);
@@ -49,23 +135,34 @@ router.get("/schedules", async (req, res, next) => {
   }
 });
 
-router.get("/schedules/:className", async (req, res, next) => {
+router.get("/schedules/students/:studentId", async (req, res, next) => {
   try {
-    const { className } = req.params;
+    const { studentId } = req.params;
     const schedulesData = await knex("schedules")
-      .join("classes", "schedules.classId", "classes.classId")
-      .where("classes.name", "=", className);
+      .join("students", "schedules.classId", "students.classId")
+      .where("students.studentId", "=", studentId);
     if (schedulesData.length === 0) {
       res.status(400);
       throw new Error("schedule not found");
     }
     const scheduleData = schedulesData[0];
-    const scheduleResponse = await getScheduleResponse(scheduleData);
+    const scheduleResponse = await getScheduleForStudentResponse(scheduleData);
     console.log(
       `>>> schedule in get by className ${className}: `,
       scheduleResponse
     );
     res.send(schedules);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/schedules/teachers/:teacherId", async (req, res, next) => {
+  try {
+    const { teacherId } = req.params;
+    const teacherResponse = await getScheduleForTeacherResponse(teacherId);
+    console.log(`>>> schedule in get by teacherId ${teacherId}: `, schedules);
+    res.send(teacherResponse);
   } catch (error) {
     next(error);
   }
@@ -80,6 +177,18 @@ router.put("/schedules/:scheduleId", async (req, res, next) => {
       res.status(400);
       throw new Error("schedule not found");
     }
+
+    const putSubjects = [];
+    const { subjects } = data;
+
+    for (let subject of subjects) {
+      const { subjectId, hour, day } = subject;
+      const putSubject = `${subjectId} ${hour} ${day}`;
+      putSubjects.push(putSubject);
+    }
+
+    data.subjects = putSubjects;
+
     await knex("schedules")
       .where({ scheduleId })
       .update({ ...data });
@@ -93,27 +202,30 @@ router.put("/schedules/:scheduleId", async (req, res, next) => {
 router.post("/schedules", async (req, res, next) => {
   try {
     const data = { ...req.body };
-    const { className, subjects, hours } = data;
+    const { classId } = data;
     const newSchedule = {};
     newSchedule.scheduleId = uuid.v4();
-    const classIdData = await knex("classes")
-      .where({ name: className })
-      .select("classId");
-    const { classId } = classIdData[0];
     newSchedule.classId = classId;
-
-    for (let subject of subjects) {
-      const subjectIdData = await knex("subjects")
-        .where({ name: subject })
-        .select("subjectId");
-      const { subjectId } = subjectIdData[0];
-      subjects.push(subjectId);
-    }
-    newSchedule.subjects = subjects;
-    newSchedule.hours = hours;
+    newSchedule.subjects = [];
 
     const schedules = await knex("schedules").insert(newSchedule);
     res.send(newSchedule);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/schedules/classes/:classId", async (req, res, next) => {
+  try {
+    const { classId } = req.params;
+    const schedulesData = await knex("schedules").where({ classId });
+    if (schedulesData.length === 0) {
+      res.status(400);
+      throw new Error("schedule not found");
+    }
+    const schedule = await getScheduleForClassResponse(classId);
+    console.log(`>>> schedule in get by classId ${classId}: `, schedule);
+    res.send(schedule);
   } catch (error) {
     next(error);
   }

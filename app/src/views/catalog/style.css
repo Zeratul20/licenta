@@ -1,0 +1,10 @@
+.catalogue-content {
+    font-family:'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+.catalogue-content-dates {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12.5px;
+    padding-top: 7px;
+}

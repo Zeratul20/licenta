@@ -1,0 +1,24 @@
+@api = http://localhost:5000/api
+
+### POST
+POST {{api}}/schedules
+Content-Type: application/json
+
+{
+    "classId": "606ca4d8-30ec-4ce2-b0d2-db400f58c693"
+}
+
+### GET
+GET {{api}}/schedules
+
+### PUT
+PUT {{api}}/schedules/564d5bcc-4e0f-4a16-9428-ecc0708ec3ad
+Content-Type: application/json
+
+{
+    "subjects": []
+}
+
+### DELETE
+DELETE {{api}}/schedules/
+

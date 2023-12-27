@@ -6,14 +6,20 @@ const state: State = {
   user: {},
   isLogoutPressed: false,
   schedule: {
-    isEditPressed: false,
-    class: [],
+    class: null,
+    schedule: null,
   },
   modal: {
     isOpen: false,
     formData: {},
+    isSavePressed: false,
   },
   teachers: [],
+  subjects: [],
+  classes: [],
+  schedules: [],
+  users: [],
+  isStateInitiated: false,
 };
 
 export const createApp = () => {

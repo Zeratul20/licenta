@@ -25,8 +25,8 @@ export const NavBar: view = ({
   user = observe.user,
   updateIsLogoutPressed = update.isLogoutPressed,
 }) => {
-  const {userId} = user;
-  console.log(">>>user in nav: ", user)
+  const { userId } = user;
+  console.log(">>>user in nav: ", user);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -94,72 +94,75 @@ export const NavBar: view = ({
   };
 
   return (
-    <AppBar
-      position="static"
-      style={{
-        background: "linear-gradient(to bottom right, blue, #8AAAE5, blue)",
-      }}
-    >
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {studentPages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {studentPages.map((page) => (
-              <Button
-                key={page}
-                onClick={() => handleCloseNavMenu(page)}
-                sx={{ my: 2, color: "white", display: "block" }}
-                style={{
-                  paddingLeft: "2rem",
-                  fontSize: "1rem",
-                  fontFamily: "ibarra-regular",
-                  fontWeight: "bold",
-                  textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+    <div style={{paddingBottom: "100px"}}>
+      <AppBar
+        position="static"
+        style={{
+          background: "linear-gradient(to bottom right, blue, #8AAAE5, blue)",
+          width: "100%",
+          position: "fixed",
+        }}
+      >
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
                 }}
               >
-                {page}
-              </Button>
-            ))}
-          </Box>
+                {studentPages.map((page) => (
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              {studentPages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={() => handleCloseNavMenu(page)}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  style={{
+                    paddingLeft: "2rem",
+                    fontSize: "1rem",
+                    fontFamily: "ibarra-regular",
+                    fontWeight: "bold",
+                    textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                  }}
+                >
+                  {page}
+                </Button>
+              ))}
+            </Box>
 
-          {/* <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
+            {/* <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -193,14 +196,34 @@ export const NavBar: view = ({
               ))}
             </Menu>
           </Box> */}
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          {!userId ? (
-            <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-              {guestPages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={() => handleCloseNavMenu(page)}
-                  sx={{ my: 2, color: "white", display: "block" }}
+            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            {!userId ? (
+              <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+                {guestPages.map((page) => (
+                  <Button
+                    key={page}
+                    onClick={() => handleCloseNavMenu(page)}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                    style={{
+                      paddingLeft: "2rem",
+                      fontSize: "1rem",
+                      fontFamily: "ibarra-regular",
+                      fontWeight: "bold",
+                      textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                    }}
+                  >
+                    {page}
+                  </Button>
+                ))}
+              </Box>
+            ) : (
+              <>
+                <Box sx={{ flexGrow: 1 }} />
+                <Box
+                  sx={{
+                    display: { xs: "none", md: "flex" },
+                    paddingRight: "1rem",
+                  }}
                   style={{
                     paddingLeft: "2rem",
                     fontSize: "1rem",
@@ -209,83 +232,67 @@ export const NavBar: view = ({
                     textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                   }}
                 >
-                  {page}
-                </Button>
-              ))}
-            </Box>
-          ) : (
-            <>
-              <Box sx={{ flexGrow: 1 }} />
-              <Box
-                sx={{
-                  display: { xs: "none", md: "flex" },
-                  paddingRight: "1rem",
-                }}
-                style={{
-                  paddingLeft: "2rem",
-                  fontSize: "1rem",
-                  fontFamily: "ibarra-regular",
-                  fontWeight: "bold",
-                  textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                }}
-              >
-                <IconButton
-                  size="large"
-                  aria-label="show 4 new mails"
-                  color="inherit"
-                >
-                  <Badge badgeContent={4} color="error">
-                    <MailIcon fontSize="inherit" />
-                  </Badge>
-                </IconButton>
-                <IconButton
-                  size="large"
-                  aria-label="show 17 new notifications"
-                  color="inherit"
-                  style={{ paddingLeft: "1rem" }}
-                >
-                  <Badge badgeContent={17} color="error">
-                    <NotificationsIcon fontSize="inherit" />
-                  </Badge>
-                </IconButton>
-              </Box>
-              <Box sx={{ paddingLeft: "1rem" }} />
-              <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Emy Sharp" src="/static/images/avatar/2.jpg" />
+                  <IconButton
+                    size="large"
+                    aria-label="show 4 new mails"
+                    color="inherit"
+                  >
+                    <Badge badgeContent={4} color="error">
+                      <MailIcon fontSize="inherit" />
+                    </Badge>
                   </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: "45px" }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  {settings.map((setting) => (
-                    <MenuItem
-                      key={setting}
-                      onClick={() => handleCloseUserMenu(setting)}
-                    >
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
-            </>
-          )}
-        </Toolbar>
-      </Container>
-    </AppBar>
+                  <IconButton
+                    size="large"
+                    aria-label="show 17 new notifications"
+                    color="inherit"
+                    style={{ paddingLeft: "1rem" }}
+                  >
+                    <Badge badgeContent={17} color="error">
+                      <NotificationsIcon fontSize="inherit" />
+                    </Badge>
+                  </IconButton>
+                </Box>
+                <Box sx={{ paddingLeft: "1rem" }} />
+                <Box sx={{ flexGrow: 0 }}>
+                  <Tooltip title="Open settings">
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar
+                        alt="Emy Sharp"
+                        src="/static/images/avatar/2.jpg"
+                      />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    {settings.map((setting) => (
+                      <MenuItem
+                        key={setting}
+                        onClick={() => handleCloseUserMenu(setting)}
+                      >
+                        <Typography textAlign="center">{setting}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
+              </>
+            )}
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </div>
   );
 };

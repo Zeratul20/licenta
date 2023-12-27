@@ -9,7 +9,12 @@ import { SignUp } from "./views/signUp";
 import { Login } from "./views/login";
 import * as producers from "./producers";
 
-export const App: view = () => {
+import { Loader } from "./components/helpers/loader";
+
+export const App: view = ({ isStateInitiated = observe.isStateInitiated }) => {
+  if (!isStateInitiated) {
+    return <Loader />;
+  }
   return (
     <div>
       <Router>
