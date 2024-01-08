@@ -9,8 +9,16 @@ Content-Type: application/json
 
 {
     "userId": "16f642dc-5a48-455b-9bdb-90ec967362b0",
-    "classId": "ecfe315d-afef-4360-9970-ec26dff18702"
+    "classId": "26fd33c4-e8a3-4c24-8f75-434e3cbc39eb"
+}
+
+### PUT
+PUT {{api}}/students/6f8174ee-4b88-4298-8d3e-aae2ca5efba4
+Content-Type: application/json
+
+{
+    "grades": []
 }
 
 ### DELETE
-DELETE {{api}}/students/21f4e3db-b0ca-486d-9061-2807f0f08493
+DELETE {{api}}/students/ae4d7fc6-f758-477d-b80d-3a2015a5a0cf

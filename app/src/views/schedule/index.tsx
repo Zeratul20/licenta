@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Table } from "./table";
+import { ClassDropdown } from "../../components/inputs/classDropdown";
 
 export const Schedule: view = ({
   user = observe.user,
@@ -26,7 +26,7 @@ export const Schedule: view = ({
     return (
       <div>
         <h1>Orar</h1>
-        <div className="dropdown">
+        {/* <div className="dropdown">
           <button
             className="btn btn-secondary dropdown-toggle"
             type="button"
@@ -50,7 +50,8 @@ export const Schedule: view = ({
               );
             })}
           </ul>
-        </div>
+        </div> */}
+        <ClassDropdown classes={classes} handleClick={handleClick} />
         <Table />
       </div>
     );

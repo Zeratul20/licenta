@@ -14,7 +14,7 @@ PUT {{api}}/teachers/3a197924-f9df-41bd-afbd-dc4cb36fc0e1
 Content-Type: application/json
 
 {
-    "classes": ["26fd33c4-e8a3-4c24-8f75-434e3cbc39eb"]
+    "classes": ["26fd33c4-e8a3-4c24-8f75-434e3cbc39eb", "606ca4d8-30ec-4ce2-b0d2-db400f58c693"]
 }
 
 ### GET

@@ -2,30 +2,20 @@ const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
 
-const getAbsenceResponse = async (absenceData) => {
-  const { studentId, subjectId, date, isMotivated } = absenceData;
-  const studentData = await knex("students")
-    .join("users", "students.userId", "users.userId")
-    .join("classes", "students.classId", "classes.classId")
-    .where("students.studentId", "=", studentId)
-    .select("users.email", "users.firstName", "users.lastName", "classes.name");
-  const student = studentData[0];
-  const subjectData = await knex("subjects")
-    .where({ subjectId })
-    .select("name");
-  const { name: subjectName } = subjectData[0];
-  const absence = { student, subjectName, date, isMotivated };
-  console.log(`>>> absence in get: `, absence);
-  return absence;
-};
+// const getAbsenceResponse = async (absenceData) => {
+//   const { studentId, subjectId, date, isMotivated } = absenceData;
+//   const absence = { studentId, subjectId, date, isMotivated };
+//   console.log(`>>> absence in get: `, absence);
+//   return absence;
+// };
 
 router.get("/absences", async (req, res, next) => {
   try {
     const absencesData = await knex("absences");
     const absences = [];
     for (let absenceData of absencesData) {
-      const absenceResponse = await getAbsenceResponse(absenceData);
-      absences.push(absenceResponse);
+      // const absenceResponse = await getAbsenceResponse(absenceData);
+      absences.push(absenceData);
     }
     console.log(">>> absences in get: ", absences);
     res.send(absences);
@@ -70,31 +60,26 @@ router.put("/absences/:absenceId", async (req, res, next) => {
 
 router.post("/absences", async (req, res, next) => {
   try {
-    const { date, studentEmail, subjectName } = req.body;
+    const { date, studentId, subjectId } = req.body;
     const newAbsence = {};
     newAbsence.date = date;
     newAbsence.absenceId = uuid.v4();
     newAbsence.isMotivated = false;
     const studentIdData = await knex("students")
       .join("users", "students.userId", "users.userId")
-      .where("users.email", "=", studentEmail)
-      .select("students.studentId");
+      .where({ studentId });
     if (studentIdData.length === 0) {
       res.status(400);
       throw new Error("student not found");
     }
-    const { studentId } = studentIdData[0];
     newAbsence.studentId = studentId;
-    const subjectIdData = await knex("subjects")
-      .where({ name: subjectName })
-      .select("subjects.subjectId");
+    const subjectIdData = await knex("subjects").where({ subjectId });
     if (subjectIdData.length === 0) {
       res.status(400);
       throw new Error("subject not found");
     }
-    const { subjectId } = subjectIdData[0];
     newAbsence.subjectId = subjectId;
-    const absences = await knex("absences").insert(newAbsence);
+    await knex("absences").insert(newAbsence);
     res.send(newAbsence);
   } catch (error) {
     next(error);

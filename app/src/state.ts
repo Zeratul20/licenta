@@ -7,6 +7,13 @@ export type State = {
   schedule: {
     class: any;
     schedule: any;
+    teacher: any;
+  };
+  catalogue: {
+    class: any;
+    catalogue: any;
+    teacher: any;
+    student: any;
   };
   modal: {
     isOpen: boolean;

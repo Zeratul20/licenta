@@ -13,7 +13,7 @@ export const initState: producer = ({
 
   let cnt = 0;
 
-  const cntMaxVal = 7;
+  const cntMaxVal = 5;
 
   const getUsers = async () => {
     const { data } = await axios.get("http://localhost:5000/api/users");
@@ -58,7 +58,7 @@ export const initState: producer = ({
     updateSchedules.set(data);
     cnt++;
   };
-  getSchedules();
+  // getSchedules();
 
   if (cnt < cntMaxVal) {
     let retries = cntMaxVal;

@@ -8,6 +8,13 @@ const state: State = {
   schedule: {
     class: null,
     schedule: null,
+    teacher: null,
+  },
+  catalogue: {
+    class: null,
+    catalogue: null,
+    teacher: null,
+    student: null,
   },
   modal: {
     isOpen: false,
