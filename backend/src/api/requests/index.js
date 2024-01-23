@@ -8,7 +8,7 @@ const getRequestResponse = async (requestData) => {
     .where({ userId })
     .select("email", "firstName", "lastName");
   const user = userData[0];
-  
+
   const studentData = await knex("students")
     .join("users", "students.userId", "users.userId")
     .where("students.studentId", "=", studentId)
@@ -89,6 +89,28 @@ router.post("/requests", async (req, res, next) => {
     const requests = await knex("requests").insert({ ...data, requestId });
     console.log(`>>> request in post by requestId ${requestId}: `, requests);
     res.send(requests);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/requests/types/:type", async (req, res, next) => {
+  try {
+    const { type } = req.params;
+    const data = { ...req.body };
+    const requestId = uuid.v4();
+    const newRequest = {};
+    newRequest.requestId = requestId;
+    newRequest.userId = data.userId;
+    newRequest.type = type;
+    newRequest.status = "sent";
+    if (type === "1") {
+      const { students } = data;
+      newRequest.students = students;
+    }
+    await knex("requests").insert(newRequest);
+    console.log(`>>> request in post by requestId ${requestId}: `, newRequest);
+    res.send(newRequest);
   } catch (error) {
     next(error);
   }

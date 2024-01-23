@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Table } from "./table";
 import { ClassDropdown } from "../../components/inputs/classDropdown";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
+import * as producers from "./producers";
+import { Loader } from "../../components/helpers/loader";
 
 export const Schedule: view = ({
   user = observe.user,
@@ -8,7 +12,9 @@ export const Schedule: view = ({
   getSchedules = get.schedules,
   updateScheduleClass = update.schedule.class,
   updateSchedule = update.schedule.schedule,
+  isStateInitiated = observe.schedule.isStateInitiated,
 }) => {
+  if(!isStateInitiated) return <Loader />;
   const schedules = getSchedules.value();
   if (user.role === "director") {
     const classes = getClasses.value();
@@ -24,7 +30,7 @@ export const Schedule: view = ({
       updateScheduleClass.set(classFound);
     };
     return (
-      <div>
+      <div className="object-fit-cover">
         <h1>Orar</h1>
         {/* <div className="dropdown">
           <button
@@ -57,9 +63,11 @@ export const Schedule: view = ({
     );
   }
   return (
-    <div>
+    <div className="object-fit-cover">
       <h1>Orar</h1>
       <Table />
     </div>
   );
 };
+
+Schedule.producers(Object.values(producers));

@@ -42,7 +42,7 @@ export const Table: view = ({
     return null;
   }
 
-  if (!scheduleClass) {
+  if (!scheduleClass || !schedule) {
     return null;
   }
 

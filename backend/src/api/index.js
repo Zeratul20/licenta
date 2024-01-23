@@ -30,5 +30,6 @@ app.use("/api", require("./schedules"));
 app.use("/api", require("./teachers"));
 app.use("/api", require("./students"));
 app.use("/api", require("./parents"));
+app.use("/api", require("./messages"));
 
 module.exports = app;

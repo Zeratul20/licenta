@@ -17,16 +17,16 @@ import AdbIcon from "@mui/icons-material/Adb";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
-const studentPages = ["Acasa", "General", "Orar", "Catalog", "Teme"];
-const guestPages = ["Sign Up", "Login"];
-const settings = ["Profile", "Account", "Logout"];
-
 export const NavBar: view = ({
   user = observe.user,
   updateIsLogoutPressed = update.isLogoutPressed,
 }) => {
+  const pages = ["Acasa", "General", "Orar", "Catalog", "Teme"];
+  const guestPages = ["Sign Up", "Login"];
+  const settings = ["Profile", "Account", "Logout"];
   const { userId } = user;
   console.log(">>>user in nav: ", user);
+  if (user.role === "director") pages.push("Cereri");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -67,6 +67,9 @@ export const NavBar: view = ({
       case "Login":
         navigate("/login");
         break;
+      case "Cereri":
+        navigate("/requests");
+        break;
       default:
         navigate("/");
         break;
@@ -94,13 +97,14 @@ export const NavBar: view = ({
   };
 
   return (
-    <div style={{paddingBottom: "100px"}}>
+    <div style={{ paddingBottom: "100px" }}>
       <AppBar
         position="static"
         style={{
           background: "linear-gradient(to bottom right, blue, #8AAAE5, blue)",
           width: "100%",
           position: "fixed",
+          zIndex: 10,
         }}
       >
         <Container maxWidth="xl">
@@ -135,7 +139,7 @@ export const NavBar: view = ({
                   display: { xs: "block", md: "none" },
                 }}
               >
-                {studentPages.map((page) => (
+                {pages.map((page) => (
                   <MenuItem key={page} onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
@@ -144,7 +148,7 @@ export const NavBar: view = ({
             </Box>
             <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {studentPages.map((page) => (
+              {pages.map((page) => (
                 <Button
                   key={page}
                   onClick={() => handleCloseNavMenu(page)}
@@ -189,7 +193,7 @@ export const NavBar: view = ({
               onClose={handleCloseNavMenu}
               sx={{ mt: "45px" }}
             >
-              {studentPages.map((page) => (
+              {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>

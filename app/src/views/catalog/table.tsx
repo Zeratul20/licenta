@@ -64,6 +64,9 @@ export const Table: view = ({
   getUsers = get.users,
   getSubjectsState = get.subjects,
 }) => {
+
+  if(!catalogueClass) return null;
+
   const user = getUser.value();
 
   const modalFormData = getModalFormData.value();

@@ -8,6 +8,7 @@ export type State = {
     class: any;
     schedule: any;
     teacher: any;
+    isStateInitiated: boolean;
   };
   catalogue: {
     class: any;
@@ -26,4 +27,5 @@ export type State = {
   schedules: any;
   users: any;
   isStateInitiated: boolean;
+  messages: any;
 };

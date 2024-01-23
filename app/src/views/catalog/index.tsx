@@ -1,6 +1,8 @@
 import React from "react";
 import { Table } from "./table";
 import { ClassDropdown } from "../../components/inputs/classDropdown";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
 
 export const Catalog: view = ({
   user = observe.user,
@@ -26,17 +28,17 @@ export const Catalog: view = ({
       updateCatalogueClass.set(classFound);
     };
     return (
-      <>
+      <div className="object-fit-cover">
         <h1>Catalog</h1>
         <ClassDropdown classes={classes} handleClick={handleClick} />
         {catalogueClass && <Table />}
-      </>
+      </div>
     );
   }
   return (
-    <>
+    <div className="object-fit-cover">
       <h1>Catalog</h1>
       <Table />
-    </>
+    </div>
   );
 };

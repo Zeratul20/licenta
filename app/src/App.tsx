@@ -10,6 +10,7 @@ import { Login } from "./views/login";
 import * as producers from "./producers";
 
 import { Loader } from "./components/helpers/loader";
+import { Requests } from "./views/requests";
 
 export const App: view = ({ isStateInitiated = observe.isStateInitiated }) => {
   if (!isStateInitiated) {
@@ -25,6 +26,7 @@ export const App: view = ({ isStateInitiated = observe.isStateInitiated }) => {
           <Route path={"/orar"} element={<Schedule />} />
           <Route path={"/catalog"} element={<Catalog />} />
           <Route path={"/teme"} element={<Teme />} />
+          <Route path={"/requests"} element={<Requests />} />
           <Route path={"/sign-up"} element={<SignUp />} />
           <Route path={"/login"} element={<Login />} />
         </Routes>

@@ -26,3 +26,7 @@ export const getTeacherData = (teachers: any, teacherId: any) => {
 export const getSubjectData = (subjects: any, subjectId: any) => {
   return subjects.find((subject: any) => subject.subjectId === subjectId);
 };
+
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};

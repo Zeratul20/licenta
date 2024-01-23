@@ -9,6 +9,7 @@ const state: State = {
     class: null,
     schedule: null,
     teacher: null,
+    isStateInitiated: false,
   },
   catalogue: {
     class: null,
@@ -27,6 +28,7 @@ const state: State = {
   schedules: [],
   users: [],
   isStateInitiated: false,
+  messages: [],
 };
 
 export const createApp = () => {
