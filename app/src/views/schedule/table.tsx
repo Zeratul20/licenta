@@ -6,7 +6,12 @@ import "bootstrap";
 import { AddIcon, EditIcon, TrashIcon } from "../../assets/icons";
 import { Modal } from "../../components/modals/modalForm";
 
-import { getSubjectData, getTeacherData, getUserData, modalOperation } from "../../utils";
+import {
+  getSubjectData,
+  getTeacherData,
+  getUserData,
+  modalOperation,
+} from "../../utils";
 
 import axios from "axios";
 import { Loader } from "../../components/helpers/loader";
@@ -18,6 +23,8 @@ export const Table: view = ({
   scheduleClass = observe.schedule.class,
   schedule = observe.schedule.schedule,
   updateSchedule = update.schedule.schedule,
+  updateSchedules = update.schedules,
+  getSchedules = get.schedules,
   updateModalFormData = update.modal.formData,
   isModalSavePressed = observe.modal.isSavePressed,
   updateIsModalSavePressed = update.modal.isSavePressed,
@@ -31,12 +38,14 @@ export const Table: view = ({
   const modalFormData = getModalFormData.value();
   const teachersState = getTeachersState.value();
   const subjectsState = getSubjectsState.value();
+  const schedules = getSchedules.value();
   const users = getUsers.value();
   const user = getUser.value();
 
   console.log(">>>teachersState: ", teachersState);
 
   console.log(">>>Schedule: ", schedule);
+  console.log(">>>Schedules: ", schedules);
 
   if (user.role === "teacher") {
     return null;
@@ -62,6 +71,7 @@ export const Table: view = ({
         day,
         hour,
       };
+      console.log(">>>subjectFound: ", subjectFound);
       const { teacherId: subjectTeacherId } = teachersState.find(
         (teacher: any) => {
           return (
@@ -73,6 +83,12 @@ export const Table: view = ({
       subject.teacherId = subjectTeacherId;
       const newSubjects = [...schedule.subjects, subject];
       const newSchedule = { ...schedule, subjects: newSubjects };
+      const newSchedules = schedules.map((scheduleEl: any) => {
+        if (scheduleEl.scheduleId === schedule.scheduleId) {
+          return newSchedule;
+        }
+        return scheduleEl;
+      });
       const updatedSchedule: any = {};
       updatedSchedule.subjects = newSubjects;
       try {
@@ -80,6 +96,7 @@ export const Table: view = ({
           `http://localhost:5000/api/schedules/${schedule.scheduleId}`,
           updatedSchedule
         );
+        updateSchedules.set(newSchedules);
         updateSchedule.set(newSchedule);
       } catch (error) {
         console.log(">>>error: ", error);
@@ -116,11 +133,18 @@ export const Table: view = ({
         return subjectEl;
       });
       const newSchedule = { ...schedule, subjects: newSubjects };
+      const newSchedules = schedules.map((scheduleEl: any) => {
+        if (scheduleEl.scheduleId === schedule.scheduleId) {
+          return newSchedule;
+        }
+        return scheduleEl;
+      });
       try {
         axios.put(
           `http://localhost:5000/api/schedules/${schedule.scheduleId}`,
           newSchedule
         );
+        updateSchedules.set(newSchedules);
         updateSchedule.set(newSchedule);
       } catch (error) {
         console.log(">>>error: ", error);

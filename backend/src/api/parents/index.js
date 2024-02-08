@@ -134,6 +134,7 @@ router.post("/parents", async (req, res, next) => {
     }
     newParent.userId = userId;
     await knex("parents").insert(newParent);
+    await knex("users").where({ userId }).update({ role: "parent" });
     console.log(">>> parent in post: ", newParent);
     res.send(newParent);
   } catch (error) {

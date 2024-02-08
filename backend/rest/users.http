@@ -13,11 +13,11 @@ POST {{api}}/users/signUp
 Content-Type: application/json
 
 {
-    "firstName": "Ionescu",
-    "lastName": "Dragos",
-    "cnp": "1890101123456",
-    "email": "dragos.ionescu@gmail.com",
-    "password": "DragosIonescu(12)",
+    "firstName": "admin",
+    "lastName": "admin",
+    "cnp": "1234567891234",
+    "email": "adminCN@gmail.com",
+    "password": "admin",
     "phoneNumber": "0732345678"
 }
 
@@ -26,7 +26,7 @@ POST {{api}}/users/population
 Content-Type: application/json
 
 ### PUT
-PUT {{api}}/users/8829654f-c574-4975-97e0-472227a95152
+PUT {{api}}/users/7b088758-6c1b-49fb-9230-e90738022c02
 Content-Type: application/json
 
 {
@@ -38,6 +38,9 @@ GET {{api}}/users
 
 ### POST
 POST {{api}}/users/population
+
+### DELETE ALL
+DELETE {{api}}/users
 
 ### GET user by email
 GET {{api}}/users/dragos.ionescu@gmail.com

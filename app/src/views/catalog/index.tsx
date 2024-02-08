@@ -13,16 +13,23 @@ export const Catalog: view = ({
   updateCatalogueClass = update.catalogue.class,
   catalogueClass = observe.catalogue.class,
 }) => {
+  console.log(">>>User: ", user);
   if (user.role === "teacher") {
     const teachers = getTeachers.value();
     const classes = getClasses.value();
     const teacher = teachers.find(
       (teacher: any) => teacher.userId === user.userId
     );
+    const teacherClassesId = teacher.classes;
+    const teacherClasses = classes.filter((classEl: any) =>
+      teacherClassesId.includes(classEl.classId)
+    );
+    console.log(">>>Teacher: ", teacher);
+    console.log(">>>Classes: ", classes);
     updateCatalogueTeacher.set(teacher);
     const handleClick = (classId: string) => {
       console.log(classId);
-      const classFound = classes.find(
+      const classFound = teacherClasses.find(
         (classEl: any) => classEl.classId === classId
       );
       updateCatalogueClass.set(classFound);
@@ -30,7 +37,7 @@ export const Catalog: view = ({
     return (
       <div className="object-fit-cover">
         <h1>Catalog</h1>
-        <ClassDropdown classes={classes} handleClick={handleClick} />
+        <ClassDropdown classes={teacherClasses} handleClick={handleClick} />
         {catalogueClass && <Table />}
       </div>
     );

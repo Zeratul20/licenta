@@ -26,7 +26,8 @@ export const NavBar: view = ({
   const settings = ["Profile", "Account", "Logout"];
   const { userId } = user;
   console.log(">>>user in nav: ", user);
-  if (user.role === "director") pages.push("Cereri");
+  // if (user.role === "director") pages.push("Cereri");
+  pages.push("Cereri");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );

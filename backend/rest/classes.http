@@ -5,9 +5,17 @@ POST {{api}}/classes
 Content-Type: application/json
 
 {
-    "name": "7C",
-    "teacherId": "ecf0c7bd-dafb-4fe9-8430-bcc1ae290036",
-    "subjects": ["e726e4a0-f0e4-4c1f-acfd-60c8748a90f0", "4592947b-5f40-419e-9ee3-5001fce6a505", "cf6b413f-a7b4-4243-aaaf-27c363f22c19", "c1a6a33b-32f7-4071-8cbd-58f267fdac8a", "1cbbcbb4-fd2f-4028-bfe5-049357e497a4", "a0cf9585-0e59-4130-b42b-2c41610acd34"]
+    "name": "8A",
+    "teacherId": "0b74d281-4fd4-471b-b066-886dd2ffc0c5",
+    "subjects": [
+        "cde1608f-42ee-49f2-ac0b-97ca4bda653f",
+        "703dae29-b840-4147-a6b4-ff7afcba513b",
+        "da36c392-2b9b-4405-9daa-aaae71521fe6",
+        "f1305d39-1184-46ba-a514-6631fb0ad736",
+        "ec2f116b-a1ac-4505-add8-f67bd0927034",
+        "703dae29-b840-4147-a6b4-ff7afcba513b",
+        "1acc52f3-de0e-4bad-820a-d0a915729ea5"
+    ]
 }
 
 ### GET

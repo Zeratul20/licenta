@@ -7,13 +7,14 @@ export const initState: producer = ({
   updateClasses = update.classes,
   updateSchedules = update.schedules,
   updateUsers = update.users,
+  updateStudents = update.students,
   updateIsStateInitiated = update.isStateInitiated,
 }) => {
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("userIdLicenta");
 
   let cnt = 0;
 
-  const cntMaxVal = 5;
+  const cntMaxVal = 6;
 
   const getUsers = async () => {
     const { data } = await axios.get("http://localhost:5000/api/users");
@@ -24,10 +25,15 @@ export const initState: producer = ({
 
   const getUser = async () => {
     if (!userId) return;
-    const { data } = await axios.get(
-      `http://localhost:5000/api/users/${userId}`
-    );
-    updateUser.set(data);
+    try {
+      const { data } = await axios.get(
+        `http://localhost:5000/api/users/${userId}`
+      );
+      updateUser.set(data);
+    } catch (e) {
+      console.log("error", e);
+      updateUser.set({});
+    }
     cnt++;
   };
   getUser();
@@ -52,6 +58,13 @@ export const initState: producer = ({
     cnt++;
   };
   getClasses();
+
+  const getStudents = async () => {
+    const { data } = await axios.get("http://localhost:5000/api/students");
+    updateStudents.set(data);
+    cnt++;
+  }
+  getStudents();
 
   const getSchedules = async () => {
     const { data } = await axios.get("http://localhost:5000/api/schedules");

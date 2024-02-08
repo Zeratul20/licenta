@@ -63,6 +63,17 @@ router.get("/requests/:requestId", async (req, res, next) => {
   }
 });
 
+router.get("/requests/users/:userId", async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const requests = await knex("requests").where({ userId });
+    console.log(`>>> requests in get by userId ${userId}: `, requests);
+    res.send(requests);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.put("/requests/:requestId", async (req, res, next) => {
   try {
     const { requestId } = req.params;

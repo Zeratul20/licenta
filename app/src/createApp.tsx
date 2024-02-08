@@ -25,10 +25,18 @@ const state: State = {
   teachers: [],
   subjects: [],
   classes: [],
+  students: [],
   schedules: [],
   users: [],
   isStateInitiated: false,
-  messages: [],
+  messages: {
+    content: [],
+    isStateInitiated: false,
+  },
+  requests: {
+    content: [],
+    isStateInitiated: false,
+  },
 };
 
 export const createApp = () => {

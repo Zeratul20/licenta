@@ -5,16 +5,16 @@ POST {{api}}/teachers
 Content-Type: application/json
 
 {
-    "userId": "e21205d4-8d96-4866-95d9-04bf521ae89f",
-    "subjectId": "e726e4a0-f0e4-4c1f-acfd-60c8748a90f0"
+    "userId": "078e59af-32a9-450c-8b29-a093dd1e36e6",
+    "subjectId": "da36c392-2b9b-4405-9daa-aaae71521fe6"
 }
 
 ### PUT
-PUT {{api}}/teachers/3a197924-f9df-41bd-afbd-dc4cb36fc0e1
+PUT {{api}}/teachers/0c0a280d-de31-453b-b43c-4b76ae836985
 Content-Type: application/json
 
 {
-    "classes": ["26fd33c4-e8a3-4c24-8f75-434e3cbc39eb", "606ca4d8-30ec-4ce2-b0d2-db400f58c693"]
+    "classes": ["f8642a8f-b985-443d-bcfe-ee63070c4261", "3d9bc254-e757-400b-b867-171886469a22", "8ac5a125-8065-4e58-ba1b-534a5028936b"]
 }
 
 ### GET

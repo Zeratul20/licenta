@@ -8,8 +8,8 @@ POST {{api}}/students
 Content-Type: application/json
 
 {
-    "userId": "16f642dc-5a48-455b-9bdb-90ec967362b0",
-    "classId": "26fd33c4-e8a3-4c24-8f75-434e3cbc39eb"
+    "userId": "6ac53401-9a77-471c-96d1-e051d44f7ae4",
+    "classId": "8ac5a125-8065-4e58-ba1b-534a5028936b"
 }
 
 ### PUT

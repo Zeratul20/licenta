@@ -22,7 +22,7 @@ export const Login: view = ({ updateUser = update.user }: any) => {
           console.log(response);
           const {data} = response;
           updateUser.set(data);
-          localStorage.setItem("userId", data.userId);
+          localStorage.setItem("userIdLicenta", data.userId);
           navigate("/");
         })
         .catch((error) => {

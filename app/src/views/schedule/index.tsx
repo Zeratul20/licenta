@@ -9,13 +9,13 @@ import { Loader } from "../../components/helpers/loader";
 export const Schedule: view = ({
   user = observe.user,
   getClasses = get.classes,
-  getSchedules = get.schedules,
+  schedules = observe.schedules,
   updateScheduleClass = update.schedule.class,
   updateSchedule = update.schedule.schedule,
   isStateInitiated = observe.schedule.isStateInitiated,
 }) => {
   if(!isStateInitiated) return <Loader />;
-  const schedules = getSchedules.value();
+  // const schedules = getSchedules.value();
   if (user.role === "director") {
     const classes = getClasses.value();
     const handleClick = (classId: string) => {

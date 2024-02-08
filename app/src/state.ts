@@ -24,8 +24,16 @@ export type State = {
   teachers: any;
   subjects: any;
   classes: any;
+  students: any;
   schedules: any;
   users: any;
   isStateInitiated: boolean;
-  messages: any;
+  messages: {
+    content: any;
+    isStateInitiated: boolean;
+  },
+  requests: {
+    content: any;
+    isStateInitiated: boolean;
+  }
 };

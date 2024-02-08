@@ -10,14 +10,16 @@ import { Modal } from "../../components/modals/modalForm";
 
 import addMessageIcon from "../../assets/img/add.png";
 
+import * as producers from "./producers";
+
 export const General: view = ({
   updateModalFormData = update.modal.formData,
   isModalSavePressed = observe.modal.isSavePressed,
   updateIsModalSavePressed = update.modal.isSavePressed,
   updateIsModalOpen = update.modal.isOpen,
   getModalFormData = get.modal.formData,
-  messages = observe.messages,
-  updateMessages = update.messages,
+  messages = observe.messages.content,
+  updateMessages = update.messages.content,
   getUser = get.user,
   getUsers = get.users,
 }) => {
@@ -69,16 +71,16 @@ export const General: view = ({
     updateIsModalSavePressed.set(false);
   }
 
-  useEffect(() => {
-    const getMessages = async () => {
-      const { data: messages } = await axios.get(
-        "http://localhost:5000/api/messages"
-      );
-      console.log(">>>messages: ", messages);
-      updateMessages.set(messages);
-    };
-    getMessages();
-  });
+  // useEffect(() => {
+  //   const getMessages = async () => {
+  //     const { data: messages } = await axios.get(
+  //       "http://localhost:5000/api/messages"
+  //     );
+  //     console.log(">>>messages: ", messages);
+  //     updateMessages.set(messages);
+  //   };
+  //   getMessages();
+  // });
 
   const handleAddButton = (initalValues: any) => {
     console.log(">>>initalValues: ", initalValues);
@@ -168,3 +170,5 @@ export const General: view = ({
     </div>
   );
 };
+
+General.producers(Object.values(producers));
