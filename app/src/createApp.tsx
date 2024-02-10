@@ -28,6 +28,7 @@ const state: State = {
   students: [],
   schedules: [],
   users: [],
+  parents: [],
   isStateInitiated: false,
   messages: {
     content: [],

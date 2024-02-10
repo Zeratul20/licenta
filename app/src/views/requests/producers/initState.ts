@@ -19,7 +19,7 @@ export const initState: producer = ({
 
   const getRequests = async () => {
     const { data } = await axios.get(
-      `http://localhost:5000/api/requests/users/${userId}`
+      `http://localhost:5000/api/requests`
     );
     updateRequests.set(data);
     console.log("data", data);

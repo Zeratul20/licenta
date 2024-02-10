@@ -1,0 +1,5 @@
+@api = http://localhost:5000/api
+
+### GET
+GET {{api}}/parents
+

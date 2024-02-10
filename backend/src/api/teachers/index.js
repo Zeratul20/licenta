@@ -73,7 +73,8 @@ router.post("/teachers", async (req, res, next) => {
     const { userId, subjectId } = req.body;
     const teacherId = uuid.v4();
     const data = { teacherId, userId, subjectId };
-    data.classes = [];
+    if (req.body.classes) data.classes = req.body.classes;
+    else data.classes = [];
     console.log(">>> data in post: ", data);
     const teachers = await knex("teachers").insert(data);
     await knex("users").where({ userId }).update({ role: "teacher" });

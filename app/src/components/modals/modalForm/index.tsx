@@ -25,7 +25,18 @@ export const Modal: view = ({
   return (
     <>
       <div className="modal fade" id="modalForm">
-        <div className="modal-dialog">
+        <div
+          className="modal-dialog"
+          style={{
+            position: "absolute",
+            top: "200px",
+            right: "500px",
+            width: "500px",
+            zIndex: 10040,
+            overflow: "auto",
+            overflowY: "auto",
+          }}
+        >
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">{title}</h5>

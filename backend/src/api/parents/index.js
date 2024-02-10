@@ -33,7 +33,7 @@ router.get("/parents", async (req, res, next) => {
 router.get("/parents/:parentId", async (req, res, next) => {
   try {
     const { parentId } = req.params;
-    const parentsData = await knex("parents").where({parentId});
+    const parentsData = await knex("parents").where({ parentId });
     if (parentsData.length === 0) {
       res.status(400);
       throw new Error("parent not found");
@@ -51,7 +51,7 @@ router.put("/parents/:parentId", async (req, res, next) => {
   try {
     const { parentId } = req.params;
     const data = { ...req.body };
-    const parentsData = await knex("parents").where({parentId});
+    const parentsData = await knex("parents").where({ parentId });
     if (parentsData.length === 0) {
       res.status(400);
       throw new Error("parent not found");
@@ -61,7 +61,7 @@ router.put("/parents/:parentId", async (req, res, next) => {
     if (data.students) {
       for (let student of data.students) {
         const { studentId } = student;
-        const studentData = await knex("students").where({studentId});
+        const studentData = await knex("students").where({ studentId });
         if (studentData.length === 0) {
           res.status(400);
           throw new Error("student not found");
@@ -80,34 +80,30 @@ router.put("/parents/:parentId", async (req, res, next) => {
   }
 });
 
-router.put("/parents/:email/student/:studentEmail", async (req, res, next) => {
+router.put("/parents/:parentId/students", async (req, res, next) => {
   try {
-    const { email, studentEmail } = req.params;
-    const data = { ...req.body };
-    const parentsData = await knex("parents")
-      .join("users", "parents.userId", "users.userId")
-      .where("users.email", "=", email);
+    const { parentId } = req.params;
+    const { students } = { ...req.body };
+    const parentsData = await knex("parents").where({ parentId });
     if (parentsData.length === 0) {
       res.status(400);
       throw new Error("parent not found");
     }
-    const studentsData = await knex("students")
-      .join("users", "students.userId", "users.userId")
-      .where("users.email", "=", studentEmail);
-    if (studentsData.length === 0) {
-      res.status(400);
-      throw new Error("Student not found");
+    const parentData = parentsData[0];
+    const prevStudents = parentData.students;
+    for (let studentId of students) {
+      const studentsData = await knex("students").where({ studentId });
+      if (studentsData.length === 0) {
+        res.status(400);
+        throw new Error("Student not found");
+      }
     }
-    const { studentId } = studentsData[0];
-    const parent = getParentResponse(parentsData[0]);
-    const { students } = parent;
-    students.push(studentId);
-    await knex("parents")
-      .join("users", "parents.userId", "users.userId")
-      .where("users.email", "=", email)
-      .update({ students });
+    const newStudents = [...prevStudents, ...students];
+    const parents = await knex("parents")
+      .where({ parentId })
+      .update({ students: newStudents });
     console.log(
-      `>>> parent in put elev by email ${email}, studentEmail ${studentEmail}: `,
+      `>>> parent in put elev by parentId ${parentId}, students ${students}: `,
       parents
     );
     res.send(parents);
@@ -127,7 +123,7 @@ router.post("/parents", async (req, res, next) => {
       newParent.students.push(studentId);
     }
 
-    const users = await knex("users").where({userId});
+    const users = await knex("users").where({ userId });
     if (users.length === 0) {
       res.status(400);
       throw new Error("User not found");

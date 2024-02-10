@@ -1,0 +1,34 @@
+@api = http://localhost:5000/api
+
+### POST
+POST {{api}}/classes
+Content-Type: application/json
+
+{
+    "name": "8A",
+    "teacherId": "0b74d281-4fd4-471b-b066-886dd2ffc0c5",
+    "subjects": [
+        "cde1608f-42ee-49f2-ac0b-97ca4bda653f",
+        "703dae29-b840-4147-a6b4-ff7afcba513b",
+        "da36c392-2b9b-4405-9daa-aaae71521fe6",
+        "f1305d39-1184-46ba-a514-6631fb0ad736",
+        "ec2f116b-a1ac-4505-add8-f67bd0927034",
+        "703dae29-b840-4147-a6b4-ff7afcba513b",
+        "1acc52f3-de0e-4bad-820a-d0a915729ea5"
+    ]
+}
+
+### GET
+GET {{api}}/requests
+
+### PUT
+PUT {{api}}/classes/606ca4d8-30ec-4ce2-b0d2-db400f58c693
+Content-Type: application/json
+
+{
+    "name": "7B"
+}
+
+### DELETE
+DELETE {{api}}/classes/01cde1f3-6847-4a22-b671-53cb1ace0e55
+

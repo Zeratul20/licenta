@@ -27,6 +27,7 @@ export type State = {
   students: any;
   schedules: any;
   users: any;
+  parents: any;
   isStateInitiated: boolean;
   messages: {
     content: any;

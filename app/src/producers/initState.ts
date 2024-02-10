@@ -8,13 +8,14 @@ export const initState: producer = ({
   updateSchedules = update.schedules,
   updateUsers = update.users,
   updateStudents = update.students,
+  updateParents = update.parents,
   updateIsStateInitiated = update.isStateInitiated,
 }) => {
   const userId = localStorage.getItem("userIdLicenta");
 
   let cnt = 0;
 
-  const cntMaxVal = 6;
+  const cntMaxVal = 7;
 
   const getUsers = async () => {
     const { data } = await axios.get("http://localhost:5000/api/users");
@@ -55,6 +56,7 @@ export const initState: producer = ({
   const getClasses = async () => {
     const { data } = await axios.get("http://localhost:5000/api/classes");
     updateClasses.set(data);
+    console.log(">>> initState classes", data);
     cnt++;
   };
   getClasses();
@@ -66,12 +68,12 @@ export const initState: producer = ({
   }
   getStudents();
 
-  const getSchedules = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/schedules");
-    updateSchedules.set(data);
+  const getParents = async () => {
+    const { data } = await axios.get("http://localhost:5000/api/parents");
+    updateParents.set(data);
     cnt++;
-  };
-  // getSchedules();
+  }
+  getParents();
 
   if (cnt < cntMaxVal) {
     let retries = cntMaxVal;
