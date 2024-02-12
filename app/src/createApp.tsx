@@ -9,6 +9,7 @@ const state: State = {
     class: null,
     schedule: null,
     teacher: null,
+    student: null,
     isStateInitiated: false,
   },
   catalogue: {

@@ -8,6 +8,7 @@ export type State = {
     class: any;
     schedule: any;
     teacher: any;
+    student: any;
     isStateInitiated: boolean;
   };
   catalogue: {

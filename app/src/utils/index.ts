@@ -30,3 +30,99 @@ export const getSubjectData = (subjects: any, subjectId: any) => {
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+export const getClassName = (className: any) => {
+  switch (className) {
+    case "5A":
+      return "a V-a A";
+    case "5B":
+      return "a V-a B";
+    case "6A":
+      return "a VI-a A";
+    case "6B":
+      return "a VI-a B";
+    case "7A":
+      return "a VII-a A";
+    case "7B":
+      return "a VII-a B";
+    case "8A":
+      return "a VIII-a A";
+    case "8B":
+      return "a VIII-a B";
+    case "9A":
+      return "a IX-a A";
+    case "9B":
+      return "a IX-a B";
+    case "9C":
+      return "a IX-a C";
+    case "10A":
+      return "a X-a A";
+    case "10B":
+      return "a X-a B";
+    case "10C":
+      return "a X-a C";
+    case "11A":
+      return "a XI-a A";
+    case "11B":
+      return "a XI-a B";
+    case "11C":
+      return "a XI-a C";
+    case "12A":
+      return "a XII-a A";
+    case "12B":
+      return "a XII-a B";
+    case "12C":
+      return "a XII-a C";
+    default:
+      return "";
+  }
+};
+
+export const getShortClassName = (className: any) => {
+  switch (className) {
+    case "5A":
+      return "VA";
+    case "5B":
+      return "VB";
+    case "6A":
+      return "VIA";
+    case "6B":
+      return "VIB";
+    case "7A":
+      return "VIIA";
+    case "7B":
+      return "VIIB";
+    case "8A":
+      return "VIIIA";
+    case "8B":
+      return "VIIIB";
+    case "9A":
+      return "IXA";
+    case "9B":
+      return "IXB";
+    case "9C":
+      return "IXC";
+    case "10A":
+      return "XA";
+    case "10B":
+      return "XB";
+    case "10C":
+      return "XC";
+    case "11A":
+      return "XIA";
+    case "11B":
+      return "XIB";
+    case "11C":
+      return "XIC";
+    case "12A":
+      return "XIIA";
+    case "12B":
+      return "XIIB";
+    case "12C":
+      return "XIIC";
+    default:
+      return "";
+
+  }
+};
+

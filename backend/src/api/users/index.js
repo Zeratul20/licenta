@@ -353,4 +353,18 @@ router.delete("/users", async (req, res, next) => {
   }
 });
 
+//Delete more than one
+router.delete("/users/delete", async (req, res, next) => {
+  try {
+    const { userIds } = req.body;
+    for (const userId of userIds) {
+      await knex("users").where({ userId }).del();
+      console.log(`>>> user in delete by userId ${userId}: `, userId);
+    }
+    res.send(userIds);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

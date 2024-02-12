@@ -11,6 +11,9 @@ Content-Type: application/json
 ### GET
 GET {{api}}/schedules
 
+### GET
+GET {{api}}/schedules/teachers/026430d7-a3e2-423e-9417-59aea9f3cc2a
+
 ### PUT
 PUT {{api}}/schedules/564d5bcc-4e0f-4a16-9428-ecc0708ec3ad
 Content-Type: application/json
@@ -20,5 +23,5 @@ Content-Type: application/json
 }
 
 ### DELETE
-DELETE {{api}}/schedules/
+DELETE {{api}}/schedules/617be495-38d1-49e8-955d-32cba877dd64
 

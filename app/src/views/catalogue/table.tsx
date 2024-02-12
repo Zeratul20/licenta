@@ -64,8 +64,9 @@ export const Table: view = ({
   getUsers = get.users,
   getSubjectsState = get.subjects,
 }) => {
+  if (!catalogueClass) return null;
 
-  if(!catalogueClass) return null;
+  console.log(">>>catalogueClass: ", catalogueClass);
 
   const user = getUser.value();
 
@@ -83,16 +84,14 @@ export const Table: view = ({
       for (let i = 0; i < catalogue.length; i++) {
         let student = catalogue[i];
         if (student.studentId === studentId) {
-          student.grades = [
-            ...student.grades,
-            {
-              subjectId: catalogueTeacher.subjectId,
-              grades: [...student.grades, { value: grade, date }],
-            },
-          ];
-          newGrade.subjectId = catalogueTeacher.subjectId;
           newGrade.value = grade;
           newGrade.date = date;
+          if (!student.grades[0])
+            student.grades.push({
+              subjectId: catalogueTeacher.subjectId,
+              grades: [],
+            });
+          student.grades[0].grades.push(newGrade);
           newCatalogue[i] = student;
         }
       }
@@ -102,6 +101,7 @@ export const Table: view = ({
           `http://localhost:5000/api/students/${studentId}/${catalogueTeacher.teacherId}/grades`,
           newGrade
         );
+        console.log(">>>newCatalogue: ", newCatalogue);
         updateCatalogue.set(newCatalogue);
       } catch (error) {
         console.log(">>>error: ", error);
@@ -126,38 +126,39 @@ export const Table: view = ({
     return user;
   };
 
-  useEffect(() => {
-    if (user.role === "teacher") {
-      const getStudents = async () => {
-        const { data: students } = await axios.get(
-          `http://localhost:5000/api/students/catalogue/${catalogueTeacher.teacherId}/${catalogueClass.classId}`
-        );
-        console.log("students in getStudents: ", students);
-        updateCatalogue.set(students);
-      };
-      getStudents();
-    }
-    if (user.role === "director") {
-      const getStudents = async () => {
-        const { data: students } = await axios.get(
-          `http://localhost:5000/api/students/catalogue/${catalogueClass.classId}`
-        );
-        updateCatalogue.set(students);
-      };
-      getStudents();
-    }
-    if (user.role === "student") {
-      const getStudents = async () => {
-        const { data: students } = await axios.get(
-          `http://localhost:5000/api/students/${catalogueStudent.studentId}`
-        );
-        updateCatalogue.set(students);
-      };
-      getStudents();
-    }
-  });
+  // useEffect(() => {
+  //   if (user.role === "teacher") {
+  //     const getStudents = async () => {
+  //       const { data: students } = await axios.get(
+  //         `http://localhost:5000/api/students/catalogue/${catalogueTeacher.teacherId}/${catalogueClass.classId}`
+  //       );
+  //       console.log("students in getStudents: ", students);
+  //       updateCatalogue.set(students);
+  //     };
+  //     getStudents();
+  //   }
+  //   if (user.role === "director") {
+  //     const getStudents = async () => {
+  //       const { data: students } = await axios.get(
+  //         `http://localhost:5000/api/students/catalogue/${catalogueClass.classId}`
+  //       );
+  //       updateCatalogue.set(students);
+  //     };
+  //     getStudents();
+  //   }
+  //   if (user.role === "student") {
+  //     const getStudents = async () => {
+  //       const { data: students } = await axios.get(
+  //         `http://localhost:5000/api/students/${catalogueStudent.studentId}`
+  //       );
+  //       updateCatalogue.set(students);
+  //     };
+  //     getStudents();
+  //   }
+  // });
 
   if (!catalogue) return null;
+  console.log(">>>catalogueClass: ", catalogueClass);
   let { subjects: tempSubjects } = catalogueClass;
   if (user.role === "teacher") {
     tempSubjects = [catalogueTeacher.subjectId];

@@ -103,7 +103,7 @@ router.put("/parents/:parentId/students", async (req, res, next) => {
       .where({ parentId })
       .update({ students: newStudents });
     console.log(
-      `>>> parent in put elev by parentId ${parentId}, students ${students}: `,
+      `>>> parent in put students by parentId ${parentId}, students ${students}: `,
       parents
     );
     res.send(parents);

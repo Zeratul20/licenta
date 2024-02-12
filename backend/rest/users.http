@@ -36,11 +36,52 @@ Content-Type: application/json
 ### GET
 GET {{api}}/users
 
+
+
+
+
+//POPULATION
+
 ### POST
 POST {{api}}/users/population
 
 ### DELETE ALL
 DELETE {{api}}/users
+
+### DELETE MORE
+DELETE {{api}}/users
+Content-Type: application/json
+
+{
+    "userIds": [
+        "e56eb3d0-b48c-48ee-b5e8-a5f862efb5df",
+        "5701dfb6-d32f-4f5e-9c86-9539d53953df",
+        "2cf5d1ac-3a1d-44a9-b015-9e8b767206ab",
+        "3fa5ffd3-01b7-4ba7-89ab-e36726804a97",
+        "3d8f6eb9-a700-4d6f-a41a-dd0544b87d73",
+        "1cc84db3-7c10-425b-a0bb-0eba7e254f66",
+        "073c4f05-8168-4fb0-9541-677450b57b98",
+        "0e8b7e8a-6014-4f13-b6ba-9bd038eabeab",
+        "82de6bd2-3884-45e1-8304-dc40d9b5d135",
+        "2d24c705-8b83-4685-8d8b-3ab884fc8577",
+        "60ea447e-4283-433a-99d9-d816d31ff1ab",
+        "b3229c68-093f-43a3-87b9-79d369d4347e",
+        "9a53ae4d-b71e-47e1-a14a-5c1c7ea8e883",
+        "7ba31999-e9d6-4bae-8739-233540c1eef9",
+        "daab1834-56b3-4bdb-802c-47ce3454a10d",
+        "26823d29-e949-409b-aecb-ae61b8171534",
+        "35a6855c-244d-4956-a00a-8ba431aeefe9",
+        "01b31f2a-85b2-4227-9807-d6be8dd470b4",
+        "9c4f4c59-a526-4ada-9a30-d99b216820d9",
+        "557cb852-3bb5-4ab2-8cb7-9486de67c417",
+        "90cca9a8-6761-4dc1-a3b4-a191b6f7eb8c",
+        "69cbb6e3-d97f-44dc-94f8-9c2139048fd0",
+        "16c43336-38e1-4a2a-9fcf-2825fc63f849",
+        "65fd7bb5-622a-47d9-823e-0c9c2171ab66",
+        "6beefcdc-30a8-4fdb-838c-6f0113fb1b22"
+
+    ]
+}
 
 ### GET user by email
 GET {{api}}/users/dragos.ionescu@gmail.com

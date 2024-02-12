@@ -6,6 +6,8 @@ import "bootstrap";
 import { AddIcon, EditIcon, TrashIcon } from "../../assets/icons";
 import { Modal } from "../../components/modals/modalForm";
 
+import { getClassName, getShortClassName } from "../../utils";
+
 import {
   getSubjectData,
   getTeacherData,
@@ -22,159 +24,172 @@ const bootstrap = require("bootstrap");
 export const Table: view = ({
   scheduleClass = observe.schedule.class,
   schedule = observe.schedule.schedule,
-  updateSchedule = update.schedule.schedule,
-  updateSchedules = update.schedules,
+  scheduleTeacher = observe.schedule.teacher,
   getSchedules = get.schedules,
   updateModalFormData = update.modal.formData,
-  isModalSavePressed = observe.modal.isSavePressed,
-  updateIsModalSavePressed = update.modal.isSavePressed,
-  getModalFormData = get.modal.formData,
   getTeachersState = get.teachers,
   getSubjectsState = get.subjects,
   getUsers = get.users,
   getUser = get.user,
+  getClassesState = get.classes,
+  getScheduleStudent = get.schedule.student,
   updateIsModalOpen = update.modal.isOpen,
 }) => {
-  const modalFormData = getModalFormData.value();
   const teachersState = getTeachersState.value();
   const subjectsState = getSubjectsState.value();
   const schedules = getSchedules.value();
   const users = getUsers.value();
   const user = getUser.value();
+  const scheduleStudent = getScheduleStudent.value();
+
+  const [modalType, setModalType] = useState("");
 
   console.log(">>>teachersState: ", teachersState);
 
   console.log(">>>Schedule: ", schedule);
   console.log(">>>Schedules: ", schedules);
 
+  const startHour = 8;
+  const endHour = 19;
+  const days = ["Lu", "Ma", "Mi", "Jo", "Vi"];
+
   if (user.role === "teacher") {
-    return null;
+    if (!scheduleTeacher) {
+      return (
+        <div className="d-flex justify-content-center">
+          <h2>Orar indisponibil</h2>
+        </div>
+      );
+    }
+    const classesState = getClassesState.value();
+    console.log(">>>scheduleTeacher: ", scheduleTeacher);
+    return (
+      <div className="schedule">
+        <div className="d-flex justify-content-center">
+          <h2>
+            {user.lastName} {user.firstName}
+          </h2>
+        </div>
+        <div className="p-5">
+          <table className="table table-bordered" style={{ border: "1px" }}>
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                {Array.from(
+                  { length: endHour - startHour + 1 },
+                  (_, i) => i + startHour
+                ).map((hour) => {
+                  return (
+                    <th className="text-center" scope="col">
+                      {hour}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {days.map((day: string) => {
+                return (
+                  <tr>
+                    <th scope="row">{day}</th>
+                    {Array.from(
+                      { length: endHour - startHour + 1 },
+                      (_, i) => i + startHour
+                    ).map((hour) => {
+                      //   return <td className="text-center">Limba Romana</td>;
+                      const hourFound = scheduleTeacher.find(
+                        (subject: any) =>
+                          subject.day === day &&
+                          subject.hour === hour.toString()
+                      );
+
+                      if (hourFound) {
+                        console.log(">>>hourFound: ", hourFound);
+                        const { classId } = hourFound;
+
+                        const { name: className } = classesState.find(
+                          (classEl: any) => classEl.classId === classId
+                        );
+
+                        console.log(">>>className", className);
+
+                        return (
+                          <td>
+                            <div className="text-center d-flex justify-content-center">
+                              {getClassName(className)}
+                            </div>
+                          </td>
+                        );
+                      }
+                      return <td className="text-center align-middle"></td>;
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
   }
 
   if (!scheduleClass || !schedule) {
     return null;
   }
 
-  if (isModalSavePressed) {
-    const { type } = modalFormData;
-    if (type === "add") {
-      console.log(">>>add hour");
-      const subjectName = modalFormData.subject;
-      const subjectFound = subjectsState.find((subject: any) => {
-        return subject.name === subjectName;
-      });
-      const { subjectId } = subjectFound;
-      const { day, hour } = modalFormData;
-      const subject = {
-        subjectId,
-        teacherId: "",
-        day,
-        hour,
-      };
-      console.log(">>>subjectFound: ", subjectFound);
-      const { teacherId: subjectTeacherId } = teachersState.find(
-        (teacher: any) => {
-          return (
-            teacher.subjectId === subjectId &&
-            teacher.classes.includes(scheduleClass.classId)
-          );
-        }
-      );
-      subject.teacherId = subjectTeacherId;
-      const newSubjects = [...schedule.subjects, subject];
-      const newSchedule = { ...schedule, subjects: newSubjects };
-      const newSchedules = schedules.map((scheduleEl: any) => {
-        if (scheduleEl.scheduleId === schedule.scheduleId) {
-          return newSchedule;
-        }
-        return scheduleEl;
-      });
-      const updatedSchedule: any = {};
-      updatedSchedule.subjects = newSubjects;
-      try {
-        axios.put(
-          `http://localhost:5000/api/schedules/${schedule.scheduleId}`,
-          updatedSchedule
-        );
-        updateSchedules.set(newSchedules);
-        updateSchedule.set(newSchedule);
-      } catch (error) {
-        console.log(">>>error: ", error);
-        toast.error("Eroare la adaugarea orei", {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 3000,
-        });
-      }
-    } else if (type === "edit") {
-      console.log(">>>edit hour");
-      const subjectName = modalFormData.subject;
-      const subjectFound = subjectsState.find((subject: any) => {
-        return subject.name === subjectName;
-      });
-      const { subjectId } = subjectFound;
-      const { day, hour } = modalFormData;
-      const subject = {
-        subjectId,
-        teacherId: "",
-        day,
-        hour,
-      };
-      const { subjectTeacherId } = teachersState.find((teacher: any) => {
-        return (
-          teacher.subjectId === subjectId &&
-          teacher.classes.includes(scheduleClass.classId)
-        );
-      });
-      subject.teacherId = subjectTeacherId;
-      const newSubjects = schedule.subjects.map((subjectEl: any) => {
-        if (subjectEl.day === day && subjectEl.hour === hour.toString()) {
-          return subject;
-        }
-        return subjectEl;
-      });
-      const newSchedule = { ...schedule, subjects: newSubjects };
-      const newSchedules = schedules.map((scheduleEl: any) => {
-        if (scheduleEl.scheduleId === schedule.scheduleId) {
-          return newSchedule;
-        }
-        return scheduleEl;
-      });
-      try {
-        axios.put(
-          `http://localhost:5000/api/schedules/${schedule.scheduleId}`,
-          newSchedule
-        );
-        updateSchedules.set(newSchedules);
-        updateSchedule.set(newSchedule);
-      } catch (error) {
-        console.log(">>>error: ", error);
-        toast.error("Eroare la modificarea orei", {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 3000,
-        });
-      }
-    }
-    updateModalFormData.set({});
-    updateIsModalSavePressed.set(false);
-  }
-
   const subjects = schedule.subjects || [];
 
-  const startHour = 8;
-  const endHour = 19;
-  const days = ["Lu", "Ma", "Mi", "Jo", "Vi"];
+  console.log(">>>subjects: ", subjects);
 
-  const handleEdit_AddButton = (initalValues: any) => {
+  const handleEdit_AddButton = (initalValues: any, type: string) => {
     console.log(">>>initalValues: ", initalValues);
+    setModalType(type);
     updateModalFormData.set(initalValues);
     updateIsModalOpen.set(true);
     modalOperation("modalForm", "show");
   };
 
+  let modalTitle = "";
+  if (modalType === "add") modalTitle = "Adauga ora";
+  if (modalType === "edit") modalTitle = "Modifica ora";
+
+  const fields = [
+    {
+      field: "subject",
+      label: "Materie",
+      className: "form-floating mb-3 col-md-12",
+      placeholder: "Limba Romana",
+      type: "text",
+    },
+    {
+      field: "hour",
+      label: "Ora",
+      className: "form-floating mb-3 col-md-12",
+      placeholder: "8",
+      type: "text",
+      disabled: true,
+    },
+    {
+      field: "day",
+      label: "Zi",
+      className: "form-floating mb-3 col-md-12",
+      placeholder: "Lu",
+      type: "text",
+      disabled: true,
+    },
+  ];
+
   return (
     <div className="schedule">
-      <div className="d-flex justify-content-center">
-        <h2>Orar clasa {getClassName(scheduleClass.name)}</h2>
+      <div>
+        <h2 style={{textAlign: "center"}}>Clasa {getClassName(scheduleClass.name)}</h2>
+        {user.role === "parent" && (
+          <h3 style={{textAlign: "center"}}>
+            {"("}
+            {scheduleStudent.lastName} {scheduleStudent.firstName}
+            {")"}
+          </h3>
+        )}
       </div>
       <div className="p-5">
         <table className="table table-bordered" style={{ border: "1px" }}>
@@ -208,33 +223,6 @@ export const Table: view = ({
                         subject.day === day && subject.hour === hour.toString()
                       );
                     });
-                    console.log(">>>subjectFound: ", subjectFound);
-
-                    const fields = [
-                      {
-                        field: "subject",
-                        label: "Materie",
-                        className: "form-floating mb-3 col-md-12",
-                        placeholder: "Limba Romana",
-                        type: "text",
-                      },
-                      {
-                        field: "hour",
-                        label: "Ora",
-                        className: "form-floating mb-3 col-md-12",
-                        placeholder: "8",
-                        type: "text",
-                        disabled: true,
-                      },
-                      {
-                        field: "day",
-                        label: "Zi",
-                        className: "form-floating mb-3 col-md-12",
-                        placeholder: "Lu",
-                        type: "text",
-                        disabled: true,
-                      },
-                    ];
 
                     const initialValuesAdd = {
                       subject: "",
@@ -243,6 +231,10 @@ export const Table: view = ({
                     };
 
                     if (subjectFound) {
+                      console.log(">>>subjectFound: ", subjectFound);
+                      console.log(">>>hour: ", hour);
+                      console.log(">>>day: ", day);
+                      console.log(">>>subjects: ", subjects);
                       const { teacherId } = subjectFound;
 
                       const { userId: teacherUserId } = getTeacherData(
@@ -255,13 +247,17 @@ export const Table: view = ({
                         teacherUserId
                       );
 
+                      console.log(">>>subjectsState", subjectsState);
+
                       const { name: subjectName } = getSubjectData(
                         subjectsState,
                         subjectFound.subjectId
                       );
 
+                      console.log(">>>subjectName: ", subjectName);
+
                       const initialValuesEdit = {
-                        subject: subjectFound.name,
+                        subject: subjectName,
                         hour: hour.toString(),
                         day,
                       };
@@ -280,16 +276,14 @@ export const Table: view = ({
                                 className="btn btn-lg btn-outline-primary py-0"
                                 style={{ fontSize: "1rem", border: "none" }}
                                 onClick={() =>
-                                  handleEdit_AddButton(initialValuesEdit)
+                                  handleEdit_AddButton(
+                                    initialValuesEdit,
+                                    "edit"
+                                  )
                                 }
                               >
                                 <EditIcon />
                               </button>
-                              <Modal
-                                fields={fields}
-                                title={"Modifica ora"}
-                                type={"edit"}
-                              />
 
                               <button
                                 className="btn btn-lg btn-outline-danger py-0"
@@ -310,16 +304,11 @@ export const Table: view = ({
                               className="btn btn-outline-success py-0"
                               style={{ fontSize: "10px", border: "none" }}
                               onClick={() =>
-                                handleEdit_AddButton(initialValuesAdd)
+                                handleEdit_AddButton(initialValuesAdd, "add")
                               }
                             >
                               <AddIcon size="1.5rem" />
                             </button>
-                            <Modal
-                              fields={fields}
-                              title={"Adauga ora"}
-                              type={"add"}
-                            />
                           </>
                         )}
                       </td>
@@ -331,74 +320,7 @@ export const Table: view = ({
           </tbody>
         </table>
       </div>
+      <Modal fields={fields} title={modalTitle} type={modalType} />
     </div>
   );
-};
-
-const getClassName = (className: any) => {
-  switch (className) {
-    case "5A":
-      return "a V-a A";
-      break;
-    case "5B":
-      return "a V-a B";
-      break;
-    case "6A":
-      return "a VI-a A";
-      break;
-    case "6B":
-      return "a VI-a B";
-      break;
-    case "7A":
-      return "a VII-a A";
-      break;
-    case "7B":
-      return "a VII-a B";
-      break;
-    case "8A":
-      return "a VIII-a A";
-      break;
-    case "8B":
-      return "a VIII-a B";
-      break;
-    case "9A":
-      return "a IX-a A";
-      break;
-    case "9B":
-      return "a IX-a B";
-      break;
-    case "9C":
-      return "a IX-a C";
-      break;
-    case "10A":
-      return "a X-a A";
-      break;
-    case "10B":
-      return "a X-a B";
-      break;
-    case "10C":
-      return "a X-a C";
-      break;
-    case "11A":
-      return "a XI-a A";
-      break;
-    case "11B":
-      return "a XI-a B";
-      break;
-    case "11C":
-      return "a XI-a C";
-      break;
-    case "12A":
-      return "a XII-a A";
-      break;
-    case "12B":
-      return "a XII-a B";
-      break;
-    case "12C":
-      return "a XII-a C";
-      break;
-    default:
-      return "";
-      break;
-  }
 };

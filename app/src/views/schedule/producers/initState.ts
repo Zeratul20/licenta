@@ -3,17 +3,36 @@ import axios from "axios";
 export const initState: producer = ({
   updateSchedules = update.schedules,
   updateIsStateInitiated = update.schedule.isStateInitiated,
+  updateScheduleTeacher = update.schedule.teacher,
+  user = observe.user,
+  getTeachersState = get.teachers,
 }) => {
   let cnt = 0;
   const cntMaxVal = 1;
 
-  const getSchedules = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/schedules");
-    updateSchedules.set(data);
-    console.log("data", data)
-    cnt++;
-  };
-  getSchedules();
+  if (user.role !== "teacher") {
+    const getSchedules = async () => {
+      const { data } = await axios.get("http://localhost:5000/api/schedules");
+      updateSchedules.set(data);
+      console.log("data", data);
+      cnt++;
+    };
+    getSchedules();
+  } else {
+    const getScheduleForTeacher = async () => {
+      const teachersState = getTeachersState.value();
+      const { teacherId } = teachersState.find(
+        (teacher: any) => teacher.userId === user.userId
+      );
+      const { data } = await axios.get(
+        `http://localhost:5000/api/schedules/teachers/${teacherId}`
+      );
+      updateScheduleTeacher.set(data);
+      console.log("data", data);
+      cnt++;
+    };
+    getScheduleForTeacher();
+  }
 
   if (cnt < cntMaxVal) {
     let retries = 5;

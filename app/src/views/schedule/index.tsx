@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table } from "./table";
 import { ClassDropdown } from "../../components/inputs/classDropdown";
+import { StudentsDropdown } from "../../components/inputs/studentsDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import * as producers from "./producers";
@@ -9,12 +10,16 @@ import { Loader } from "../../components/helpers/loader";
 export const Schedule: view = ({
   user = observe.user,
   getClasses = get.classes,
+  getStudents = get.students,
+  getParents = get.parents,
+  getUsers = get.users,
   schedules = observe.schedules,
   updateScheduleClass = update.schedule.class,
   updateSchedule = update.schedule.schedule,
+  updateScheduleStudent = update.schedule.student,
   isStateInitiated = observe.schedule.isStateInitiated,
 }) => {
-  if(!isStateInitiated) return <Loader />;
+  if (!isStateInitiated) return <Loader />;
   // const schedules = getSchedules.value();
   if (user.role === "director") {
     const classes = getClasses.value();
@@ -32,39 +37,92 @@ export const Schedule: view = ({
     return (
       <div className="object-fit-cover">
         <h1>Orar</h1>
-        {/* <div className="dropdown">
-          <button
-            className="btn btn-secondary dropdown-toggle"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Clasa
-          </button>
-          <ul className="dropdown-menu">
-            {classes.map((classEl: any) => {
-              return (
-                <li>
-                  <button
-                    key={classEl.classId}
-                    className="dropdown-item"
-                    onClick={() => handleClick(classEl.classId)}
-                  >
-                    {classEl.name}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div> */}
         <ClassDropdown classes={classes} handleClick={handleClick} />
         <Table />
       </div>
     );
   }
+
+  if (user.role === "teacher") {
+    return (
+      <div className="object-fit-cover">
+        <h1>Orar profesor</h1>
+        <Table />
+      </div>
+    );
+  }
+
+  if (user.role === "student") {
+    const students = getStudents.value();
+    const classes = getClasses.value();
+    const student = students.find(
+      (student: any) => student.userId === user.userId
+    );
+    const studentClass = classes.find(
+      (classEl: any) => classEl.classId === student.classId
+    );
+    const scheduleFound = schedules.find(
+      (schedule: any) => schedule.classId === student.classId
+    );
+    updateSchedule.set(scheduleFound);
+    updateScheduleClass.set(studentClass);
+    return (
+      <div className="object-fit-cover">
+        <h1>Orar</h1>
+        <Table />
+      </div>
+    );
+  }
+
+  const getNameByStudentId = (studentId: string) => {
+    const students = getStudents.value();
+    const users = getUsers.value();
+    const student = students.find(
+      (student: any) => student.studentId === studentId
+    );
+    const user = users.find((user: any) => user.userId === student.userId);
+    return {
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+  };
+
+  const parentsState = getParents.value();
+  const studentsState = getStudents.value();
+  const classesState = getClasses.value();
+  const parentFound = parentsState.find(
+    (parent: any) => parent.userId === user.userId
+  );
+  if (!parentFound) return null;
+  const handleClick = (studentId: string) => {
+    const studentClassId = studentsState.find(
+      (student: any) => student.studentId === studentId
+    ).classId;
+    const classFound = classesState.find(
+      (classEl: any) => classEl.classId === studentClassId
+    );
+    const scheduleFound = schedules.find(
+      (schedule: any) => schedule.classId === studentClassId
+    );
+    const { firstName, lastName } = getNameByStudentId(studentId);
+    updateScheduleStudent.set({ studentId, firstName, lastName });
+    updateSchedule.set(scheduleFound);
+    updateScheduleClass.set(classFound);
+  };
+  const { students: parentStudents } = parentFound;
+  const students: any = [];
+  parentStudents.forEach((studentId: string) => {
+    const { firstName, lastName } = getNameByStudentId(studentId);
+    students.push({
+      studentId,
+      firstName,
+      lastName,
+    });
+  });
   return (
     <div className="object-fit-cover">
       <h1>Orar</h1>
+      <StudentsDropdown students={students} handleClick={handleClick} />
       <Table />
     </div>
   );

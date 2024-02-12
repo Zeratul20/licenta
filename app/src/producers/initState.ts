@@ -25,7 +25,10 @@ export const initState: producer = ({
   getUsers();
 
   const getUser = async () => {
-    if (!userId) return;
+    if (!userId) {
+      cnt++;
+      return;
+    }
     try {
       const { data } = await axios.get(
         `http://localhost:5000/api/users/${userId}`

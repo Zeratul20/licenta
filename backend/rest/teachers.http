@@ -10,11 +10,11 @@ Content-Type: application/json
 }
 
 ### PUT
-PUT {{api}}/teachers/0c0a280d-de31-453b-b43c-4b76ae836985
+PUT {{api}}/teachers/77f2b927-401a-456b-b4a9-289f0d5b1c87
 Content-Type: application/json
 
 {
-    "classes": ["f8642a8f-b985-443d-bcfe-ee63070c4261", "3d9bc254-e757-400b-b867-171886469a22", "8ac5a125-8065-4e58-ba1b-534a5028936b"]
+    "classes": []
 }
 
 ### GET

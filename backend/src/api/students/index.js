@@ -179,7 +179,11 @@ router.put("/students/:studentId/:teacherId/grades", async (req, res, next) => {
     const { studentId, teacherId } = req.params;
     const data = { ...req.body };
     console.log(">>>>> data: ", data);
-    const { subjectId, value, date } = data;
+    const { value, date } = data;
+    const subjectIdData = await knex("teachers")
+      .where({ teacherId })
+      .select("subjectId");
+    const subjectId = subjectIdData[0].subjectId;
     const studentsData = await knex("students").where({ studentId });
     if (studentsData.length === 0) {
       res.status(400);

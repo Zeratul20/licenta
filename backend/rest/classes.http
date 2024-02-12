@@ -22,11 +22,18 @@ Content-Type: application/json
 GET {{api}}/classes
 
 ### PUT
-PUT {{api}}/classes/606ca4d8-30ec-4ce2-b0d2-db400f58c693
+PUT {{api}}/classes/8ac5a125-8065-4e58-ba1b-534a5028936b
 Content-Type: application/json
 
 {
-    "name": "7B"
+    "subjects": [
+        "cde1608f-42ee-49f2-ac0b-97ca4bda653f",
+        "703dae29-b840-4147-a6b4-ff7afcba513b",
+        "da36c392-2b9b-4405-9daa-aaae71521fe6",
+        "f1305d39-1184-46ba-a514-6631fb0ad736",
+        "ec2f116b-a1ac-4505-add8-f67bd0927034",
+        "1acc52f3-de0e-4bad-820a-d0a915729ea5"
+    ]
 }
 
 ### DELETE
