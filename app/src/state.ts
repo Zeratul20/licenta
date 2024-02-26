@@ -33,9 +33,14 @@ export type State = {
   messages: {
     content: any;
     isStateInitiated: boolean;
-  },
+  };
   requests: {
     content: any;
     isStateInitiated: boolean;
-  }
+  };
+  classDetails: {
+    teachers: any;
+    class: any;
+    isStateInitiated: boolean;
+  };
 };

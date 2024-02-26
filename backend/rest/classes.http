@@ -21,19 +21,15 @@ Content-Type: application/json
 ### GET
 GET {{api}}/classes
 
+### GET Teachers
+GET {{api}}/classes/f8642a8f-b985-443d-bcfe-ee63070c4261/teachers
+
 ### PUT
-PUT {{api}}/classes/8ac5a125-8065-4e58-ba1b-534a5028936b
+PUT {{api}}/classes/3d9bc254-e757-400b-b867-171886469a22
 Content-Type: application/json
 
 {
-    "subjects": [
-        "cde1608f-42ee-49f2-ac0b-97ca4bda653f",
-        "703dae29-b840-4147-a6b4-ff7afcba513b",
-        "da36c392-2b9b-4405-9daa-aaae71521fe6",
-        "f1305d39-1184-46ba-a514-6631fb0ad736",
-        "ec2f116b-a1ac-4505-add8-f67bd0927034",
-        "1acc52f3-de0e-4bad-820a-d0a915729ea5"
-    ]
+    "teacherId": "026430d7-a3e2-423e-9417-59aea9f3cc2a"
 }
 
 ### DELETE

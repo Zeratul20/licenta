@@ -5,8 +5,8 @@ POST {{api}}/teachers
 Content-Type: application/json
 
 {
-    "userId": "078e59af-32a9-450c-8b29-a093dd1e36e6",
-    "subjectId": "da36c392-2b9b-4405-9daa-aaae71521fe6"
+    "userId": "b5547102-6ad6-42a4-989f-729406c6562a",
+    "subjectId": "1acc52f3-de0e-4bad-820a-d0a915729ea5"
 }
 
 ### PUT

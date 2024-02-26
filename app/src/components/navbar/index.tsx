@@ -26,8 +26,8 @@ export const NavBar: view = ({
   const settings = ["Profile", "Account", "Logout"];
   const { userId } = user;
   console.log(">>>user in nav: ", user);
-  // if (user.role === "director") pages.push("Cereri");
   pages.push("Cereri");
+  if (user.role === "director") pages.push("Clase");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -71,6 +71,9 @@ export const NavBar: view = ({
       case "Cereri":
         navigate("/requests");
         break;
+      case "Clase":
+        navigate("/classes");
+        break;
       default:
         navigate("/");
         break;
@@ -88,9 +91,6 @@ export const NavBar: view = ({
         break;
       case "Logout":
         updateIsLogoutPressed.set(true);
-        navigate("/");
-        break;
-      default:
         navigate("/");
         break;
     }

@@ -36,6 +36,8 @@ export const UserRequests: view = ({
   ];
   const fieldsType2: any = [];
   const fieldsType3: any = [];
+  const fieldsType4: any = [];
+  // const fieldsType5: any = [];
 
   const initialValuesType1 = {
     requestType: 1,
@@ -44,6 +46,8 @@ export const UserRequests: view = ({
   };
   const initialValuesType2 = { requestType: 2 };
   const initialValuesType3 = { requestType: 3 };
+  const initialValuesType4 = { requestType: 4 };
+  // const initialValuesType5 = { requestType: 5 };
 
   const handleMakeRequest = (initialValues: any) => {
     updateModalFormData.set(initialValues);
@@ -64,7 +68,14 @@ export const UserRequests: view = ({
   } else if (requestType === 3) {
     fieldsType = fieldsType3;
     modalTitle = "Cerere profesor";
-  }
+  } else if (requestType === 4) {
+    fieldsType = fieldsType3;
+    modalTitle = "Cerere stergere elev";
+  } 
+  // else if (requestType === 5) {
+  //   fieldsType = fieldsType3;
+  //   modalTitle = "Cerere stergere profesor";
+  // }
 
   const getUserDataById = (userId: any) => {
     const data = usersState.find((user: any) => user.userId === userId);
@@ -131,6 +142,30 @@ export const UserRequests: view = ({
           Cerere rol profesor
         </button>
       </div>
+      <div className="request">
+        <p>
+          Pentru cererea de stergere a rolului de elev, completati formularul
+          urmator:
+        </p>
+        <button
+          className="btn btn-primary"
+          onClick={() => handleMakeRequest(initialValuesType4)}
+        >
+          Cerere stergere rol elev
+        </button>
+      </div>
+      {/* <div className="request">
+        <p>
+          Pentru cererea de stergere a rolului de profesor, completati
+          formularul urmator:
+        </p>
+        <button
+          className="btn btn-primary"
+          onClick={() => handleMakeRequest(initialValuesType5)}
+        >
+          Cerere stergere rol profesor
+        </button>
+      </div> */}
       <Modal fields={fieldsType} title={modalTitle} type={"add"} />
       <h2 style={{ paddingLeft: "100px", paddingTop: "40px" }}>
         Cereri in asteptare:
@@ -164,9 +199,7 @@ export const UserRequests: view = ({
                 Respinsa: Cerere de tipul {request.type} de la {email}{" "}
                 {`(${lastName} ${firstName})`}
               </p>
-              <p>
-                Motiv respingere: {request.response}
-              </p>
+              <p>Motiv respingere: {request.response}</p>
             </div>
           );
         })}

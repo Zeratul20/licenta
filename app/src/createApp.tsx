@@ -39,6 +39,11 @@ const state: State = {
     content: [],
     isStateInitiated: false,
   },
+  classDetails: {
+    teachers: [],
+    class: null,
+    isStateInitiated: false,
+  },
 };
 
 export const createApp = () => {

@@ -31,6 +31,14 @@ export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
+export const sortedClassesByName = (classes: any) => {
+  return classes.sort((a: any, b: any) => {
+    if (a.name < b.name) return -1;
+    if (a.name > b.name) return 1;
+    return 0;
+  });
+}
+
 export const getClassName = (className: any) => {
   switch (className) {
     case "5A":

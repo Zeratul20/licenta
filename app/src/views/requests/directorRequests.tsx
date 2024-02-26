@@ -5,7 +5,7 @@ import * as producers from "./producers";
 // import { toast } from "react-toastify";
 import { GreenTick } from "../../assets/icons/greenTick";
 import { RedX } from "../../assets/icons/redX";
-import { UserRequests } from "./userRequests";
+import { getClassName } from "../../utils";
 
 export const DirectorRequests: view = ({
   user = observe.user,
@@ -14,6 +14,8 @@ export const DirectorRequests: view = ({
   requests = observe.requests.content,
   getStudents = get.students,
   getUsers = get.users,
+  getTeacherState = get.teacher,
+  getClassesState = get.classes,
 }) => {
   console.log(">>>user: ", user);
   console.log(">>>requests: ", requests);
@@ -56,24 +58,61 @@ export const DirectorRequests: view = ({
       type: "text",
     },
   ];
+  const fieldsType4: any = [];
 
   const initialValuesType1 = {
     requestType: 1,
   };
   const initialValuesType2 = { requestType: 2, className: "" };
   const initialValuesType3 = { requestType: 3, subjectName: "", classes: "" };
+  const initialValuesType4 = { requestType: 4};
+
+  // const getFieldsType5 = (request: any) => {
+  //   const fields = [];
+  //   const { userId } = request;
+  //   const teacherState = getTeacherState.value();
+  //   const classesState = getClassesState.value();
+  //   const teacherFound = teacherState.find(
+  //     (teacher: any) => teacher.userId === userId
+  //   );
+  //   const classFound = classesState.find(
+  //     (classState: any) => classState.teacherId === teacherFound.teacherId
+  //   );
+  //   if(classFound) {
+  //     fields.push({
+  //       field: "class",
+  //       label: `Diriginte Clasa ${getClassName(classFound.name)}`,
+  //       className: "form-floating mb-3 col-md-12",
+  //       placeholder: "5A",
+  //       type: "text",
+  //     });
+  //   }
+  //   const classes = teacherFound.classes;
+  //   classes.forEach((classId: any) => {
+  //     const classFound = classesState.find(
+  //       (classState: any) => classState.classId === classId
+  //     );
+  //     fields.push({
+  //       field: `${classId}`,
+  //       label: `Prof. Clasa ${getClassName(classFound.name)}`,
+  //       className: "form-floating mb-3 col-md-12",
+  //       placeholder: "5A",
+  //       type: "text",
+  //     });
+  //   });
+  // };
 
   const handleAnswerRequest = (
     initialValues: any,
     request: any,
     status: string
   ) => {
-    const {userId, requestId} = request;
+    const { userId, requestId } = request;
     initialValues.status = status;
     initialValues.requestId = requestId;
     initialValues.userId = userId;
-    if(initialValues.requestType === 1)
-        initialValues.students = request.students;
+    if (initialValues.requestType === 1)
+      initialValues.students = request.students;
     updateModalFormData.set(initialValues);
     console.log(">>>initialValues: ", initialValues);
     setRequestType(initialValues.requestType);
@@ -96,6 +135,9 @@ export const DirectorRequests: view = ({
   } else if (requestType === 3) {
     fieldsType = fieldsType3;
     modalTitle = "Acceptare Cerere profesor";
+  } else if (requestType === 4) {
+    fieldsType = fieldsType4;
+    modalTitle = "Acceptare Cerere stergere elev";
   }
 
   const pendingRequests = requests.filter(
@@ -283,7 +325,8 @@ export const DirectorRequests: view = ({
                 </div>
               </div>
             );
-          } else {
+          }
+          if (request.type == "3") {
             const dataForUser = usersState.find(
               (userState: any) => userState.userId === request.userId
             );
@@ -324,6 +367,75 @@ export const DirectorRequests: view = ({
                           onClick={() =>
                             handleAnswerRequest(
                               initialValuesType3,
+                              request,
+                              "accepted"
+                            )
+                          }
+                        >
+                          <GreenTick />
+                        </button>
+                        <button
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                          }}
+                          onClick={() =>
+                            handleAnswerRequest(
+                              { response: "" },
+                              request,
+                              "rejected"
+                            )
+                          }
+                        >
+                          <RedX />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          } else {
+            const dataForUser = usersState.find(
+              (userState: any) => userState.userId === request.userId
+            );
+            const { email, firstName, lastName } = dataForUser;
+            return (
+              <div
+                key={request.requestId}
+                style={{ width: "75%", paddingBottom: "50px" }}
+              >
+                <div
+                  className="card border-dark mb-5 w-50"
+                  style={{
+                    marginLeft: "500px",
+                    zIndex: 1,
+                    boxShadow: "4px 4px 15px 2px rgba(0,0,0,0.75)",
+                  }}
+                >
+                  <div
+                    className="card-header bg-transparent border-dark"
+                    // style={{ display: "flex" }}
+                  >
+                    <b>Cerere de tipul stergere elev</b>
+                  </div>
+                  <div className="card-body">
+                    <div>
+                      <div className="card-title">
+                        Utilizatorul {email} {`(${lastName} ${firstName})`}{" "}
+                        doreste sa isi stearga rolul de elev.
+                      </div>
+                      <div className="card-text" style={{ display: "flex" }}>
+                        <button
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            paddingRight: "200px",
+                            // blockSize: "15px",
+                          }}
+                          onClick={() =>
+                            handleAnswerRequest(
+                              initialValuesType4,
                               request,
                               "accepted"
                             )

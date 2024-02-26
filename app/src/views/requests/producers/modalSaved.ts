@@ -209,5 +209,25 @@ export const modalSaved: producer = ({
         autoClose: 3000,
       });
     }
+  } else if(modalFormData.requestType === 4) {
+    try {
+      const { studentId } = studentsState.find(
+        (student: any) => student.userId === userId
+      );
+      axios.delete(`http://localhost:5000/api/students/${studentId}`);
+      axios.put(`http://localhost:5000/api/requests/${requestId}`, {
+        status: "accepted",
+      });
+      toast.success("Elevul a fost sters", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (e) {
+      console.log(">>>error: ", e);
+      toast.error("Elev invalid", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   }
 };

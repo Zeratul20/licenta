@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import * as producers from "./producers";
 import { Loader } from "../../components/helpers/loader";
+import { sortedClassesByName } from "../../utils";
 
 export const Schedule: view = ({
   user = observe.user,
@@ -23,6 +24,7 @@ export const Schedule: view = ({
   // const schedules = getSchedules.value();
   if (user.role === "director") {
     const classes = getClasses.value();
+    const sortedClasses = sortedClassesByName(classes);
     const handleClick = (classId: string) => {
       console.log(classId);
       const classFound = classes.find(
@@ -37,7 +39,7 @@ export const Schedule: view = ({
     return (
       <div className="object-fit-cover">
         <h1>Orar</h1>
-        <ClassDropdown classes={classes} handleClick={handleClick} />
+        <ClassDropdown classes={sortedClasses} handleClick={handleClick} />
         <Table />
       </div>
     );

@@ -12,6 +12,8 @@ import { ToastContainer } from "react-toastify";
 
 import { Loader } from "./components/helpers/loader";
 import { Requests } from "./views/requests";
+import { Classes } from "./views/classes";
+import {ClassDetails} from "./views/classes/classDetails"
 import "react-toastify/dist/ReactToastify.css";
 
 export const App: view = ({ isStateInitiated = observe.isStateInitiated }) => {
@@ -29,6 +31,8 @@ export const App: view = ({ isStateInitiated = observe.isStateInitiated }) => {
           <Route path={"/catalog"} element={<Catalogue />} />
           <Route path={"/teme"} element={<Teme />} />
           <Route path={"/requests"} element={<Requests />} />
+          <Route path={"/classes"} element={<Classes />} />
+          <Route path={"/classes/:classId"} element={<ClassDetails />} />
           <Route path={"/sign-up"} element={<SignUp />} />
           <Route path={"/login"} element={<Login />} />
         </Routes>
