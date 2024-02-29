@@ -13,29 +13,34 @@ import { ToastContainer } from "react-toastify";
 import { Loader } from "./components/helpers/loader";
 import { Requests } from "./views/requests";
 import { Classes } from "./views/classes";
-import {ClassDetails} from "./views/classes/classDetails"
+import { ClassDetails } from "./views/classes/classDetails";
 import "react-toastify/dist/ReactToastify.css";
+import "./style.css";
 
 export const App: view = ({ isStateInitiated = observe.isStateInitiated }) => {
   if (!isStateInitiated) {
     return <Loader />;
   }
   return (
-    <div>
+    <div className="cover">
       <Router>
         <NavBar />
-        <Routes>
-          <Route path={"/"} element={<Home />} />
-          <Route path={"/general"} element={<General />} />
-          <Route path={"/orar"} element={<Schedule />} />
-          <Route path={"/catalog"} element={<Catalogue />} />
-          <Route path={"/teme"} element={<Teme />} />
-          <Route path={"/requests"} element={<Requests />} />
-          <Route path={"/classes"} element={<Classes />} />
-          <Route path={"/classes/:classId"} element={<ClassDetails />} />
-          <Route path={"/sign-up"} element={<SignUp />} />
-          <Route path={"/login"} element={<Login />} />
-        </Routes>
+        <div className="card-container">
+          <div className="card-content">
+            <Routes>
+              <Route path={"/"} element={<Home />} />
+              <Route path={"/general"} element={<General />} />
+              <Route path={"/orar"} element={<Schedule />} />
+              <Route path={"/catalog"} element={<Catalogue />} />
+              <Route path={"/teme"} element={<Teme />} />
+              <Route path={"/requests"} element={<Requests />} />
+              <Route path={"/classes"} element={<Classes />} />
+              <Route path={"/classes/:classId"} element={<ClassDetails />} />
+              <Route path={"/sign-up"} element={<SignUp />} />
+              <Route path={"/login"} element={<Login />} />
+            </Routes>
+          </div>
+        </div>
       </Router>
       <ToastContainer />
     </div>

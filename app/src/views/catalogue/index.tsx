@@ -4,7 +4,7 @@ import { ClassDropdown } from "../../components/inputs/classDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import * as producers from "./producers";
-import { getClassName } from "../../utils";
+import { getClassName, sortedClassesByName } from "../../utils";
 import { StudentsDropdown } from "../../components/inputs/studentsDropdown";
 
 export const Catalogue: view = ({
@@ -30,12 +30,13 @@ export const Catalogue: view = ({
     const teacherClasses = classes.filter((classEl: any) =>
       teacherClassesId.includes(classEl.classId)
     );
+    const sortedTeacherClasses = sortedClassesByName(teacherClasses);
     console.log(">>>Teacher: ", teacher);
     console.log(">>>Classes: ", classes);
     updateCatalogueTeacher.set(teacher);
     const handleClick = (classId: string) => {
       console.log(classId);
-      const classFound = teacherClasses.find(
+      const classFound = sortedTeacherClasses.find(
         (classEl: any) => classEl.classId === classId
       );
       updateCatalogueClass.set(classFound);
@@ -48,7 +49,7 @@ export const Catalogue: view = ({
             Clasa {getClassName(catalogueClass.name)}
           </h2>
         )}
-        <ClassDropdown classes={teacherClasses} handleClick={handleClick} />
+        <ClassDropdown classes={sortedTeacherClasses} handleClick={handleClick} />
         {catalogueClass && <Table />}
       </div>
     );
@@ -56,22 +57,23 @@ export const Catalogue: view = ({
 
   if (user.role === "director") {
     const classes = getClasses.value();
+    const sortedClasses = sortedClassesByName(classes);
     const handleClick = (classId: string) => {
       console.log(classId);
-      const classFound = classes.find(
+      const classFound = sortedClasses.find(
         (classEl: any) => classEl.classId === classId
       );
       updateCatalogueClass.set(classFound);
     };
     return (
-      <div className="object-fit-cover">
+      <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
         <h1>Catalog</h1>
+        <ClassDropdown classes={sortedClasses} handleClick={handleClick} />
         {catalogueClass && (
           <h2 style={{ textAlign: "center" }}>
             Clasa {getClassName(catalogueClass.name)}
           </h2>
         )}
-        <ClassDropdown classes={classes} handleClick={handleClick} />
         {catalogueClass && <Table />}
       </div>
     );

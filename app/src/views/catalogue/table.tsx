@@ -63,6 +63,8 @@ export const Table: view = ({
   getUser = get.user,
   getUsers = get.users,
   getSubjectsState = get.subjects,
+  getParents = get.parents,
+  getStudents = get.students,
 }) => {
   if (!catalogueClass) return null;
 
@@ -74,7 +76,21 @@ export const Table: view = ({
   const catalogueTeacher = getCatalogueTeacher.value();
   const catalogueStudent = getCatalogueStudent.value();
   const subjectsState = getSubjectsState.value();
+  const parentsState = getParents.value();
+  const studentsState = getStudents.value();
   const users = getUsers.value();
+
+  const getSubject = (subjectId: string) => {
+    const subject = subjectsState.find(
+      (subject: any) => subject.subjectId === subjectId
+    );
+    return subject;
+  };
+
+  const getUserById = (userId: string) => {
+    const user = users.find((user: any) => user.userId === userId);
+    return user;
+  };
 
   if (isModalSavePressed) {
     if (user.role === "teacher") {
@@ -102,7 +118,27 @@ export const Table: view = ({
           newGrade
         );
         console.log(">>>newCatalogue: ", newCatalogue);
+        const parentsFound = parentsState.filter((parent: any) =>
+          parent.students.includes(studentId)
+        );
+        const userParents = parentsFound.map((parent: any) =>
+          users.find((user: any) => user.userId === parent.userId)
+        );
+        const emails = userParents.map((user: any) => user.email);
+        const studentFound = studentsState.find(
+          (student: any) => student.studentId === studentId
+        );
+        const userStudent = users.find(
+          (user: any) => user.userId === studentFound.userId
+        );
         updateCatalogue.set(newCatalogue);
+        axios.post(`http://localhost:5000/api/email/grade`, {
+          emailsTo: emails,
+          ccEmail: userStudent.email,
+          studentName: `${userStudent.lastName} ${userStudent.firstName}`,
+          grade: newGrade.value,
+          subjectName: getSubject(catalogueTeacher.subjectId).name,
+        });
       } catch (error) {
         console.log(">>>error: ", error);
         toast.error("Eroare la adaugarea notei", {
@@ -113,49 +149,6 @@ export const Table: view = ({
     }
     updateIsModalSavePressed.set(false);
   }
-
-  const getSubject = (subjectId: string) => {
-    const subject = subjectsState.find(
-      (subject: any) => subject.subjectId === subjectId
-    );
-    return subject;
-  };
-
-  const getUserById = (userId: string) => {
-    const user = users.find((user: any) => user.userId === userId);
-    return user;
-  };
-
-  // useEffect(() => {
-  //   if (user.role === "teacher") {
-  //     const getStudents = async () => {
-  //       const { data: students } = await axios.get(
-  //         `http://localhost:5000/api/students/catalogue/${catalogueTeacher.teacherId}/${catalogueClass.classId}`
-  //       );
-  //       console.log("students in getStudents: ", students);
-  //       updateCatalogue.set(students);
-  //     };
-  //     getStudents();
-  //   }
-  //   if (user.role === "director") {
-  //     const getStudents = async () => {
-  //       const { data: students } = await axios.get(
-  //         `http://localhost:5000/api/students/catalogue/${catalogueClass.classId}`
-  //       );
-  //       updateCatalogue.set(students);
-  //     };
-  //     getStudents();
-  //   }
-  //   if (user.role === "student") {
-  //     const getStudents = async () => {
-  //       const { data: students } = await axios.get(
-  //         `http://localhost:5000/api/students/${catalogueStudent.studentId}`
-  //       );
-  //       updateCatalogue.set(students);
-  //     };
-  //     getStudents();
-  //   }
-  // });
 
   if (!catalogue) return null;
   console.log(">>>catalogueClass: ", catalogueClass);

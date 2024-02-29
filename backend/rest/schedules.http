@@ -5,7 +5,7 @@ POST {{api}}/schedules
 Content-Type: application/json
 
 {
-    "classId": "8ac5a125-8065-4e58-ba1b-534a5028936b"
+    "classId": "89cff064-ff1a-4f71-bc60-044c39c23ca2"
 }
 
 ### GET

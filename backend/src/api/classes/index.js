@@ -5,7 +5,6 @@ const uuid = require("uuid");
 const getClassResponse = async (classData) => {
   const { classId, teacherId, name, subjects } = classData;
   const classResponse = { classId, teacherId, name, subjects };
-  console.log(`>>> classResponse in get by id ${classId}: `, classResponse);
   return classResponse;
 };
 
@@ -50,10 +49,11 @@ router.get("/classes/:classId/teachers", async (req, res, next) => {
     }
     const teachersData = await knex("teachers");
     const teachers = [];
-    console.log(">>>TeachersData: ", teachersData);
     for (const teacherData of teachersData) {
       const { classes, teacherId } = teacherData;
-      if (classes.includes(classId)) teachers.push(teacherId);
+      if (classes.includes(classId)) {
+        teachers.push(teacherId);
+      }
     }
     res.send(teachers);
   } catch (error) {
@@ -96,7 +96,7 @@ router.put("/classes/:classId", async (req, res, next) => {
       const classesTeachers = await knex("classes").where({
         teacherId: newTeacherId,
       });
-      if (classesTeachers.length > 0) {
+      if (classesTeachers.length > 0 && classesTeachers[0].classId !== classId) {
         res.status(400);
         res.send({
           message: `Profesorul este deja diriginte la clasa ${classesTeachers[0].name}`,
@@ -114,21 +114,17 @@ router.put("/classes/:classId", async (req, res, next) => {
       }
       const teacherData = teachersData[0];
       const newTeacherData = newTeachersData[0];
+      console.log(">>>>> teacherData: ", teacherData);
+      console.log(">>>>> newTeacherData: ", newTeacherData);
       if (teacherData.subjectId !== newTeacherData.subjectId) {
+        console.log(">>>>> teacherData different subjects: ", teacherData);
         if (!newTeacherData.classes.includes(classId)) {
           res.status(400);
           res.send({ message: "Profesorul nu preda la aceasta clasa" });
           throw new Error("Profesorul nu preda la aceasta clasa");
         }
       } else {
-        console.log(
-          ">>> teachers in classes put with teacehrID: ",
-          (
-            await knex("teachers").where({
-              teacherId,
-            })
-          )[0]
-        );
+        console.log(">>>>> teacherData same subjects: ", teacherData);
         const { classes: classesTeacher } = (
           await knex("teachers").where({
             teacherId,
@@ -139,14 +135,16 @@ router.put("/classes/:classId", async (req, res, next) => {
             teacherId: newTeacherId,
           })
         )[0];
-        console.log(">>> classesTeacher: ", classesTeacher);
-        console.log(">>> classesNewTeacher: ", classesNewTeacher);
+
+        console.log(">>>>> classesTeacher: ", classesTeacher);
+
         const newClassesTeacher = classesTeacher.filter(
-          (classId) => classId !== classId
+          (teacherClassId) => teacherClassId !== classId
         );
-        console.log(">>> newClassesTeacher: ", newClassesTeacher);
+
+        console.log(">>>>> newClassesTeacher: ", newClassesTeacher);
+
         classesNewTeacher.push(classId);
-        console.log(">>> newClassesNewTeacher: ", newClassesNewTeacher);
         await knex("teachers").where({ teacherId }).update({
           classes: newClassesTeacher,
         });
@@ -159,7 +157,6 @@ router.put("/classes/:classId", async (req, res, next) => {
     const newClassesData = await knex("classes").where({ classId });
     const newClassData = newClassesData[0];
     const newClassResponse = await getClassResponse(newClassData);
-    console.log(`>>> class in put by id ${classId}: `, newClassResponse);
     res.send(newClassResponse);
   } catch (error) {
     next(error);
@@ -196,9 +193,13 @@ router.post("/classes", async (req, res, next) => {
     const teacherData = teachersData[0];
     const classes = teacherData.classes || [];
     classes.push(newClass.classId);
-    console.log(">>> newClass in post: ", newClass);
     await knex("classes").insert(newClass);
     await knex("teachers").where({ teacherId }).update({ classes });
+    await knex("schedules").insert({
+      classId: newClass.classId,
+      scheduleId: uuid.v4(),
+      subjects: [],
+    });
     res.send(newClass);
   } catch (error) {
     next(error);
@@ -214,7 +215,6 @@ router.delete("/classes/:classId", async (req, res, next) => {
       throw new Error("Class not found");
     }
     await knex("classes").where({ classId }).del();
-    console.log(`>>> class in delete by classId ${classId}: `, classes);
     res.send(classes);
   } catch (error) {
     next(error);

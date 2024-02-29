@@ -42,7 +42,7 @@ export const modalSaved: producer = async ({
       if (newTeacher.subjectId !== subjectId)
         throw new Error("Profesorul nu preda aceasta materie");
       const classesTeacher = teacherFound.classes.filter(
-        (classId: any) => classId !== classId
+        (teacherClassId: any) => teacherClassId !== classId
       );
       const classesNewTeacher = newTeacher.classes;
       classesNewTeacher.push(classId);

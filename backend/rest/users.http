@@ -26,11 +26,11 @@ POST {{api}}/users/population
 Content-Type: application/json
 
 ### PUT
-PUT {{api}}/users/7b088758-6c1b-49fb-9230-e90738022c02
+PUT {{api}}/users/52ced541-58c4-4beb-8689-50014f614a6b
 Content-Type: application/json
 
 {
-    "role": "director"
+    "email": "andrei.petrica389@gmail.com"
 }
 
 ### GET

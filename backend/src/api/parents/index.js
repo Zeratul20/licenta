@@ -11,7 +11,6 @@ const getParentResponse = async (parentData) => {
   for (let studentId of students) {
     parent.students.push(studentId);
   }
-  console.log(`>>> parent in get by parentId ${userId}: `, parent);
   return parent;
 };
 
@@ -23,7 +22,6 @@ router.get("/parents", async (req, res, next) => {
       const parentResponse = await getParentResponse(parentData);
       parents.push(parentResponse);
     }
-    console.log(">>> parents in get: ", parents);
     res.send(parents);
   } catch (error) {
     next(error);
@@ -40,7 +38,6 @@ router.get("/parents/:parentId", async (req, res, next) => {
     }
     const parentData = parentsData[0];
     const parentResponse = await getParentResponse(parentData);
-    console.log(`>>> parent in get by id ${parentId}: `, parentResponse);
     res.send(parentResponse);
   } catch (error) {
     next(error);
@@ -73,7 +70,6 @@ router.put("/parents/:parentId", async (req, res, next) => {
       .join("users", "parents.userId", "users.userId")
       .where("users.email", "=", email)
       .update(parentToUpdate);
-    console.log(`>>> parent in put by email ${email}: `, parentToUpdate);
     res.send(parents);
   } catch (error) {
     next(error);
@@ -102,10 +98,6 @@ router.put("/parents/:parentId/students", async (req, res, next) => {
     const parents = await knex("parents")
       .where({ parentId })
       .update({ students: newStudents });
-    console.log(
-      `>>> parent in put students by parentId ${parentId}, students ${students}: `,
-      parents
-    );
     res.send(parents);
   } catch (error) {
     next(error);
@@ -131,7 +123,6 @@ router.post("/parents", async (req, res, next) => {
     newParent.userId = userId;
     await knex("parents").insert(newParent);
     await knex("users").where({ userId }).update({ role: "parent" });
-    console.log(">>> parent in post: ", newParent);
     res.send(newParent);
   } catch (error) {
     next(error);

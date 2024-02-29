@@ -5,7 +5,6 @@ const uuid = require("uuid");
 router.get("/requests", async (req, res, next) => {
   try {
     const requests = await knex("requests");
-    console.log(">>> requests in get: ", requests);
     res.send(requests);
   } catch (error) {
     next(error);
@@ -20,7 +19,6 @@ router.get("/requests/:requestId", async (req, res, next) => {
       res.status(400);
       throw new Error("request not found");
     }
-    console.log(`>>> request in get by requestId ${requestId}: `, requests);
     res.send(requests);
   } catch (error) {
     next(error);
@@ -31,7 +29,6 @@ router.get("/requests/users/:userId", async (req, res, next) => {
   try {
     const { userId } = req.params;
     const requests = await knex("requests").where({ userId });
-    console.log(`>>> requests in get by userId ${userId}: `, requests);
     res.send(requests);
   } catch (error) {
     next(error);
@@ -50,7 +47,6 @@ router.put("/requests/:requestId", async (req, res, next) => {
     await knex("requests")
       .where({ requestId })
       .update({ ...data });
-    console.log(`>>> request in put by requestId ${requestId}: `, requests);
     res.send(requests);
   } catch (error) {
     next(error);
@@ -62,7 +58,6 @@ router.post("/requests", async (req, res, next) => {
     const data = { ...req.body };
     const requestId = uuid.v4();
     const requests = await knex("requests").insert({ ...data, requestId });
-    console.log(`>>> request in post by requestId ${requestId}: `, requests);
     res.send(requests);
   } catch (error) {
     next(error);
@@ -84,7 +79,6 @@ router.post("/requests/types/:type", async (req, res, next) => {
       newRequest.students = students;
     }
     await knex("requests").insert(newRequest);
-    console.log(`>>> request in post by requestId ${requestId}: `, newRequest);
     res.send(newRequest);
   } catch (error) {
     next(error);

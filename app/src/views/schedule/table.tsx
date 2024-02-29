@@ -143,6 +143,7 @@ export const Table: view = ({
 
   const handleEdit_AddButton = (initalValues: any, type: string) => {
     console.log(">>>initalValues: ", initalValues);
+    initalValues.type = type;
     setModalType(type);
     updateModalFormData.set(initalValues);
     updateIsModalOpen.set(true);
@@ -150,10 +151,8 @@ export const Table: view = ({
   };
 
   let modalTitle = "";
-  if (modalType === "add") modalTitle = "Adauga ora";
-  if (modalType === "edit") modalTitle = "Modifica ora";
 
-  const fields = [
+  let fields = [
     {
       field: "subject",
       label: "Materie",
@@ -179,12 +178,21 @@ export const Table: view = ({
     },
   ];
 
+  if (modalType === "add") modalTitle = "Adauga ora";
+  else if (modalType === "edit") modalTitle = "Modifica ora";
+  else if (modalType === "delete") {
+    fields = [];
+    modalTitle = "Sterge ora";
+  }
+
   return (
     <div className="schedule">
       <div>
-        <h2 style={{textAlign: "center"}}>Clasa {getClassName(scheduleClass.name)}</h2>
+        <h2 style={{ textAlign: "center" }}>
+          Clasa {getClassName(scheduleClass.name)}
+        </h2>
         {user.role === "parent" && (
-          <h3 style={{textAlign: "center"}}>
+          <h3 style={{ textAlign: "center" }}>
             {"("}
             {scheduleStudent.lastName} {scheduleStudent.firstName}
             {")"}
@@ -288,6 +296,9 @@ export const Table: view = ({
                               <button
                                 className="btn btn-lg btn-outline-danger py-0"
                                 style={{ fontSize: "1rem", border: "none" }}
+                                onClick={() =>
+                                  handleEdit_AddButton(initialValuesAdd, "delete")
+                                }
                               >
                                 <TrashIcon />
                               </button>

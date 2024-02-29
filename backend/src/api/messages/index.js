@@ -5,7 +5,6 @@ const uuid = require("uuid");
 router.get("/messages", async (req, res, next) => {
   try {
     const messages = await knex("messages");
-    console.log(">>> messages in get: ", messages);
     res.send(messages);
   } catch (error) {
     next(error);
@@ -20,7 +19,6 @@ router.get("/messages/:messageId", async (req, res, next) => {
       res.status(400);
       throw new Error("message not found");
     }
-    console.log(`>>> message in get by messageId ${messageId}: `, messages[0]);
     res.send(messages[0]);
   } catch (error) {
     next(error);
@@ -39,7 +37,6 @@ router.put("/messages/:messageId", async (req, res, next) => {
     await knex("messages")
       .where({ messageId })
       .update({ ...data });
-    console.log(`>>> message in put by messageId ${messageId}: `, messages);
     res.send(messages);
   } catch (error) {
     next(error);
@@ -73,10 +70,6 @@ router.delete("/messages/:messageId", async (req, res, next) => {
       throw new Error("message not found");
     }
     await knex("messages").where({ messageId }).del();
-    console.log(
-      `>>> message in delete by messageId ${messageId}: `,
-      messages[0]
-    );
     res.send(messages[0]);
   } catch (error) {
     next(error);

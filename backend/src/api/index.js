@@ -31,5 +31,6 @@ app.use("/api", require("./teachers"));
 app.use("/api", require("./students"));
 app.use("/api", require("./parents"));
 app.use("/api", require("./messages"));
+app.use("/api", require("./email"));
 
 module.exports = app;

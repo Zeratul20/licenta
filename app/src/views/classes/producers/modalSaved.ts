@@ -38,6 +38,12 @@ export const modalSaved: producer = async ({
         name: className,
         teacherId,
       };
+      const isClassNameAlreadyUsed = classesState.some(
+        (classEl: any) =>
+          classEl.name === className && classEl.classId !== classId
+      );
+      if (isClassNameAlreadyUsed)
+        throw new Error("Numele clasei este deja folosit");
       await axios.put(
         `http://localhost:5000/api/classes/${classId}`,
         updatedClass
@@ -53,7 +59,9 @@ export const modalSaved: producer = async ({
     } catch (error: any) {
       console.log(">>>error: ", error);
       toast.error(
-        error?.response?.data?.message || "Eroare la modificarea clasei",
+        error?.response?.data?.message ||
+          error.message ||
+          "Eroare la modificarea clasei",
         {
           position: "top-right",
           autoClose: 3000,

@@ -4,7 +4,6 @@ exports.up = function (knex) {
         table.string("userId").primary();
         table.string("firstName").notNullable();
         table.string("lastName").notNullable();
-        table.string("cnp").notNullable();
         table.string("email").notNullable();
         table.string("password").notNullable();
         table.string("phoneNumber").notNullable();

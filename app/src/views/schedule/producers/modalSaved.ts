@@ -143,6 +143,37 @@ export const modalSaved: producer = ({
         autoClose: 3000,
       });
     }
+  } else if (type === "delete") {
+    console.log(">>>delete hour");
+    const { day, hour } = modalFormData;
+    const newSubjects = schedule.subjects.filter((subject: any) => {
+      return !(subject.day === day && subject.hour === hour);
+    });
+    const newSchedule = { ...schedule, subjects: newSubjects };
+    const newSchedules = schedules.map((scheduleEl: any) => {
+      if (scheduleEl.scheduleId === schedule.scheduleId) {
+        return newSchedule;
+      }
+      return scheduleEl;
+    });
+    try {
+      axios.put(
+        `http://localhost:5000/api/schedules/${schedule.scheduleId}`,
+        newSchedule
+      );
+      updateSchedules.set(newSchedules);
+      updateSchedule.set(newSchedule);
+      toast.success("Ora stearsa cu succes", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.log(">>>error: ", error);
+      toast.error("Eroare la stergerea orei", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+      });
+    }
   }
   updateModalFormData.set({});
 };

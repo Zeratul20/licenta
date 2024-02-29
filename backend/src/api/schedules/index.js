@@ -97,7 +97,6 @@ const getScheduleForTeacherResponse = async (teacherId) => {
     .whereIn("classId", classes)
     .select("subjects", "classId");
   const teacherSchedule = [];
-  console.log(">>> schedulesData in getScheduleForTeacherResponse: ", schedulesData);
   scheduleLabel: for (let scheduleData of schedulesData) {
     const { subjects, classId } = scheduleData;
     for (let subject of subjects) {
@@ -128,7 +127,6 @@ router.get("/schedules", async (req, res, next) => {
       );
       schedules.push(scheduleResponse);
     }
-    console.log(">>> schedules in get: ", schedules);
     res.send(schedules);
   } catch (error) {
     next(error);
@@ -147,10 +145,7 @@ router.get("/schedules/students/:studentId", async (req, res, next) => {
     }
     const scheduleData = schedulesData[0];
     const scheduleResponse = await getScheduleForStudentResponse(scheduleData);
-    console.log(
-      `>>> schedule in get by className ${className}: `,
-      scheduleResponse
-    );
+
     res.send(schedules);
   } catch (error) {
     next(error);
@@ -161,7 +156,6 @@ router.get("/schedules/teachers/:teacherId", async (req, res, next) => {
   try {
     const { teacherId } = req.params;
     const teacherResponse = await getScheduleForTeacherResponse(teacherId);
-    console.log(`>>> schedule in get by teacherId ${teacherId}: `, teacherResponse);
     res.send(teacherResponse);
   } catch (error) {
     next(error);
@@ -192,7 +186,6 @@ router.put("/schedules/:scheduleId", async (req, res, next) => {
     await knex("schedules")
       .where({ scheduleId })
       .update({ ...data });
-    console.log(`>>> schedule in put by scheduleId ${scheduleId}: `, schedules);
     res.send(schedules);
   } catch (error) {
     next(error);
@@ -224,7 +217,6 @@ router.get("/schedules/classes/:classId", async (req, res, next) => {
       throw new Error("schedule not found");
     }
     const schedule = await getScheduleForClassResponse(classId);
-    console.log(`>>> schedule in get by classId ${classId}: `, schedule);
     res.send(schedule);
   } catch (error) {
     next(error);
@@ -240,7 +232,6 @@ router.delete("/schedules/:scheduleId", async (req, res, next) => {
       throw new Error("schedule not found");
     }
     await knex("schedules").where({ scheduleId }).del();
-    console.log(`>>> schedule in delete by scheduleId ${scheduleId}: `, schedules);
     res.send(schedules);
   } catch (error) {
     next(error);

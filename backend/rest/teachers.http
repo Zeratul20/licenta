@@ -10,11 +10,27 @@ Content-Type: application/json
 }
 
 ### PUT
-PUT {{api}}/teachers/77f2b927-401a-456b-b4a9-289f0d5b1c87
+PUT {{api}}/teachers/d30589c4-688e-4ae8-bc5e-9ec017267683
 Content-Type: application/json
 
 {
-    "classes": []
+    "classes": [
+        "48498ee0-615e-4d03-8ea8-d77957d3cfe7",
+        "89cff064-ff1a-4f71-bc60-044c39c23ca2",
+        "10486be5-854b-4cd0-ac7c-2af95c19b544",
+        "83e048f9-4dc1-484e-b02d-b1e19ce2b8a3"
+    ]
+}
+
+
+### PUT
+PUT {{api}}/teachers/abf9a6e8-9041-4cd8-bb71-5dc700d79aae
+Content-Type: application/json
+
+{
+    "classes": [
+        "9afa9ed2-3187-41bd-bd38-8ed27f03fb64"
+    ]
 }
 
 ### GET

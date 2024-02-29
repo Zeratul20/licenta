@@ -124,12 +124,12 @@ export const ClassDetails: view = ({
 
   return (
     <>
-      <h2 style={{ textAlign: "center" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "30px" }}>
         Clasa {getClassName(classFound?.name)}
       </h2>
       <TableContainer
         component={Paper}
-        style={{ width: "75%", marginLeft: "200px" }}
+        style={{ width: "75%", marginLeft: "200px", boxShadow: "0 0 1px 0"}}
       >
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -174,16 +174,6 @@ export const ClassDetails: view = ({
                         }
                       >
                         <EditIcon />
-                      </button>
-                    )}
-                  </TableCell>
-                  <TableCell align="center">
-                    {index > 0 && (
-                      <button
-                        className="btn btn-outline-danger"
-                        style={{ fontSize: "1.2rem", border: "none" }}
-                      >
-                        <TrashIcon />
                       </button>
                     )}
                   </TableCell>

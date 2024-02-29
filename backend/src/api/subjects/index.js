@@ -5,7 +5,6 @@ const uuid = require("uuid");
 router.get("/subjects", async (req, res, next) => {
   try {
     const subjects = await knex("subjects");
-    console.log(">>> subjects in get: ", subjects);
     res.send(subjects);
   } catch (error) {
     next(error);
@@ -20,7 +19,6 @@ router.get("/subjects/:subjectId", async (req, res, next) => {
       res.status(400);
       throw new Error("subject not found");
     }
-    console.log(`>>> subject in get by subjectId ${subjectId}: `, subjects);
     res.send(subjects);
   } catch (error) {
     next(error);
@@ -39,7 +37,6 @@ router.put("/subjects/:subjectId", async (req, res, next) => {
     await knex("subjects")
       .where({ subjectId })
       .update({ ...data });
-    console.log(`>>> subject in put by subjectId ${subjectId}: `, subjects);
     res.send(subjects);
   } catch (error) {
     next(error);
@@ -51,7 +48,6 @@ router.post("/subjects", async (req, res, next) => {
     const data = { ...req.body };
     const subjectId = uuid.v4();
     const subjects = await knex("subjects").insert({ ...data, subjectId });
-    console.log(`>>> subject in post by subjectId ${subjectId}: `, subjects);
     res.send(subjects);
   } catch (error) {
     next(error);
@@ -67,7 +63,6 @@ router.delete("/subjects/:subjectId", async (req, res, next) => {
       throw new Error("subject not found");
     }
     await knex("subjects").where({ subjectId }).del();
-    console.log(`>>> subject in delete by subjectId ${subjectId}: `, subjects);
     res.send(subjects);
   } catch (error) {
     next(error);

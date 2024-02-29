@@ -7,6 +7,7 @@ import "bootstrap";
 import * as producers from "./producers";
 import { Loader } from "../../components/helpers/loader";
 import { sortedClassesByName } from "../../utils";
+import "../../style.css"
 
 export const Schedule: view = ({
   user = observe.user,
@@ -37,8 +38,8 @@ export const Schedule: view = ({
       updateScheduleClass.set(classFound);
     };
     return (
-      <div className="object-fit-cover">
-        <h1>Orar</h1>
+      <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+        <h1 className="font-family">Orar</h1>
         <ClassDropdown classes={sortedClasses} handleClick={handleClick} />
         <Table />
       </div>
@@ -47,8 +48,8 @@ export const Schedule: view = ({
 
   if (user.role === "teacher") {
     return (
-      <div className="object-fit-cover">
-        <h1>Orar profesor</h1>
+      <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+        <h1 className="font-family">Orar profesor</h1>
         <Table />
       </div>
     );
@@ -69,8 +70,8 @@ export const Schedule: view = ({
     updateSchedule.set(scheduleFound);
     updateScheduleClass.set(studentClass);
     return (
-      <div className="object-fit-cover">
-        <h1>Orar</h1>
+      <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+        <h1 className="font-family">Orar</h1>
         <Table />
       </div>
     );
@@ -122,8 +123,8 @@ export const Schedule: view = ({
     });
   });
   return (
-    <div className="object-fit-cover">
-      <h1>Orar</h1>
+    <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+      <h1 className="font-family">Orar</h1>
       <StudentsDropdown students={students} handleClick={handleClick} />
       <Table />
     </div>

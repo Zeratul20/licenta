@@ -13,7 +13,7 @@ POST {{api}}/subjects
 Content-Type: application/json
 
 {
-    "name": "Ed. Fizica"
+    "name": "Logica"
 }
 
 ### PUT

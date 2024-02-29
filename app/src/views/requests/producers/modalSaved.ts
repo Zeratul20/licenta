@@ -13,6 +13,7 @@ export const modalSaved: producer = ({
   getSubjects = get.subjects,
   requests = observe.requests.content,
   updateRequests = update.requests.content,
+  updateIsStateInitiated = update.isStateInitiated,
   user = observe.user,
 }) => {
   if (!isModalSavePressed) return;
@@ -182,11 +183,12 @@ export const modalSaved: producer = ({
     try {
       const { subjectName, classes: classesString } = modalFormData;
       const classes = classesString.split(/(?:,| )+/);
-      console.log(">>>modalForm classes: ", classes)
-      console.log(">>>modalForm subjectName: ", subjectName)
-      const classIds = classes.map(
-        (cls: any) => classesState.find((c: any) => c.name === cls).classId
-      );
+      console.log(">>>modalForm classes: ", classes);
+      console.log(">>>modalForm subjectName: ", subjectName);
+      const classIds =
+        classes.map(
+          (cls: any) => classesState.find((c: any) => c.name === cls)?.classId
+        ) || [];
       const { subjectId } = subjectsState.find(
         (subject: any) => subject.name === subjectName
       );
@@ -198,6 +200,7 @@ export const modalSaved: producer = ({
       axios.put(`http://localhost:5000/api/requests/${requestId}`, {
         status: "accepted",
       });
+      updateIsStateInitiated.set(false);
       toast.success("Profesorul a fost salvat", {
         position: "top-right",
         autoClose: 3000,
@@ -209,7 +212,7 @@ export const modalSaved: producer = ({
         autoClose: 3000,
       });
     }
-  } else if(modalFormData.requestType === 4) {
+  } else if (modalFormData.requestType === 4) {
     try {
       const { studentId } = studentsState.find(
         (student: any) => student.userId === userId

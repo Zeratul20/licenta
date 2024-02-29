@@ -26,3 +26,6 @@ When serving the production build, the application will be available at http://l
 ### Authoring single-spa
 
 ### Authoring modules
+
+TODO: 
+- Profesorul nu e vazut la crearea claselor dupa ce ii este acceptata cererea

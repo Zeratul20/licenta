@@ -21,9 +21,9 @@ export const NavBar: view = ({
   user = observe.user,
   updateIsLogoutPressed = update.isLogoutPressed,
 }) => {
-  const pages = ["Acasa", "General", "Orar", "Catalog", "Teme"];
+  const pages = ["Acasa", "General", "Orar", "Catalog"];
   const guestPages = ["Sign Up", "Login"];
-  const settings = ["Profile", "Account", "Logout"];
+  const settings = ["Account", "Logout"];
   const { userId } = user;
   console.log(">>>user in nav: ", user);
   pages.push("Cereri");
@@ -102,7 +102,7 @@ export const NavBar: view = ({
       <AppBar
         position="static"
         style={{
-          background: "linear-gradient(to bottom right, blue, #8AAAE5, blue)",
+          background: "linear-gradient(to bottom right, #189AB4, #189AB4, #189AB4)",
           width: "100%",
           position: "fixed",
           zIndex: 10,
@@ -155,11 +155,11 @@ export const NavBar: view = ({
                   onClick={() => handleCloseNavMenu(page)}
                   sx={{ my: 2, color: "white", display: "block" }}
                   style={{
-                    paddingLeft: "2rem",
+                    paddingLeft: "3rem",
                     fontSize: "1rem",
                     fontFamily: "ibarra-regular",
                     fontWeight: "bold",
-                    textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                    textShadow: "0px 5px 5px rgba(0, 0, 0, 0.3)",
                   }}
                 >
                   {page}
@@ -224,7 +224,7 @@ export const NavBar: view = ({
             ) : (
               <>
                 <Box sx={{ flexGrow: 1 }} />
-                <Box
+                {/* <Box
                   sx={{
                     display: { xs: "none", md: "flex" },
                     paddingRight: "1rem",
@@ -256,7 +256,7 @@ export const NavBar: view = ({
                       <NotificationsIcon fontSize="inherit" />
                     </Badge>
                   </IconButton>
-                </Box>
+                </Box> */}
                 <Box sx={{ paddingLeft: "1rem" }} />
                 <Box sx={{ flexGrow: 0 }}>
                   <Tooltip title="Open settings">

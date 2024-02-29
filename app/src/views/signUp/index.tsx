@@ -56,13 +56,6 @@ export const SignUp = () => {
       type: "text",
     },
     {
-      field: "cnp",
-      label: "CNP",
-      className: "form-floating mb-3 col-md-6",
-      placeholder: "1234567890123",
-      type: "number",
-    },
-    {
       field: "email",
       label: "E-mail",
       className: "form-floating mb-3 col-md-6",

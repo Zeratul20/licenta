@@ -1,0 +1,26 @@
+.cover {
+    background-color: #e4e4e4;
+}
+
+.card-container {
+    background-color: #e4e4e4;
+    padding: 4rem;
+}
+
+.card-content {
+    background-color: rgb(243, 247, 248);
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 1300px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.75rem;
+    padding-bottom: 2rem;
+    box-sizing: inherit;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+.font-family {
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}

@@ -17,7 +17,6 @@ router.get("/absences", async (req, res, next) => {
       // const absenceResponse = await getAbsenceResponse(absenceData);
       absences.push(absenceData);
     }
-    console.log(">>> absences in get: ", absences);
     res.send(absences);
   } catch (error) {
     next(error);
@@ -32,7 +31,6 @@ router.get("/absences/:absenceId", async (req, res, next) => {
       res.status(400);
       throw new Error("absence not found");
     }
-    console.log(`>>> absence in get by absenceId ${absenceId}: `, absences);
     res.send(absences);
   } catch (error) {
     next(error);
@@ -51,7 +49,6 @@ router.put("/absences/:absenceId", async (req, res, next) => {
     await knex("absences")
       .where({ absenceId })
       .update({ ...data });
-    console.log(`>>> absence in put by absenceId ${absenceId}: `, absences);
     res.send(absences);
   } catch (error) {
     next(error);

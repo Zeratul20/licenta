@@ -9,6 +9,7 @@ import { getUserData, modalOperation, capitalize } from "../../utils";
 import { Modal } from "../../components/modals/modalForm";
 
 import addMessageIcon from "../../assets/img/add.png";
+import "../../style.css"
 
 import * as producers from "./producers";
 
@@ -23,7 +24,7 @@ export const General: view = ({
   getUser = get.user,
   getUsers = get.users,
 }) => {
-  if(!messages) return null;
+  if (!messages) return null;
   const fields = [
     {
       field: "title",
@@ -71,17 +72,6 @@ export const General: view = ({
     updateIsModalSavePressed.set(false);
   }
 
-  // useEffect(() => {
-  //   const getMessages = async () => {
-  //     const { data: messages } = await axios.get(
-  //       "http://localhost:5000/api/messages"
-  //     );
-  //     console.log(">>>messages: ", messages);
-  //     updateMessages.set(messages);
-  //   };
-  //   getMessages();
-  // });
-
   const handleAddButton = (initalValues: any) => {
     console.log(">>>initalValues: ", initalValues);
     updateModalFormData.set(initalValues);
@@ -89,9 +79,14 @@ export const General: view = ({
     modalOperation("modalForm", "show");
   };
 
+  const sortedMessages = messages.sort(
+    (a: any, b: any) =>
+      dayjs(b.date + " " + b.time).unix() - dayjs(a.date + " " + a.time).unix()
+  );
+
   return (
-    <div className="object-fit-cover">
-      <h1>General</h1>
+    <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+      <h1 className="font-family">General</h1>
       <div
         style={{
           paddingRight: "200px",
@@ -99,7 +94,7 @@ export const General: view = ({
           paddingTop: "20px",
         }}
       >
-        {messages.map((message: any) => {
+        {sortedMessages.map((message: any) => {
           const { userId: messageUserId } = message;
           const messageUser = getUserData(users, messageUserId);
           if (messageUser.role === "teacher") messageUser.role = "profesor";
@@ -130,7 +125,10 @@ export const General: view = ({
           }
 
           return (
-            <div className="card border-dark mb-5 w-50" style={{marginLeft: "200px", zIndex: 1}}>
+            <div
+              className="card border-dark mb-5 w-50"
+              style={{ marginLeft: "200px", zIndex: 1 }}
+            >
               <div
                 className="card-header bg-transparent border-dark"
                 // style={{ display: "flex" }}
@@ -141,8 +139,8 @@ export const General: view = ({
                 <div className="text-end">{timeString}</div>
               </div>
               <div className="card-body">
-                <h5 className="card-title">{title}</h5>
-                <p className="card-text">{messageText}</p>
+                <b className="card-title" style={{fontSize: "20px"}}>{title}</b>
+                <p className="card-text" style={{paddingTop: "15px"}}>{messageText}</p>
               </div>
             </div>
           );
@@ -163,7 +161,10 @@ export const General: view = ({
           data-bs-title="Adaugati un mesaj"
           onClick={() => handleAddButton(initialValuesAdd)}
         >
-          <img src={addMessageIcon} style={{ width: "40px", position: "fixed" }} />
+          <img
+            src={addMessageIcon}
+            style={{ width: "40px", position: "fixed" }}
+          />
         </button>
         <Modal fields={fields} title={"Adauga ora"} type={"add"} />
       </div>
