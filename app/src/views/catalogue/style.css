@@ -8,3 +8,9 @@
     font-size: 12.5px;
     padding-top: 7px;
 }
+
+.is-cut {
+    border: 1px solid #000;
+    padding: 7px;
+    border-radius: 50%;
+}

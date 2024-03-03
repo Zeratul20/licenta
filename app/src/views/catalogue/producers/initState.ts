@@ -3,6 +3,7 @@ import axios from "axios";
 export const initState: producer = ({
   updateCatalogue = update.catalogue.catalogue,
   updateIsStateInitiated = update.messages.isStateInitiated,
+  updateAbsences = update.catalogue.absences,
   user = observe.user,
   catalogueClass = observe.catalogue.class,
   getCatalogueTeacher = get.catalogue.teacher,
@@ -14,7 +15,7 @@ export const initState: producer = ({
   if (!catalogueClass || !user) return;
 
   let cnt = 0;
-  const cntMaxVal = 1;
+  const cntMaxVal = 2;
 
   if (user.role === "teacher") {
     const getStudents = async () => {
@@ -52,6 +53,15 @@ export const initState: producer = ({
     };
     getStudents();
   }
+
+  const getAbsences = async () => {
+    const { data: absences } = await axios.get(
+      `http://localhost:5000/api/absences`
+    );
+    updateAbsences.set(absences);
+    cnt++;
+  };
+  getAbsences();
 
   if (cnt < cntMaxVal) {
     let retries = 5;

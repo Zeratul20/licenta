@@ -17,6 +17,7 @@ const state: State = {
     catalogue: null,
     teacher: null,
     student: null,
+    absences: [],
   },
   modal: {
     isOpen: false,

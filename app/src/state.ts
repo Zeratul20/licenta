@@ -16,6 +16,7 @@ export type State = {
     catalogue: any;
     teacher: any;
     student: any;
+    absences: any;
   };
   modal: {
     isOpen: boolean;

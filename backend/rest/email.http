@@ -1,0 +1,13 @@
+@api = http://localhost:5000/api
+
+### POST
+POST {{api}}/email/absence
+Content-Type: application/json
+
+{
+    "emailsTo": ["dumitritagradinaru77@yahoo.com"],
+    "ccEmail": "dumitritagradinaru77@gmail.com",
+    "studentName": "Gradinaru Dumitrita-Elena",
+    "date": "02.03",
+    "subjectName": "Limba Romana"
+}

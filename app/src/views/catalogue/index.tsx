@@ -44,12 +44,12 @@ export const Catalogue: view = ({
     return (
       <div className="object-fit-cover">
         <h1>Catalog</h1>
+        <ClassDropdown classes={sortedTeacherClasses} handleClick={handleClick} />
         {catalogueClass && (
           <h2 style={{ textAlign: "center" }}>
             Clasa {getClassName(catalogueClass.name)}
           </h2>
         )}
-        <ClassDropdown classes={sortedTeacherClasses} handleClick={handleClick} />
         {catalogueClass && <Table />}
       </div>
     );

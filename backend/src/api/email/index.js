@@ -17,7 +17,6 @@ const emailFrom = "andriesvladandrei@gmail.com";
 
 router.post("/email/grade", async (req, res, next) => {
   try {
-    console.log(">>>HEREEE");
     const { emailsTo, ccEmail, studentName, grade, subjectName } = req.body;
     const emailsString = emailsTo.join(", ");
     const html = `
@@ -41,6 +40,41 @@ router.post("/email/grade", async (req, res, next) => {
       to: emailsString,
       cc: ccEmail,
       subject: `Nota ${studentName}`,
+      html,
+    };
+    await transporter.sendMail(mailOptions);
+    res.status(200).send("Email sent!");
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
+router.post("/email/absence", async (req, res, next) => {
+  try {
+    const { emailsTo, ccEmail, studentName, date, subjectName } = req.body;
+    const emailsString = emailsTo.join(", ");
+    const html = `
+        <div>
+            <p> Buna ziua! </p>
+            <p> 
+                Va informam ca elevul <i>${studentName}</i> a absentat la disciplina <i>${subjectName}</i> pe data de ${date}<b>.
+            </p>
+            <br>
+            <p>
+                Va multumim!
+                <br>
+                <b>
+                    Colegiul de Informatica
+                </b>
+            </p>
+        </div>
+    `;
+    const mailOptions = {
+      from: emailFrom,
+      to: emailsString,
+      cc: ccEmail,
+      subject: `Absenta`,
       html,
     };
     await transporter.sendMail(mailOptions);

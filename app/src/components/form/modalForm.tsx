@@ -52,8 +52,10 @@ export const ModalForm: view = ({
           placeholder,
           type,
           disabled,
+          hidden,
         } = field;
         console.log(">>>field: ", field);
+        if (hidden) return null;
         return input(fieldName, label, className, placeholder, type, disabled);
       })}
     </div>
