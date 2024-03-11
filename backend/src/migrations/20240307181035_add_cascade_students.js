@@ -4,10 +4,13 @@
  */
 exports.up = function (knex) {
   return knex.schema.alterTable("absences", function (table) {
-    // table.dropColumn("date");
-    return;
+    table.dropForeign("studentId");
+    table
+      .foreign("studentId")
+      .references("studentId")
+      .inTable("students")
+      .onDelete("CASCADE");
   });
-  return;
 };
 
 /**

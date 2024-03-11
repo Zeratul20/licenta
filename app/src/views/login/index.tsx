@@ -4,6 +4,7 @@ import axios from "axios";
 import { Form } from "../../components/form";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import LogInIcon from "../../assets/img/profile.png";
 
 export const Login: view = ({ updateUser = update.user }: any) => {
   const [data, setData]: any = useState({});
@@ -15,12 +16,12 @@ export const Login: view = ({ updateUser = update.user }: any) => {
 
   useEffect(() => {
     if (isButtonPressed) {
-      console.log(">>>data in login: ", data)
+      console.log(">>>data in login: ", data);
       axios
         .post(`http://localhost:5000/api/users/login/${email}`, { password })
         .then((response: any) => {
           console.log(response);
-          const {data} = response;
+          const { data } = response;
           updateUser.set(data);
           localStorage.setItem("userIdLicenta", data.userId);
           navigate("/");
@@ -59,21 +60,33 @@ export const Login: view = ({ updateUser = update.user }: any) => {
   ];
 
   return (
-    <div
-      className="container"
-      style={{
-        height: "600px",
-        paddingTop: "100px",
-        paddingLeft: "150px",
-        paddingRight: "150px",
-      }}
-    >
-      <Form
-        fields={fields}
-        setData={setData}
-        buttonMessage={"Log in"}
-        setIsButtonPressed={setIsButtonPressed}
+    <>
+      <img
+        src={LogInIcon}
+        style={{
+          width: "150px",
+          height: "150px",
+          display: "block",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
       />
-    </div>
+      <div
+        className="container"
+        style={{
+          height: "600px",
+          paddingTop: "50px",
+          paddingLeft: "150px",
+          paddingRight: "150px",
+        }}
+      >
+        <Form
+          fields={fields}
+          setData={setData}
+          buttonMessage={"Log in"}
+          setIsButtonPressed={setIsButtonPressed}
+        />
+      </div>
+    </>
   );
 };

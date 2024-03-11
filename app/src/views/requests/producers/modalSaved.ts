@@ -116,6 +116,10 @@ export const modalSaved: producer = ({
       status,
       response,
     });
+    const newRequests = requests.filter(
+      (request: any) => request.requestId !== requestId
+    );
+    updateRequests.set(newRequests);
     toast.success("Cerere respinsa cu succes", {
       position: "top-right",
       autoClose: 3000,
@@ -149,6 +153,7 @@ export const modalSaved: producer = ({
       axios.put(`http://localhost:5000/api/requests/${requestId}`, {
         status: "accepted",
       });
+      updateIsStateInitiated.set(false);
     } catch (e) {
       console.log(">>>error: ", e);
       toast.error("Parinte invalid", {
@@ -168,7 +173,8 @@ export const modalSaved: producer = ({
       axios.put(`http://localhost:5000/api/requests/${requestId}`, {
         status: "accepted",
       });
-      toast.success("Clasa a fost salvata", {
+      updateIsStateInitiated.set(false);
+      toast.success("Elevul a fost adaugat", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -221,6 +227,7 @@ export const modalSaved: producer = ({
       axios.put(`http://localhost:5000/api/requests/${requestId}`, {
         status: "accepted",
       });
+      updateIsStateInitiated.set(false);
       toast.success("Elevul a fost sters", {
         position: "top-right",
         autoClose: 3000,

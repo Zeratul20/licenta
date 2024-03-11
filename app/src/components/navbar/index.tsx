@@ -16,18 +16,96 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import LoginIcon from "@mui/icons-material/Login";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import HomeIcon from "@mui/icons-material/Home";
+import MessageIcon from "@mui/icons-material/Message";
+import TodayIcon from "@mui/icons-material/Today";
+import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
+import SchoolIcon from "@mui/icons-material/School";
+import ForumIcon from "@mui/icons-material/Forum";
+import SchoolLogo from "../../assets/img/school-logo.png";
+
+const getRoleName = (role: string) => {
+  switch (role) {
+    case "teacher":
+      return "Profesor";
+    case "director":
+      return "Director";
+    case "student":
+      return "Elev";
+    case "parent":
+      return "Parinte";
+    default:
+      return "Guest";
+  }
+};
+
+const renderNavPage = (page: string) => {
+  if (page === "Acasa") {
+    return (
+      <div style={{ display: "flex" }}>
+        <HomeIcon fontSize="medium" />
+        <span style={{ paddingLeft: "5px" }}>{page}</span>
+      </div>
+    );
+  }
+  if (page === "General") {
+    return (
+      <div style={{ display: "flex" }}>
+        <MessageIcon fontSize="medium" />
+        <span style={{ paddingLeft: "5px" }}>{page}</span>
+      </div>
+    );
+  }
+  if (page === "Orar") {
+    return (
+      <div style={{ display: "flex" }}>
+        <TodayIcon fontSize="medium" />
+        <span style={{ paddingLeft: "5px" }}>{page}</span>
+      </div>
+    );
+  }
+  if (page === "Catalog") {
+    return (
+      <div style={{ display: "flex" }}>
+        <SortByAlphaIcon fontSize="medium" />
+        <span style={{ paddingLeft: "5px" }}>{page}</span>
+      </div>
+    );
+  }
+  if (page === "Clase") {
+    return (
+      <div style={{ display: "flex" }}>
+        <SchoolIcon fontSize="medium" />
+        <span style={{ paddingLeft: "5px" }}>{page}</span>
+      </div>
+    );
+  }
+  if (page === "Cereri") {
+    return (
+      <div style={{ display: "flex" }}>
+        <ForumIcon fontSize="medium" />
+        <span style={{ paddingLeft: "5px" }}>{page}</span>
+      </div>
+    );
+  }
+  return null;
+};
 
 export const NavBar: view = ({
   user = observe.user,
   updateIsLogoutPressed = update.isLogoutPressed,
 }) => {
-  const pages = ["Acasa", "General", "Orar", "Catalog"];
+  const pages = ["Acasa"];
   const guestPages = ["Sign Up", "Login"];
   const settings = ["Account", "Logout"];
   const { userId } = user;
   console.log(">>>user in nav: ", user);
-  pages.push("Cereri");
+  if (user?.userId && user?.role !== "user")
+    pages.push(...["General", "Orar", "Catalog"]);
   if (user.role === "director") pages.push("Clase");
+  if (user?.userId) pages.push("Cereri");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -90,8 +168,8 @@ export const NavBar: view = ({
         navigate("/account");
         break;
       case "Logout":
-        updateIsLogoutPressed.set(true);
         navigate("/");
+        updateIsLogoutPressed.set(true);
         break;
     }
     setAnchorElUser(null);
@@ -102,7 +180,8 @@ export const NavBar: view = ({
       <AppBar
         position="static"
         style={{
-          background: "linear-gradient(to bottom right, #189AB4, #189AB4, #189AB4)",
+          background:
+            "linear-gradient(to bottom right, #189AB4, #189AB4, #189AB4)",
           width: "100%",
           position: "fixed",
           zIndex: 10,
@@ -110,7 +189,12 @@ export const NavBar: view = ({
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+            <img
+              src={SchoolLogo}
+              alt="school-logo"
+              style={{ width: "50px", height: "50px" }}
+            />
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -142,7 +226,9 @@ export const NavBar: view = ({
               >
                 {pages.map((page) => (
                   <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                    <Typography textAlign="center">
+                      {renderNavPage(page)}
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -162,45 +248,10 @@ export const NavBar: view = ({
                     textShadow: "0px 5px 5px rgba(0, 0, 0, 0.3)",
                   }}
                 >
-                  {page}
+                  {renderNavPage(page)}
                 </Button>
               ))}
             </Box>
-
-            {/* <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ mt: "45px" }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box> */}
             <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
             {!userId ? (
               <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
@@ -217,52 +268,42 @@ export const NavBar: view = ({
                       textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                     }}
                   >
-                    {page}
+                    {page === "Login" ? (
+                      <div style={{ display: "flex" }}>
+                        <LoginIcon fontSize="medium" />
+                        <span style={{ paddingLeft: "5px" }}>{page}</span>
+                      </div>
+                    ) : (
+                      <div style={{ display: "flex" }}>
+                        <LockOpenIcon fontSize="medium" />
+                        <span style={{ paddingLeft: "5px" }}>{page}</span>
+                      </div>
+                    )}
                   </Button>
                 ))}
               </Box>
             ) : (
               <>
                 <Box sx={{ flexGrow: 1 }} />
-                {/* <Box
-                  sx={{
-                    display: { xs: "none", md: "flex" },
-                    paddingRight: "1rem",
-                  }}
-                  style={{
-                    paddingLeft: "2rem",
-                    fontSize: "1rem",
-                    fontFamily: "ibarra-regular",
-                    fontWeight: "bold",
-                    textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                  }}
-                >
-                  <IconButton
-                    size="large"
-                    aria-label="show 4 new mails"
-                    color="inherit"
-                  >
-                    <Badge badgeContent={4} color="error">
-                      <MailIcon fontSize="inherit" />
-                    </Badge>
-                  </IconButton>
-                  <IconButton
-                    size="large"
-                    aria-label="show 17 new notifications"
-                    color="inherit"
-                    style={{ paddingLeft: "1rem" }}
-                  >
-                    <Badge badgeContent={17} color="error">
-                      <NotificationsIcon fontSize="inherit" />
-                    </Badge>
-                  </IconButton>
-                </Box> */}
                 <Box sx={{ paddingLeft: "1rem" }} />
                 <Box sx={{ flexGrow: 0 }}>
+                  <Badge
+                    sx={{
+                      paddingRight: "20px",
+                      fontSize: "20px",
+                      fontFamily: "inherit",
+                      textShadow: "inherit",
+                      color: "#FFF5E0",
+                    }}
+                  >
+                    <i>
+                      <b>{getRoleName(user.role)}</b>
+                    </i>
+                  </Badge>
                   <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <Avatar
-                        alt="Emy Sharp"
+                        alt={user.firstName}
                         src="/static/images/avatar/2.jpg"
                       />
                     </IconButton>

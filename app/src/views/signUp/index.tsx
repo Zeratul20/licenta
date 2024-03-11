@@ -6,6 +6,7 @@ import { Form } from "../../components/form";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import SignUpIcon from "../../assets/img/sign-up.png";
 
 export const SignUp = () => {
   const [data, setData]: any = useState({});
@@ -80,39 +81,34 @@ export const SignUp = () => {
 
   if (!isButtonPressed) {
     return (
-      <div
-        className="container"
-        style={{
-          height: "600px",
-          paddingTop: "100px",
-          paddingLeft: "150px",
-          paddingRight: "150px",
-        }}
-      >
-        <Form
-          fields={fields}
-          setData={setData}
-          buttonMessage={"Sign up"}
-          setIsButtonPressed={setIsButtonPressed}
+      <>
+        <img
+          src={SignUpIcon}
+          style={{
+            width: "150px",
+            height: "150px",
+            display: "block",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
         />
-      </div>
+        <div
+          className="container"
+          style={{
+            height: "600px",
+            paddingTop: "50px",
+            paddingLeft: "150px",
+            paddingRight: "150px",
+          }}
+        >
+          <Form
+            fields={fields}
+            setData={setData}
+            buttonMessage={"Sign up"}
+            setIsButtonPressed={setIsButtonPressed}
+          />
+        </div>
+      </>
     );
   }
-  if (userAlreadyExists) {
-    return (
-      <div>
-        An account with the username {data.username} already exists. Please
-        refresh and choose another username.
-      </div>
-    );
-  }
-  if (errorSingUp) {
-    return (
-      <div>
-        You entered an invalid username or password. Please refresh the page and
-        try again.
-      </div>
-    );
-  }
-  return <div>You have been signed up. </div>;
 };

@@ -21,4 +21,4 @@ Content-Type: application/json
 }
 
 ### DELETE
-DELETE {{api}}/students/ae4d7fc6-f758-477d-b80d-3a2015a5a0cf
+DELETE {{api}}/students/1fae63c7-244d-4155-9cfa-efdb3a84f700

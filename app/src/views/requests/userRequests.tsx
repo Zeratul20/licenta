@@ -6,6 +6,7 @@ import * as producers from "./producers";
 // import { toast } from "react-toastify";
 import { GreenTick } from "../../assets/icons/greenTick";
 import { RedX } from "../../assets/icons/redX";
+import "./style.css";
 
 export const UserRequests: view = ({
   user = observe.user,
@@ -71,7 +72,7 @@ export const UserRequests: view = ({
   } else if (requestType === 4) {
     fieldsType = fieldsType3;
     modalTitle = "Cerere stergere elev";
-  } 
+  }
   // else if (requestType === 5) {
   //   fieldsType = fieldsType3;
   //   modalTitle = "Cerere stergere profesor";
@@ -104,56 +105,66 @@ export const UserRequests: view = ({
   return (
     <>
       <h2 style={{ paddingLeft: "100px", paddingTop: "40px" }}>
-        Tipuri de cereri:
+        <span>
+          <i>Tipuri de cereri</i>
+        </span>
       </h2>
-      <div className="request">
-        <p>
-          Pentru cererea de asignare a parintelui cu un elev, completati
-          formularul urmator:
-        </p>
-        <button
-          className="btn btn-primary"
-          onClick={() => handleMakeRequest(initialValuesType1)}
-        >
-          Cerere parinte {"->"} elev
-        </button>
-      </div>
-      <div className="request">
-        <p>
-          Pentru cererea de asignare a rolului de elev, completati formularul
-          urmator:
-        </p>
-        <button
-          className="btn btn-primary"
-          onClick={() => handleMakeRequest(initialValuesType2)}
-        >
-          Cerere rol elev
-        </button>
-      </div>
-      <div className="request">
-        <p>
-          Pentru cererea de asignare a rolului de profesor, completati
-          formularul urmator:
-        </p>
-        <button
-          className="btn btn-primary"
-          onClick={() => handleMakeRequest(initialValuesType3)}
-        >
-          Cerere rol profesor
-        </button>
-      </div>
-      <div className="request">
-        <p>
-          Pentru cererea de stergere a rolului de elev, completati formularul
-          urmator:
-        </p>
-        <button
-          className="btn btn-primary"
-          onClick={() => handleMakeRequest(initialValuesType4)}
-        >
-          Cerere stergere rol elev
-        </button>
-      </div>
+      {user.role !== "student" && (
+        <div className="request">
+          <p>
+            Pentru cererea de asignare a parintelui cu un elev, completati
+            formularul urmator:
+          </p>
+          <button
+            className="btn btn-primary"
+            onClick={() => handleMakeRequest(initialValuesType1)}
+          >
+            Cerere parinte {"->"} elev
+          </button>
+        </div>
+      )}
+      {user.role === "user" && (
+        <div className="request">
+          <p>
+            Pentru cererea de asignare a rolului de elev, completati formularul
+            urmator:
+          </p>
+          <button
+            className="btn btn-primary"
+            onClick={() => handleMakeRequest(initialValuesType2)}
+          >
+            Cerere rol elev
+          </button>
+        </div>
+      )}
+      {user.role !== "student" && user.role !== "teacher" &&(
+        <div className="request">
+          <p>
+            Pentru cererea de asignare a rolului de profesor, completati
+            formularul urmator:
+          </p>
+          <button
+            className="btn btn-primary"
+            onClick={() => handleMakeRequest(initialValuesType3)}
+          >
+            Cerere rol profesor
+          </button>
+        </div>
+      )}
+      {user.role === "student" && (
+        <div className="request">
+          <p>
+            Pentru cererea de stergere a rolului de elev, completati formularul
+            urmator:
+          </p>
+          <button
+            className="btn btn-primary"
+            onClick={() => handleMakeRequest(initialValuesType4)}
+          >
+            Cerere stergere rol elev
+          </button>
+        </div>
+      )}
       {/* <div className="request">
         <p>
           Pentru cererea de stergere a rolului de profesor, completati
@@ -167,61 +178,83 @@ export const UserRequests: view = ({
         </button>
       </div> */}
       <Modal fields={fieldsType} title={modalTitle} type={"add"} />
-      <h2 style={{ paddingLeft: "100px", paddingTop: "40px" }}>
-        Cereri in asteptare:
-      </h2>
-      <div>
-        {pendingRequests.map((request: any) => {
-          const { email, firstName, lastName } = getUserDataById(
-            request.userId
-          );
-          return (
-            <div key={request.requestId}>
-              <p>
-                Cerere de tipul {request.type} de la {email}{" "}
-                {`(${lastName} ${firstName})`} in asteptare
-              </p>
-            </div>
-          );
-        })}
-      </div>
-      <h2 style={{ paddingLeft: "100px", paddingTop: "40px" }}>
-        Cereri respinse:
-      </h2>
-      <div>
-        {rejectedRequests.map((request: any) => {
-          const { email, firstName, lastName } = getUserDataById(
-            request.userId
-          );
-          return (
-            <div key={request.requestId}>
-              <p>
-                Respinsa: Cerere de tipul {request.type} de la {email}{" "}
-                {`(${lastName} ${firstName})`}
-              </p>
-              <p>Motiv respingere: {request.response}</p>
-            </div>
-          );
-        })}
-      </div>
-      <h2 style={{ paddingLeft: "100px", paddingTop: "40px" }}>
-        Cereri acceptate:
-      </h2>
-      <div>
-        {acceptedRequests.map((request: any) => {
-          const { email, firstName, lastName } = getUserDataById(
-            request.userId
-          );
-          return (
-            <div key={request.requestId}>
-              <p>
-                Acceptata: Cerere de tipul {request.type} de la {email}{" "}
-                {`(${lastName} ${firstName})`}
-              </p>
-            </div>
-          );
-        })}
-      </div>
+      {pendingRequests && pendingRequests.length > 0 && (
+        <>
+          <h2 style={{ paddingLeft: "100px", paddingTop: "40px" }}>
+            <span>
+              <i>Cereri in asteptare</i>
+            </span>
+          </h2>
+          <div>
+            {pendingRequests.map((request: any) => {
+              const { email, firstName, lastName } = getUserDataById(
+                request.userId
+              );
+              return (
+                <div key={request.requestId}>
+                  <ul>
+                    <li>
+                      Cerere de tipul {request.type} de la {email}{" "}
+                      {`(${lastName} ${firstName})`} in asteptare
+                    </li>
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+      {rejectedRequests && rejectedRequests.length > 0 && (
+        <>
+          <h2 style={{ paddingLeft: "100px", paddingTop: "40px" }}>
+            <span>
+              <i>Cereri respinse</i>
+            </span>
+          </h2>
+          <div>
+            {rejectedRequests.map((request: any) => {
+              const { email, firstName, lastName } = getUserDataById(
+                request.userId
+              );
+              return (
+                <div key={request.requestId}>
+                  <p>
+                    Respinsa: Cerere de tipul {request.type} de la {email}{" "}
+                    {`(${lastName} ${firstName})`}
+                  </p>
+                  <p>Motiv respingere: {request.response}</p>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+      {acceptedRequests && acceptedRequests.length > 0 && (
+        <>
+          <h2 style={{ paddingLeft: "100px", paddingTop: "40px" }}>
+            <span>
+              <i>Cereri acceptate</i>
+            </span>
+          </h2>
+          <div>
+            {acceptedRequests.map((request: any) => {
+              const { email, firstName, lastName } = getUserDataById(
+                request.userId
+              );
+              return (
+                <div key={request.requestId}>
+                  <ul>
+                    <li>
+                      Cerere de tipul {request.type} de la {email}{" "}
+                      {`(${lastName} ${firstName})`}
+                    </li>
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
     </>
   );
 };

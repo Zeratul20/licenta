@@ -23,6 +23,25 @@ router.get("/classes", async (req, res, next) => {
   }
 });
 
+router.get("/classes/nrOfStudents", async (req, res, next) => {
+  try {
+    const classesData = await knex("classes");
+    const studentsData = await knex("students");
+    const students = [];
+    const nrOfStudents = [];
+    classesData.forEach((classData) => {
+      const { classId } = classData;
+      const students = studentsData.filter(
+        (studentData) => studentData.classId === classId
+      );
+      nrOfStudents.push({ classId, value: students.length });
+    });
+    res.send(nrOfStudents);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/classes/:classId", async (req, res, next) => {
   try {
     const { classId } = req.params;
@@ -61,24 +80,26 @@ router.get("/classes/:classId/teachers", async (req, res, next) => {
   }
 });
 
-router.get("/classes/:classId/nrOfStudents", async (req, res, next) => {
-  try {
-    const { classId } = req.params;
-    const classesData = await knex("classes").where({ classId });
-    if (classesData.length === 0) {
-      res.status(400);
-      throw new Error("Class not found");
-    }
-    const studentsData = await knex("students");
-    const students = [];
-    for (const studentData of studentsData) {
-      if (studentData.classId === classId) students.push(studentData.studentId);
-    }
-    res.send(students.length);
-  } catch (error) {
-    next(error);
-  }
-});
+
+
+// router.get("/classes/:classId/nrOfStudents", async (req, res, next) => {
+//   try {
+//     const { classId } = req.params;
+//     const classesData = await knex("classes").where({ classId });
+//     if (classesData.length === 0) {
+//       res.status(400);
+//       throw new Error("Class not found");
+//     }
+//     const studentsData = await knex("students");
+//     const students = [];
+//     for (const studentData of studentsData) {
+//       if (studentData.classId === classId) students.push(studentData.studentId);
+//     }
+//     res.send({ value: students.length });
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 router.put("/classes/:classId", async (req, res, next) => {
   try {
@@ -96,7 +117,10 @@ router.put("/classes/:classId", async (req, res, next) => {
       const classesTeachers = await knex("classes").where({
         teacherId: newTeacherId,
       });
-      if (classesTeachers.length > 0 && classesTeachers[0].classId !== classId) {
+      if (
+        classesTeachers.length > 0 &&
+        classesTeachers[0].classId !== classId
+      ) {
         res.status(400);
         res.send({
           message: `Profesorul este deja diriginte la clasa ${classesTeachers[0].name}`,

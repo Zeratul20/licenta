@@ -21,6 +21,9 @@ Content-Type: application/json
 ### GET
 GET {{api}}/classes
 
+### GET NR_OF_STUDENTS
+GET {{api}}/classes/nrOfStudents
+
 ### GET Teachers
 GET {{api}}/classes/f8642a8f-b985-443d-bcfe-ee63070c4261/teachers
 

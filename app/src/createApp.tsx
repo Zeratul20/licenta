@@ -18,6 +18,7 @@ const state: State = {
     teacher: null,
     student: null,
     absences: [],
+    currentPage: 1,
   },
   modal: {
     isOpen: false,
@@ -35,6 +36,7 @@ const state: State = {
   messages: {
     content: [],
     isStateInitiated: false,
+    currentPage: 1,
   },
   requests: {
     content: [],
@@ -43,6 +45,10 @@ const state: State = {
   classDetails: {
     teachers: [],
     class: null,
+    isStateInitiated: false,
+  },
+  classesDetails: {
+    nrOfStudents: [],
     isStateInitiated: false,
   },
 };

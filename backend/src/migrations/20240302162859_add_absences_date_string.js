@@ -4,7 +4,8 @@
  */
 exports.up = function (knex) {
   return knex.schema.alterTable("absences", function (table) {
-    table.string("date").notNullable();
+    // table.string("date").notNullable();
+    return;
   });
 };
 

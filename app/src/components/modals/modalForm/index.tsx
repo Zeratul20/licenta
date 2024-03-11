@@ -58,7 +58,7 @@ export const Modal: view = ({
                 data-bs-dismiss="modal"
                 onClick={handleClose}
               >
-                Close
+                Inchide
               </button>
               <button
                 type="button"
@@ -66,7 +66,7 @@ export const Modal: view = ({
                 data-bs-dismiss="modal"
                 onClick={handleSave}
               >
-                Save changes
+                Salveaza modificarile
               </button>
             </div>
           </div>

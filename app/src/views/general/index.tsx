@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
@@ -9,71 +9,62 @@ import { getUserData, modalOperation, capitalize } from "../../utils";
 import { Modal } from "../../components/modals/modalForm";
 
 import addMessageIcon from "../../assets/img/add.png";
-import "../../style.css"
+import "../../style.css";
 
 import * as producers from "./producers";
+import { EditIcon } from "../../assets/icons/pen";
+import { TrashIcon } from "../../assets/icons/trash";
+import { Paginate } from "../../components/modules/pagination";
 
 export const General: view = ({
   updateModalFormData = update.modal.formData,
-  isModalSavePressed = observe.modal.isSavePressed,
-  updateIsModalSavePressed = update.modal.isSavePressed,
   updateIsModalOpen = update.modal.isOpen,
-  getModalFormData = get.modal.formData,
   messages = observe.messages.content,
-  updateMessages = update.messages.content,
+  currentPage = observe.messages.currentPage,
+  updateCurrentPage = update.messages.currentPage,
   getUser = get.user,
   getUsers = get.users,
 }) => {
+  const [modalType, setModalType] = useState("");
   if (!messages) return null;
-  const fields = [
-    {
-      field: "title",
-      label: "Titlu",
-      className: "form-floating mb-3 col-md-12",
-      placeholder: "Titlu",
-      type: "text",
-    },
-    {
-      field: "message",
-      label: "Mesaj",
-      className: "form-floating mb-3 col-md-12",
-      placeholder: "Mesaj",
-      type: "text",
-    },
-  ];
+  let fields: any = [];
+  let modalTitle = "";
+  if (modalType === "add" || modalType === "edit") {
+    fields = [
+      {
+        field: "title",
+        label: "Titlu",
+        className: "form-floating mb-3 col-md-12",
+        placeholder: "Titlu",
+        type: "text",
+      },
+      {
+        field: "message",
+        label: "Mesaj",
+        className: "form-floating mb-3 col-md-12",
+        placeholder: "Mesaj",
+        type: "text",
+      },
+    ];
+    if (modalType === "edit") {
+      modalTitle = "Modifica mesajul";
+    } else {
+      modalTitle = "Adauga mesaj";
+    }
+  } else if (modalType === "delete") modalTitle = "Sterge mesajul";
 
   const initialValuesAdd = {
     title: "",
     message: "",
   };
 
-  const modalFormData = getModalFormData.value();
   const user = getUser.value();
   const users = getUsers.value();
 
-  if (isModalSavePressed) {
-    console.log(">>>modalFormData: ", modalFormData);
-    const newMessage = modalFormData;
-    newMessage.userId = user.userId;
-    newMessage.date = dayjs().format("DD.MMM.YYYY");
-    newMessage.time = dayjs().format("HH:mm");
-
-    try {
-      axios.post("http://localhost:5000/api/messages", newMessage);
-      updateMessages.set([...messages, newMessage]);
-    } catch (error) {
-      console.log(">>>error: ", error);
-      toast.error("Eroare la adaugarea mesajului!", {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 3000,
-      });
-    }
-
-    updateIsModalSavePressed.set(false);
-  }
-
-  const handleAddButton = (initalValues: any) => {
+  const handleEdit_AddButton = (initalValues: any, type: string) => {
     console.log(">>>initalValues: ", initalValues);
+    initalValues.type = type;
+    setModalType(type);
     updateModalFormData.set(initalValues);
     updateIsModalOpen.set(true);
     modalOperation("modalForm", "show");
@@ -84,18 +75,45 @@ export const General: view = ({
       dayjs(b.date + " " + b.time).unix() - dayjs(a.date + " " + a.time).unix()
   );
 
+  const messagesPage = [];
+  for (let i = currentPage * 5 - 5; i < currentPage * 5; i++) {
+    if (sortedMessages[i]) messagesPage.push(sortedMessages[i]);
+  }
+
+  const calculateNrOfPages = () => {
+    console.log("current page: ", currentPage);
+    return (
+      Math.floor(sortedMessages.length / 5) +
+        (sortedMessages.length % 5 !== 0 ? 1 : 0) || 0
+    );
+  };
+
+  const handlePageChange = (event: any, value: number) => {
+    updateCurrentPage.set(value);
+  };
+
   return (
-    <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+    <div className="object-fit-cover" style={{ paddingLeft: "20px" }}>
       <h1 className="font-family">General</h1>
+      <div>
+        <Paginate
+          nrOfPages={calculateNrOfPages()}
+          onChange={(event: any, value: number) =>
+            handlePageChange(event, value)
+          }
+          currentPage={currentPage}
+        />
+      </div>
       <div
         style={{
           paddingRight: "200px",
-          paddingLeft: "100px",
+          paddingLeft: "200px",
           paddingTop: "20px",
         }}
       >
-        {sortedMessages.map((message: any) => {
-          const { userId: messageUserId } = message;
+        {messagesPage.map((message: any) => {
+          const { userId: messageUserId, messageId } = message;
+          console.log(">>> message", message);
           const messageUser = getUserData(users, messageUserId);
           if (messageUser.role === "teacher") messageUser.role = "profesor";
           const { firstName, lastName, role } = messageUser;
@@ -124,6 +142,14 @@ export const General: view = ({
             timeString = `${messageDay} ${messageMonth} ${messageYear}, ${time}`;
           }
 
+          const initialValuesEdit = {
+            title,
+            message: messageText,
+            messageId,
+          };
+
+          const initialValuesDelete = { messageId };
+
           return (
             <div
               className="card border-dark mb-5 w-50"
@@ -139,9 +165,39 @@ export const General: view = ({
                 <div className="text-end">{timeString}</div>
               </div>
               <div className="card-body">
-                <b className="card-title" style={{fontSize: "20px"}}>{title}</b>
-                <p className="card-text" style={{paddingTop: "15px"}}>{messageText}</p>
+                <b className="card-title" style={{ fontSize: "20px" }}>
+                  {title}
+                </b>
+                <p className="card-text" style={{ paddingTop: "15px" }}>
+                  {messageText}
+                </p>
               </div>
+              {user.userId === messageUserId && (
+                <div className="card-footer">
+                  <div className="d-flex">
+                    <button
+                      className="btn btn-lg btn-outline-primary py-0 justify-content-start"
+                      style={{ fontSize: "1.5rem", border: "none" }}
+                      onClick={() =>
+                        handleEdit_AddButton(initialValuesEdit, "edit")
+                      }
+                    >
+                      Modifica
+                    </button>
+                    <div style={{ paddingLeft: "200px" }}>
+                      <button
+                        className="btn btn-lg btn-outline-danger py-0 "
+                        style={{ fontSize: "1.75rem", border: "none" }}
+                        onClick={() =>
+                          handleEdit_AddButton(initialValuesDelete, "delete")
+                        }
+                      >
+                        <TrashIcon />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
@@ -150,7 +206,7 @@ export const General: view = ({
         style={{
           position: "absolute",
           bottom: "75px",
-          right: "150px",
+          right: "400px",
         }}
       >
         <button
@@ -159,14 +215,14 @@ export const General: view = ({
           data-bs-toggle="tooltip"
           data-bs-placement="bottom"
           data-bs-title="Adaugati un mesaj"
-          onClick={() => handleAddButton(initialValuesAdd)}
+          onClick={() => handleEdit_AddButton(initialValuesAdd, "add")}
         >
           <img
             src={addMessageIcon}
             style={{ width: "40px", position: "fixed" }}
           />
         </button>
-        <Modal fields={fields} title={"Adauga ora"} type={"add"} />
+        <Modal fields={fields} title={modalTitle} type={modalType} />
       </div>
     </div>
   );

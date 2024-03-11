@@ -17,6 +17,7 @@ export type State = {
     teacher: any;
     student: any;
     absences: any;
+    currentPage: number;
   };
   modal: {
     isOpen: boolean;
@@ -34,6 +35,7 @@ export type State = {
   messages: {
     content: any;
     isStateInitiated: boolean;
+    currentPage: number;
   };
   requests: {
     content: any;
@@ -42,6 +44,10 @@ export type State = {
   classDetails: {
     teachers: any;
     class: any;
+    isStateInitiated: boolean;
+  };
+  classesDetails: {
+    nrOfStudents: any;
     isStateInitiated: boolean;
   };
 };

@@ -15,23 +15,31 @@ import { AddIcon, EditIcon } from "../../assets/icons";
 import { modalOperation, sortedClassesByName } from "../../utils";
 import { Modal } from "../../components/modals/modalForm";
 import * as producers from "./producers";
+import { Loader } from "../../components/helpers/loader";
 
 export const Classes: view = ({
   classes = observe.classes,
   user = observe.user,
+  nrOfStudents = observe.classesDetails.nrOfStudents,
+  isStateInitiated = observe.classesDetails.isStateInitiated,
   getTeachersState = get.teachers,
   getUsersState = get.users,
   updateClass = update.classDetails.class,
   updateModalFormData = update.modal.formData,
   updateIsModalOpen = update.modal.isOpen,
 }) => {
-  if (user.role !== "director") return null;
   const teachersState = getTeachersState.value();
   const usersState = getUsersState.value();
   const navigate = useNavigate();
   const sortedClasses = sortedClassesByName(classes);
-
+  
+  console.log(">>> nrOfStudents", nrOfStudents);
+  
   const [modalType, setModalType] = useState("");
+
+  if(!isStateInitiated) return <Loader />;
+
+  if (user.role !== "director") return null;
 
   const handleEdit_AddButton = (initalValues: any, type: string) => {
     console.log(">>>initalValues: ", initalValues);
@@ -106,6 +114,9 @@ export const Classes: view = ({
                 teacherEmail: email,
                 classId,
               };
+              const nrOfStudentsFound = nrOfStudents.find(
+                (nr: any) => nr.classId === classId
+              );
               return (
                 <TableRow
                   key={cls.name}
@@ -124,7 +135,7 @@ export const Classes: view = ({
                   <TableCell align="center">
                     {firstName} {lastName}
                   </TableCell>
-                  <TableCell align="center">{30}</TableCell>
+                  <TableCell align="center">{nrOfStudentsFound.value}</TableCell>
                   <TableCell align="center">
                     <button
                       className="btn btn-lg btn-outline-primary py-0"

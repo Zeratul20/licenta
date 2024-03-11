@@ -18,6 +18,7 @@ export const Catalogue: view = ({
   updateCatalogueClass = update.catalogue.class,
   catalogueClass = observe.catalogue.class,
   updateCatalogueStudent = update.catalogue.student,
+  updateCurrentPage = update.catalogue.currentPage,
 }) => {
   console.log(">>>User: ", user);
   if (user.role === "teacher") {
@@ -35,6 +36,7 @@ export const Catalogue: view = ({
     console.log(">>>Classes: ", classes);
     updateCatalogueTeacher.set(teacher);
     const handleClick = (classId: string) => {
+      updateCurrentPage.set(1);
       console.log(classId);
       const classFound = sortedTeacherClasses.find(
         (classEl: any) => classEl.classId === classId
@@ -44,7 +46,10 @@ export const Catalogue: view = ({
     return (
       <div className="object-fit-cover">
         <h1>Catalog</h1>
-        <ClassDropdown classes={sortedTeacherClasses} handleClick={handleClick} />
+        <ClassDropdown
+          classes={sortedTeacherClasses}
+          handleClick={handleClick}
+        />
         {catalogueClass && (
           <h2 style={{ textAlign: "center" }}>
             Clasa {getClassName(catalogueClass.name)}
@@ -60,13 +65,14 @@ export const Catalogue: view = ({
     const sortedClasses = sortedClassesByName(classes);
     const handleClick = (classId: string) => {
       console.log(classId);
+      updateCurrentPage.set(1);
       const classFound = sortedClasses.find(
         (classEl: any) => classEl.classId === classId
       );
       updateCatalogueClass.set(classFound);
     };
     return (
-      <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+      <div className="object-fit-cover" style={{ paddingLeft: "20px" }}>
         <h1>Catalog</h1>
         <ClassDropdown classes={sortedClasses} handleClick={handleClick} />
         {catalogueClass && (
