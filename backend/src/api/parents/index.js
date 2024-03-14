@@ -54,10 +54,9 @@ router.put("/parents/:parentId", async (req, res, next) => {
       throw new Error("parent not found");
     }
     const parentToUpdate = {};
-    parentToUpdate.students = [];
+    parentToUpdate.students = parentsData[0].students || [];
     if (data.students) {
-      for (let student of data.students) {
-        const { studentId } = student;
+      for (let studentId of data.students) {
         const studentData = await knex("students").where({ studentId });
         if (studentData.length === 0) {
           res.status(400);
@@ -66,11 +65,8 @@ router.put("/parents/:parentId", async (req, res, next) => {
         parentToUpdate.students.push(studentId);
       }
     }
-    await knex("parents")
-      .join("users", "parents.userId", "users.userId")
-      .where("users.email", "=", email)
-      .update(parentToUpdate);
-    res.send(parents);
+    await knex("parents").where({ parentId }).update(parentToUpdate);
+    res.send(parentToUpdate);
   } catch (error) {
     next(error);
   }

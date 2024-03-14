@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "../inputs/input";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { DatePick } from "../inputs/datePicker";
 
 export const ModalForm: view = ({
   fields,
@@ -12,6 +13,8 @@ export const ModalForm: view = ({
   if (!isModalOpen) return null;
   console.log(">>>formData: ", modalFormData);
   const handleChange = (value: string, field: string) => {
+    console.log(">>>modalForm Field: ", field);
+    console.log(">>>modalForm Value: ", value);
     modalFormData[field] = value;
     modalFormData.type = type;
     updateModalFormData.set(modalFormData);
@@ -42,6 +45,24 @@ export const ModalForm: view = ({
       </div>
     );
   };
+
+  const datePicker = (
+    field: string,
+    className: string = "",
+    disabled = false
+  ) => {
+    return (
+      <div className={className}>
+        <DatePick
+          field={field}
+          value={modalFormData[field] || ""}
+          handleChange={handleChange}
+          disabled={disabled}
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="row">
       {fields.map((field: any) => {
@@ -53,9 +74,11 @@ export const ModalForm: view = ({
           type,
           disabled,
           hidden,
+          isDate,
         } = field;
         console.log(">>>field: ", field);
         if (hidden) return null;
+        if (isDate) return datePicker(fieldName, className, disabled);
         return input(fieldName, label, className, placeholder, type, disabled);
       })}
     </div>

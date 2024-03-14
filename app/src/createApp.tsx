@@ -19,6 +19,7 @@ const state: State = {
     student: null,
     absences: [],
     currentPage: 1,
+    isStateInitiated: false,
   },
   modal: {
     isOpen: false,
@@ -49,6 +50,11 @@ const state: State = {
   },
   classesDetails: {
     nrOfStudents: [],
+    isStateInitiated: false,
+  },
+  reports: {
+    content: [],
+    student: null,
     isStateInitiated: false,
   },
 };

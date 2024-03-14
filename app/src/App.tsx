@@ -16,6 +16,7 @@ import { Classes } from "./views/classes";
 import { ClassDetails } from "./views/classes/classDetails";
 import "react-toastify/dist/ReactToastify.css";
 import "./style.css";
+import { Reports } from "./views/reports";
 
 export const App: view = ({ isStateInitiated = observe.isStateInitiated }) => {
   if (!isStateInitiated) {
@@ -36,6 +37,7 @@ export const App: view = ({ isStateInitiated = observe.isStateInitiated }) => {
               <Route path={"/requests"} element={<Requests />} />
               <Route path={"/classes"} element={<Classes />} />
               <Route path={"/classes/:classId"} element={<ClassDetails />} />
+              <Route path={"/reports"} element={<Reports />} />
               <Route path={"/sign-up"} element={<SignUp />} />
               <Route path={"/login"} element={<Login />} />
             </Routes>

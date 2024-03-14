@@ -80,7 +80,8 @@ export const Table: view = ({
         className: "form-floating mb-3 col-md-12",
         placeholder: "01.01",
         type: "text",
-        disabled: true,
+        disabled: false,
+        isDate: true,
       },
     ];
   } else if (modalType === "addAbsence") {
@@ -108,7 +109,8 @@ export const Table: view = ({
         className: "form-floating mb-3 col-md-12",
         placeholder: "01.01",
         type: "text",
-        disabled: true,
+        disabled: false,
+        isDate: true,
       },
     ];
     modalTitle = "Adauga absenta";
@@ -138,6 +140,7 @@ export const Table: view = ({
         placeholder: "01.01",
         type: "text",
         disabled: true,
+        isDate: true,
       },
     ];
     modalTitle = "Motiveaza absenta";
@@ -300,6 +303,33 @@ export const Table: view = ({
     );
   };
 
+  const monthsOrder = [
+    "09",
+    "10",
+    "11",
+    "12",
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+  ];
+
+  const isDayBAfterDayA = (a: string, b: string) => {
+    const parseDayA = `${a.slice(3, 5)}.${a.slice(0, 2)}`;
+    const parseDayB = `${b.slice(3, 5)}.${b.slice(0, 2)}`;
+
+    const monthA = a.slice(3, 5);
+    const monthB = b.slice(3, 5);
+
+    if (monthA !== monthB) {
+      return monthsOrder.indexOf(monthA) < monthsOrder.indexOf(monthB);
+    }
+
+    return dayjs(parseDayB).isAfter(dayjs(parseDayA));
+  };
+
   return (
     <>
       <div>
@@ -415,15 +445,22 @@ export const Table: view = ({
                         studentId: student.studentId,
                       };
 
+                      const sortedGrades = studentGrade.grades.sort(
+                        (a: any, b: any) =>
+                          isDayBAfterDayA(a.date, b.date) ? -1 : 1
+                      );
+
+                      console.log(">>>sortedGrades: ", sortedGrades);
+
                       const studentSubjectAbsences = absences
                         .filter(
                           (absence: any) =>
                             absence.studentId === student.studentId &&
                             absence.subjectId === subject
                         )
-                        .sort((a: any, b: any) => {
-                          return dayjs(b.date).isAfter(dayjs(a.date)) ? -1 : 1;
-                        });
+                        .sort((a: any, b: any) =>
+                          isDayBAfterDayA(a.date, b.date) ? -1 : 1
+                        );
                       return (
                         <>
                           <td
@@ -432,7 +469,7 @@ export const Table: view = ({
                             colSpan={1}
                             className="text-center"
                           >
-                            {manipulateGrades(studentGrade.grades)}
+                            {manipulateGrades(sortedGrades)}
                             {user.role === "teacher" &&
                               catalogueTeacher.subjectId === subject && (
                                 <>

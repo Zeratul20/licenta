@@ -1,6 +1,16 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const isGrade = (grade: string) => {
+  // if(grade < "1" || grade > "9") return false;
+  const parsedGrade = parseFloat(grade);
+  console.log(">>>parsedGrade: ", parsedGrade);
+  if (Number.isNaN(parsedGrade) || parsedGrade < 1 || parsedGrade > 10 || !Number.isInteger(parsedGrade)) {
+    return false;
+  }
+  return true;
+}
+
 export const modalSaved: producer = async ({
   catalogue = observe.catalogue.catalogue,
   updateCatalogue = update.catalogue.catalogue,
@@ -53,6 +63,14 @@ export const modalSaved: producer = async ({
     if (type === "addGrade") {
       const newGrade: any = {};
       const { grade } = modalFormData;
+      if(!isGrade(grade)) {
+        toast.error("Nota invalida!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+        });
+        return;
+      }
+      console.log(">>>modalSaved modalFormData: ", modalFormData);
       let newCatalogue = catalogue;
       for (let i = 0; i < catalogue.length; i++) {
         let student = catalogue[i];
@@ -77,6 +95,13 @@ export const modalSaved: producer = async ({
         console.log(">>>newCatalogue: ", newCatalogue);
 
         updateCatalogue.set(newCatalogue);
+        console.log(">>>Email obj: ", {
+          emailsTo: emails,
+          ccEmail: userStudent.email,
+          studentName: `${userStudent.lastName} ${userStudent.firstName}`,
+          grade: newGrade.value,
+          subjectName: getSubject(catalogueTeacher.subjectId).name,
+        })
         axios.post(`http://localhost:5000/api/email/grade`, {
           emailsTo: emails,
           ccEmail: userStudent.email,

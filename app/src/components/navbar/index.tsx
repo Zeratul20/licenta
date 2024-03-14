@@ -24,6 +24,7 @@ import TodayIcon from "@mui/icons-material/Today";
 import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
 import SchoolIcon from "@mui/icons-material/School";
 import ForumIcon from "@mui/icons-material/Forum";
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import SchoolLogo from "../../assets/img/school-logo.png";
 
 const getRoleName = (role: string) => {
@@ -82,6 +83,14 @@ const renderNavPage = (page: string) => {
       </div>
     );
   }
+  if (page === "Rapoarte") {
+    return (
+      <div style={{ display: "flex" }}>
+        <AssessmentIcon fontSize="medium" />
+        <span style={{ paddingLeft: "5px" }}>{page}</span>
+      </div>
+    );
+  }
   if (page === "Cereri") {
     return (
       <div style={{ display: "flex" }}>
@@ -105,6 +114,8 @@ export const NavBar: view = ({
   if (user?.userId && user?.role !== "user")
     pages.push(...["General", "Orar", "Catalog"]);
   if (user.role === "director") pages.push("Clase");
+  if(user.role === "student" || user.role === "parent")
+    pages.push("Rapoarte");
   if (user?.userId) pages.push("Cereri");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -151,6 +162,9 @@ export const NavBar: view = ({
         break;
       case "Clase":
         navigate("/classes");
+        break;
+      case "Rapoarte":
+        navigate("/reports");
         break;
       default:
         navigate("/");

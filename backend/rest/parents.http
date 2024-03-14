@@ -3,3 +3,13 @@
 ### GET
 GET {{api}}/parents
 
+### PUT
+PUT {{api}}/parents/eea4e68e-f0ec-4fd6-a399-8d283e3519a8
+Content-Type: application/json
+
+{
+    "students": [
+        "f06abf98-eda1-44d0-af5b-d693a9914c3e"
+    ]
+}
+

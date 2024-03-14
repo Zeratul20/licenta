@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const initState: producer = ({
   updateCatalogue = update.catalogue.catalogue,
-  updateIsStateInitiated = update.messages.isStateInitiated,
+  updateIsStateInitiated = update.catalogue.isStateInitiated,
   updateAbsences = update.catalogue.absences,
   user = observe.user,
   catalogueClass = observe.catalogue.class,

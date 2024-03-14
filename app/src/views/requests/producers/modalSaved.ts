@@ -76,6 +76,10 @@ export const modalSaved: producer = ({
       }
       newRequest.userId = user.userId;
       newRequest.status = "pending";
+      toast.success("Cererea a fost salvata", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       try {
         axios.post("http://localhost:5000/api/requests", newRequest);
         updateRequests.set([...requests, newRequest]);
@@ -141,7 +145,7 @@ export const modalSaved: producer = ({
           autoClose: 3000,
         });
       } else {
-        axios.put(`http://localhost:5000/api/parents${parent.parentId}`, {
+        axios.put(`http://localhost:5000/api/parents/${parent.parentId}`, {
           userId,
           students,
         });

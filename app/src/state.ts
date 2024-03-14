@@ -18,6 +18,7 @@ export type State = {
     student: any;
     absences: any;
     currentPage: number;
+    isStateInitiated: boolean;
   };
   modal: {
     isOpen: boolean;
@@ -50,4 +51,9 @@ export type State = {
     nrOfStudents: any;
     isStateInitiated: boolean;
   };
+  reports: {
+    content: any;
+    student: any;
+    isStateInitiated: boolean;
+  }
 };

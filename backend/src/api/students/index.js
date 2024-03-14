@@ -215,6 +215,15 @@ router.delete("/students/:studentId", async (req, res, next) => {
       .select("userId");
     const { userId } = userIdData[0];
     const students = await knex("students").where({ studentId }).del();
+    const parent = await knex("parents").whereIn("studentId", "students");
+    const parentStudents = parent[0].students;
+    const parentId = parent[0].parentId;
+    const newParentStudents = parentStudents.filter(
+      (student) => student !== studentId
+    );
+    await knex("parents")
+      .where({ parentId })
+      .update({ students: newParentStudents });
     await knex("users").where({ userId }).update({ role: "user" });
     res.send(studentId);
   } catch (error) {

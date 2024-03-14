@@ -13,12 +13,19 @@ Content-Type: application/json
 }
 
 ### PUT
-PUT {{api}}/students/6f8174ee-4b88-4298-8d3e-aae2ca5efba4
+PUT {{api}}/students/176ce013-1dda-4a05-8d58-ab149cee54c0/f6ea7e6d-7d7b-461c-977b-4d056043e149/grades
 Content-Type: application/json
 
 {
-    "grades": []
+    "value": "8",
+    "date": "23.01"
 }
 
 ### DELETE
 DELETE {{api}}/students/1fae63c7-244d-4155-9cfa-efdb3a84f700
+
+
+
+
+// a06f96c8-9d14-44e0-a453-590545cdeae7
+// f06abf98-eda1-44d0-af5b-d693a9914c3e
