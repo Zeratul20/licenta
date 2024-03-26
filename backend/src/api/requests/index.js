@@ -1,9 +1,14 @@
 const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
+const { checkToken } = require("../helpers/tokens");
 
 router.get("/requests", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const requests = await knex("requests");
     res.send(requests);
   } catch (error) {
@@ -13,6 +18,10 @@ router.get("/requests", async (req, res, next) => {
 
 router.get("/requests/:requestId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { requestId } = req.params;
     const requests = await knex("requests").where({ requestId });
     if (requests.length === 0) {
@@ -27,6 +36,10 @@ router.get("/requests/:requestId", async (req, res, next) => {
 
 router.get("/requests/users/:userId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { userId } = req.params;
     const requests = await knex("requests").where({ userId });
     res.send(requests);
@@ -37,6 +50,10 @@ router.get("/requests/users/:userId", async (req, res, next) => {
 
 router.put("/requests/:requestId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { requestId } = req.params;
     const data = { ...req.body };
     const requests = await knex("requests").where({ requestId });
@@ -55,6 +72,10 @@ router.put("/requests/:requestId", async (req, res, next) => {
 
 router.post("/requests", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const data = { ...req.body };
     const requestId = uuid.v4();
     const requests = await knex("requests").insert({ ...data, requestId });
@@ -66,6 +87,10 @@ router.post("/requests", async (req, res, next) => {
 
 router.post("/requests/types/:type", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { type } = req.params;
     const data = { ...req.body };
     const requestId = uuid.v4();

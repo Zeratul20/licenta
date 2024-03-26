@@ -1,6 +1,7 @@
 const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
+const { checkToken } = require("../helpers/tokens");
 
 const getParentResponse = async (parentData) => {
   const { parentId, userId, students } = parentData;
@@ -16,6 +17,10 @@ const getParentResponse = async (parentData) => {
 
 router.get("/parents", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const parentsData = await knex("parents");
     const parents = [];
     for (let parentData of parentsData) {
@@ -30,6 +35,10 @@ router.get("/parents", async (req, res, next) => {
 
 router.get("/parents/:parentId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { parentId } = req.params;
     const parentsData = await knex("parents").where({ parentId });
     if (parentsData.length === 0) {
@@ -46,6 +55,10 @@ router.get("/parents/:parentId", async (req, res, next) => {
 
 router.put("/parents/:parentId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { parentId } = req.params;
     const data = { ...req.body };
     const parentsData = await knex("parents").where({ parentId });
@@ -74,6 +87,10 @@ router.put("/parents/:parentId", async (req, res, next) => {
 
 router.put("/parents/:parentId/students", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { parentId } = req.params;
     const { students } = { ...req.body };
     const parentsData = await knex("parents").where({ parentId });
@@ -102,6 +119,10 @@ router.put("/parents/:parentId/students", async (req, res, next) => {
 
 router.post("/parents", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const data = { ...req.body };
     const { userId, students } = data;
     const newParent = {};

@@ -15,11 +15,25 @@ import {
   modalOperation,
 } from "../../utils";
 
-import axios from "axios";
 import { Loader } from "../../components/helpers/loader";
 import { toast } from "react-toastify";
 
 const bootstrap = require("bootstrap");
+
+const colors = [
+  "#ddeeff", 
+  "#ddccff",
+  "#ffddcc",
+  "#ffccdd",
+  "#ccffdd",
+  "#f6fdc3",
+  "#f6d6c3",
+  "#f6c3c3",
+  "#f6c3e7",
+  "#c3f6f6",
+  "#c3f6c3",
+  "#c3c3f6",
+];
 
 export const Table: view = ({
   scheduleClass = observe.schedule.class,
@@ -53,6 +67,7 @@ export const Table: view = ({
   const endHour = 19;
   const days = ["Lu", "Ma", "Mi", "Jo", "Vi"];
 
+
   if (user.role === "teacher") {
     if (!scheduleTeacher) {
       return (
@@ -63,6 +78,10 @@ export const Table: view = ({
     }
     const classesState = getClassesState.value();
     console.log(">>>scheduleTeacher: ", scheduleTeacher);
+    const colorsForClasses: any = {};
+    classesState.forEach((classEl: any, index: number) => {
+      colorsForClasses[classEl.classId] = colors[index];
+    });
     return (
       <div className="schedule">
         <div className="d-flex justify-content-center">
@@ -107,6 +126,8 @@ export const Table: view = ({
                         console.log(">>>hourFound: ", hourFound);
                         const { classId } = hourFound;
 
+                        const backgroundClr = colorsForClasses[classId];
+
                         const { name: className } = classesState.find(
                           (classEl: any) => classEl.classId === classId
                         );
@@ -114,7 +135,7 @@ export const Table: view = ({
                         console.log(">>>className", className);
 
                         return (
-                          <td>
+                          <td style={{backgroundColor: backgroundClr}}>
                             <div className="text-center d-flex justify-content-center">
                               {getClassName(className)}
                             </div>
@@ -185,6 +206,12 @@ export const Table: view = ({
     modalTitle = "Sterge ora";
   }
 
+  const colorsForSubjects: any = {};
+
+  subjectsState.forEach((subject: any, index: number) => {
+    colorsForSubjects[subject.subjectId] = colors[index];
+  });
+
   return (
     <div className="schedule">
       <div>
@@ -208,8 +235,9 @@ export const Table: view = ({
                 { length: endHour - startHour + 1 },
                 (_, i) => i + startHour
               ).map((hour) => {
+                
                 return (
-                  <th className="text-center" scope="col">
+                  <th className="text-center" scope="col" style={{}}>
                     {hour}
                   </th>
                 );
@@ -217,7 +245,7 @@ export const Table: view = ({
             </tr>
           </thead>
           <tbody>
-            {days.map((day: string) => {
+            {days.map((day: string, index: number) => {
               return (
                 <tr>
                   <th scope="row">{day}</th>
@@ -231,6 +259,8 @@ export const Table: view = ({
                         subject.day === day && subject.hour === hour.toString()
                       );
                     });
+
+                    const backgroundClr = subjectFound ? colorsForSubjects[subjectFound.subjectId] : "#ffffff";
 
                     const initialValuesAdd = {
                       subject: "",
@@ -271,7 +301,7 @@ export const Table: view = ({
                       };
 
                       return (
-                        <td>
+                        <td style={{backgroundColor: backgroundClr}}>
                           <div className="text-center d-flex justify-content-center">
                             {firstName} {lastName}
                           </div>

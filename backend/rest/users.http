@@ -13,11 +13,11 @@ POST {{api}}/users/signUp
 Content-Type: application/json
 
 {
-    "firstName": "admin",
-    "lastName": "admin",
-    "cnp": "1234567891234",
-    "email": "adminCN@gmail.com",
-    "password": "admin",
+    "firstName": "aaaaa",
+    "lastName": "bbbbbb",
+    "cnp": "1234568891234",
+    "email": "dfffff@gmail.com",
+    "password": "bb",
     "phoneNumber": "0732345678"
 }
 
@@ -35,6 +35,9 @@ Content-Type: application/json
 
 ### GET
 GET {{api}}/users
+
+### DELETE
+DELETE {{api}}/users/b7657ff9-98a5-49ed-872f-e14d2e0ee4e8
 
 
 

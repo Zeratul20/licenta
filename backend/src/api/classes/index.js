@@ -1,6 +1,7 @@
 const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
+const { checkToken } = require("../helpers/tokens");
 
 const getClassResponse = async (classData) => {
   const { classId, teacherId, name, subjects } = classData;
@@ -10,6 +11,10 @@ const getClassResponse = async (classData) => {
 
 router.get("/classes", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const classesData = await knex("classes");
     const classes = [];
     for (let classData of classesData) {
@@ -25,6 +30,10 @@ router.get("/classes", async (req, res, next) => {
 
 router.get("/classes/nrOfStudents", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const classesData = await knex("classes");
     const studentsData = await knex("students");
     const students = [];
@@ -44,6 +53,10 @@ router.get("/classes/nrOfStudents", async (req, res, next) => {
 
 router.get("/classes/:classId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { classId } = req.params;
     const classesData = await knex("classes").where({ classId });
     if (classesData.length === 0) {
@@ -60,6 +73,10 @@ router.get("/classes/:classId", async (req, res, next) => {
 
 router.get("/classes/:classId/teachers", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { classId } = req.params;
     const classesData = await knex("classes").where({ classId });
     if (classesData.length === 0) {
@@ -79,8 +96,6 @@ router.get("/classes/:classId/teachers", async (req, res, next) => {
     next(error);
   }
 });
-
-
 
 // router.get("/classes/:classId/nrOfStudents", async (req, res, next) => {
 //   try {
@@ -103,6 +118,10 @@ router.get("/classes/:classId/teachers", async (req, res, next) => {
 
 router.put("/classes/:classId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { classId } = req.params;
     const data = { ...req.body };
     const classesData = await knex("classes").where({ classId });
@@ -189,6 +208,10 @@ router.put("/classes/:classId", async (req, res, next) => {
 
 router.post("/classes", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const data = { ...req.body };
     const { name, teacherId, subjects } = data;
     const existingClasses = await knex("classes").where({ name });
@@ -232,6 +255,10 @@ router.post("/classes", async (req, res, next) => {
 
 router.delete("/classes/:classId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { classId } = req.params;
     const classes = await knex("classes").where({ classId });
     if (classes.length === 0) {

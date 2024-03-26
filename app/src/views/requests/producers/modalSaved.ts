@@ -1,5 +1,5 @@
-import axios from "axios";
 import { toast } from "react-toastify";
+import { makeApi } from "../../../utils";
 
 export const modalSaved: producer = ({
   isModalSavePressed = observe.modal.isSavePressed,
@@ -17,6 +17,7 @@ export const modalSaved: producer = ({
   user = observe.user,
 }) => {
   if (!isModalSavePressed) return;
+  const api = makeApi();
   const modalFormData = getModalFormData.value();
   const studentsState = getStudents.value();
   const usersState = getUsers.value();
@@ -81,7 +82,7 @@ export const modalSaved: producer = ({
         autoClose: 3000,
       });
       try {
-        axios.post("http://localhost:5000/api/requests", newRequest);
+        api.post("/requests", newRequest);
         updateRequests.set([...requests, newRequest]);
       } catch (error) {
         console.log(">>>error: ", error);
@@ -98,7 +99,7 @@ export const modalSaved: producer = ({
     newRequest.status = "pending";
     console.log(">>>newRequest: ", newRequest);
     try {
-      axios.post("http://localhost:5000/api/requests", newRequest);
+      api.post("/requests", newRequest);
       toast.success("Cererea a fost salvata", {
         position: "top-right",
         autoClose: 3000,
@@ -116,7 +117,7 @@ export const modalSaved: producer = ({
   const { userId, requestId, status } = modalFormData;
   if (status === "rejected") {
     const { response } = modalFormData;
-    axios.put(`http://localhost:5000/api/requests/${requestId}`, {
+    api.put(`/requests/${requestId}`, {
       status,
       response,
     });
@@ -139,13 +140,13 @@ export const modalSaved: producer = ({
         (parent: any) => parent.userId === userId
       );
       if (!parent) {
-        axios.post("http://localhost:5000/api/parents", { userId, students });
+        api.post("/parents", { userId, students });
         toast.success("Parintele a fost adaugat", {
           position: "top-right",
           autoClose: 3000,
         });
       } else {
-        axios.put(`http://localhost:5000/api/parents/${parent.parentId}`, {
+        api.put(`/parents/${parent.parentId}`, {
           userId,
           students,
         });
@@ -154,7 +155,7 @@ export const modalSaved: producer = ({
           autoClose: 3000,
         });
       }
-      axios.put(`http://localhost:5000/api/requests/${requestId}`, {
+      api.put(`/requests/${requestId}`, {
         status: "accepted",
       });
       updateIsStateInitiated.set(false);
@@ -173,8 +174,8 @@ export const modalSaved: producer = ({
       const { classId } = classesState.find(
         (cls: any) => cls.name === formClassName
       );
-      axios.post("http://localhost:5000/api/students", { userId, classId });
-      axios.put(`http://localhost:5000/api/requests/${requestId}`, {
+      api.post("/students", { userId, classId });
+      api.put(`/requests/${requestId}`, {
         status: "accepted",
       });
       updateIsStateInitiated.set(false);
@@ -202,12 +203,12 @@ export const modalSaved: producer = ({
       const { subjectId } = subjectsState.find(
         (subject: any) => subject.name === subjectName
       );
-      axios.post("http://localhost:5000/api/teachers", {
+      api.post("/teachers", {
         userId,
         subjectId,
         classes: classIds,
       });
-      axios.put(`http://localhost:5000/api/requests/${requestId}`, {
+      api.put(`/requests/${requestId}`, {
         status: "accepted",
       });
       updateIsStateInitiated.set(false);
@@ -227,8 +228,8 @@ export const modalSaved: producer = ({
       const { studentId } = studentsState.find(
         (student: any) => student.userId === userId
       );
-      axios.delete(`http://localhost:5000/api/students/${studentId}`);
-      axios.put(`http://localhost:5000/api/requests/${requestId}`, {
+      api.delete(`/students/${studentId}`);
+      api.put(`/requests/${requestId}`, {
         status: "accepted",
       });
       updateIsStateInitiated.set(false);

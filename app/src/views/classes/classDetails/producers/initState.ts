@@ -1,4 +1,5 @@
 import axios from "axios";
+import { makeApi } from "../../../../utils";
 
 export const initState: producer = ({
   currentClass = observe.classDetails.class,
@@ -7,14 +8,15 @@ export const initState: producer = ({
 }) => {
   let cnt = 0;
   const cntMaxVal = 1;
+  const api = makeApi();
   const getClassTeachers = async () => {
     console.log(">>>currentClass", currentClass)
     if (!currentClass) {
       cnt++;
       return;
     }
-    const { data } = await axios.get(
-      `http://localhost:5000/api/classes/${currentClass.classId}/teachers`
+    const { data } = await api.get(
+      `/classes/${currentClass.classId}/teachers`
     );
     console.log(">>>currentClassTeachers: ", data)
     updateClassTeachers.set(data);

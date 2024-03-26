@@ -1,4 +1,4 @@
-import axios from "axios";
+import { makeApi } from "../../../utils";
 
 export const initState: producer = ({
   classes = observe.classes,
@@ -7,9 +7,10 @@ export const initState: producer = ({
 }) => {
   let cnt = 0;
   const cntMaxVal = 1;
+  const api = makeApi();
   const getClassNrOfStudents = async () => {
-    const { data } = await axios.get(
-      `http://localhost:5000/api/classes/nrOfStudents`
+    const { data } = await api.get(
+      `/classes/nrOfStudents`
     );
     console.log(">>>nrOfStudents initState: ", data);
     updateNrOfStudents.set(data);

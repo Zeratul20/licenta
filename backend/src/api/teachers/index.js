@@ -1,6 +1,7 @@
 const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
+const { checkToken } = require("../helpers/tokens");
 
 const getTeacher = async (teacherData) => {
   const { teacherId, userId, subjectId, classes } = teacherData;
@@ -15,6 +16,10 @@ const getTeacher = async (teacherData) => {
 
 router.get("/teachers", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const teachersData = await knex("teachers");
     const teachers = [];
     for (const teacher of teachersData) {
@@ -29,6 +34,10 @@ router.get("/teachers", async (req, res, next) => {
 
 router.get("/teachers/:teacherId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { teacherId } = req.params;
     const teachersData = await knex("teachers").where({ teacherId });
     if (teachersData.length === 0) {
@@ -44,6 +53,10 @@ router.get("/teachers/:teacherId", async (req, res, next) => {
 
 router.put("/teachers/:teacherId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { teacherId } = req.params;
     const data = { ...req.body };
     const teachers = await knex("teachers").where({ teacherId });
@@ -67,6 +80,10 @@ router.put("/teachers/:teacherId", async (req, res, next) => {
 
 router.post("/teachers", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { userId, subjectId } = req.body;
     const teacherId = uuid.v4();
     const data = { teacherId, userId, subjectId };
@@ -82,6 +99,10 @@ router.post("/teachers", async (req, res, next) => {
 
 router.delete("/teachers/:teacherId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { teacherId } = req.params;
     const teachers = await knex("teachers").where({ teacherId });
     if (teachers.length === 0) {
@@ -102,6 +123,10 @@ router.delete("/teachers/:teacherId", async (req, res, next) => {
 
 router.put("/teachers/:teacherId/classes", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { teacherId } = req.params;
     const { classes } = req.body;
     const teachers = await knex("teachers").where({ teacherId });
@@ -115,7 +140,5 @@ router.put("/teachers/:teacherId/classes", async (req, res, next) => {
     next(error);
   }
 });
-
-//TODO: assign teachers to classes [put]
 
 module.exports = router;

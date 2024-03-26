@@ -5,6 +5,7 @@ import { App } from "./App";
 const state: State = {
   user: {},
   isLogoutPressed: false,
+  isTokenExpired: false,
   schedule: {
     class: null,
     schedule: null,

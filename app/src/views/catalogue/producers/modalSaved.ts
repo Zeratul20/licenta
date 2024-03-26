@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { makeApi } from "../../../utils";
 
 const isGrade = (grade: string) => {
   // if(grade < "1" || grade > "9") return false;
@@ -36,6 +37,8 @@ export const modalSaved: producer = async ({
   const studentsState = getStudents.value();
   const users = getUsers.value();
   updateIsModalSavePressed.set(false);
+
+  const api = makeApi();
 
   const getSubject = (subjectId: string) => {
     const subject = subjectsState.find(
@@ -88,8 +91,8 @@ export const modalSaved: producer = async ({
       }
 
       try {
-        axios.put(
-          `http://localhost:5000/api/students/${studentId}/${catalogueTeacher.teacherId}/grades`,
+        api.put(
+          `/students/${studentId}/${catalogueTeacher.teacherId}/grades`,
           newGrade
         );
         console.log(">>>newCatalogue: ", newCatalogue);
@@ -102,7 +105,7 @@ export const modalSaved: producer = async ({
           grade: newGrade.value,
           subjectName: getSubject(catalogueTeacher.subjectId).name,
         })
-        axios.post(`http://localhost:5000/api/email/grade`, {
+        api.post(`/email/grade`, {
           emailsTo: emails,
           ccEmail: userStudent.email,
           studentName: `${userStudent.lastName} ${userStudent.firstName}`,
@@ -123,8 +126,8 @@ export const modalSaved: producer = async ({
     } else if (type === "addAbsence") {
       try {
         const { date, studentId } = modalFormData;
-        const { data: newAbsence } = await axios.post(
-          `http://localhost:5000/api/absences`,
+        const { data: newAbsence } = await api.post(
+          `/absences`,
           {
             date,
             studentId,
@@ -132,7 +135,7 @@ export const modalSaved: producer = async ({
           }
         );
         updateAbsences.set([...absences, newAbsence]);
-        axios.post(`http://localhost:5000/api/email/absence`, {
+        api.post(`/email/absence`, {
           emailsTo: emails,
           ccEmail: userStudent.email,
           studentName: `${userStudent.lastName} ${userStudent.firstName}`,
@@ -153,7 +156,7 @@ export const modalSaved: producer = async ({
     } else if (type === "editAbsence") {
       try {
         const { absenceId } = modalFormData;
-        await axios.put(`http://localhost:5000/api/absences/${absenceId}`, {
+        await api.put(`/absences/${absenceId}`, {
           isMotivated: true,
         });
         const newAbsences = absences.map((absence: any) => {

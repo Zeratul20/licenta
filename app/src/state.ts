@@ -4,6 +4,7 @@
 export type State = {
   user: any;
   isLogoutPressed: boolean;
+  isTokenExpired: boolean;
   schedule: {
     class: any;
     schedule: any;

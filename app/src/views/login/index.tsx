@@ -6,7 +6,10 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import LogInIcon from "../../assets/img/profile.png";
 
-export const Login: view = ({ updateUser = update.user }: any) => {
+export const Login: view = ({
+  updateUser = update.user,
+  updateIsStateInitiated = update.isStateInitiated,
+}: any) => {
   const [data, setData]: any = useState({});
   const [isButtonPressed, setIsButtonPressed] = useState(false);
 
@@ -24,6 +27,8 @@ export const Login: view = ({ updateUser = update.user }: any) => {
           const { data } = response;
           updateUser.set(data);
           localStorage.setItem("userIdLicenta", data.userId);
+          localStorage.setItem("tokenLicenta", data.token);
+          updateIsStateInitiated.set(false);
           navigate("/");
         })
         .catch((error) => {

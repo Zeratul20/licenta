@@ -1,4 +1,4 @@
-import axios from "axios";
+import { makeApi } from "../../../utils";
 
 export const initState: producer = ({
   updateMessages = update.messages.content,
@@ -7,8 +7,10 @@ export const initState: producer = ({
   let cnt = 0;
   const cntMaxVal = 1;
 
+  const api = makeApi();
+
   const getSchedules = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/messages");
+    const { data } = await api.get("/messages");
     updateMessages.set(data);
     console.log("data", data)
     cnt++;

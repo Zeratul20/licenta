@@ -1,6 +1,6 @@
-import axios from "axios";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
+import { makeApi } from "../../../utils";
 
 export const modalSaved: producer = async ({
   isModalSavePressed = observe.modal.isSavePressed,
@@ -16,6 +16,8 @@ export const modalSaved: producer = async ({
   const user = getUser.value();
   const users = getUsers.value();
 
+  const api = makeApi();
+
   updateIsModalSavePressed.set(false);
 
   console.log(">>>modalFormData: ", modalFormData);
@@ -30,8 +32,8 @@ export const modalSaved: producer = async ({
     };
 
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/messages",
+      const { data } = await api.post(
+        "/messages",
         newMessage
       );
       updateMessages.set([...messages, data]);
@@ -57,8 +59,8 @@ export const modalSaved: producer = async ({
     };
     const updatedMessage = { ...messageForUpdate, messageId };
     try {
-      axios.put(
-        `http://localhost:5000/api/messages/${messageId}`,
+      api.put(
+        `/messages/${messageId}`,
         messageForUpdate
       );
       const updatedMessages = messages.map((m: any) => {
@@ -82,7 +84,7 @@ export const modalSaved: producer = async ({
   } else if (type === "delete") {
     const { messageId } = modalFormData;
     try {
-      await axios.delete(`http://localhost:5000/api/messages/${messageId}`);
+      await api.delete(`/messages/${messageId}`);
       const updatedMessages = messages.filter(
         (m: any) => m.messageId !== messageId
       );

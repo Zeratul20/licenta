@@ -1,6 +1,7 @@
 const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
+const { checkToken } = require("../helpers/tokens");
 
 const getScheduleForStudentResponse = async (studentId) => {
   const scheduleData = await knex("schedules")
@@ -119,6 +120,10 @@ const getScheduleForTeacherResponse = async (teacherId) => {
 
 router.get("/schedules", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const schedulesData = await knex("schedules");
     const schedules = [];
     for (let scheduleData of schedulesData) {
@@ -135,6 +140,10 @@ router.get("/schedules", async (req, res, next) => {
 
 router.get("/schedules/students/:studentId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { studentId } = req.params;
     const schedulesData = await knex("schedules")
       .join("students", "schedules.classId", "students.classId")
@@ -154,6 +163,10 @@ router.get("/schedules/students/:studentId", async (req, res, next) => {
 
 router.get("/schedules/teachers/:teacherId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { teacherId } = req.params;
     const teacherResponse = await getScheduleForTeacherResponse(teacherId);
     res.send(teacherResponse);
@@ -164,6 +177,10 @@ router.get("/schedules/teachers/:teacherId", async (req, res, next) => {
 
 router.put("/schedules/:scheduleId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { scheduleId } = req.params;
     const data = { ...req.body };
     const schedules = await knex("schedules").where({ scheduleId });
@@ -194,6 +211,10 @@ router.put("/schedules/:scheduleId", async (req, res, next) => {
 
 router.post("/schedules", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const data = { ...req.body };
     const { classId } = data;
     const newSchedule = {};
@@ -210,6 +231,10 @@ router.post("/schedules", async (req, res, next) => {
 
 router.get("/schedules/classes/:classId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { classId } = req.params;
     const schedulesData = await knex("schedules").where({ classId });
     if (schedulesData.length === 0) {
@@ -225,6 +250,10 @@ router.get("/schedules/classes/:classId", async (req, res, next) => {
 
 router.delete("/schedules/:scheduleId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { scheduleId } = req.params;
     const schedules = await knex("schedules").where({ scheduleId });
     if (schedules.length === 0) {

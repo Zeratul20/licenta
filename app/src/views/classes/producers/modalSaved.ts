@@ -1,5 +1,5 @@
-import axios from "axios";
 import { toast } from "react-toastify";
+import { makeApi } from "../../../utils";
 
 export const modalSaved: producer = async ({
   isModalSavePressed = observe.modal.isSavePressed,
@@ -14,6 +14,7 @@ export const modalSaved: producer = async ({
   user = observe.user,
 }) => {
   if (!isModalSavePressed) return;
+  const api = makeApi();
   const modalFormData = getModalFormData.value();
   const usersState = getUsers.value();
   const classesState = getClasses.value();
@@ -44,8 +45,8 @@ export const modalSaved: producer = async ({
       );
       if (isClassNameAlreadyUsed)
         throw new Error("Numele clasei este deja folosit");
-      await axios.put(
-        `http://localhost:5000/api/classes/${classId}`,
+      await api.put(
+        `/classes/${classId}`,
         updatedClass
       );
       const updatedClasses = classesState.map((classEl: any) => {
@@ -87,7 +88,7 @@ export const modalSaved: producer = async ({
         teacherId: teacher.teacherId,
         subjects: [teacher.subjectId],
       };
-      await axios.post("http://localhost:5000/api/classes", newClass);
+      await api.post("/classes", newClass);
       updateIsStateInitiated.set(false);
     } catch (error: any) {
       console.log(">>>error: ", error);

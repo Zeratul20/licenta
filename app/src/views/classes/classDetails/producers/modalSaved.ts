@@ -1,5 +1,5 @@
-import axios from "axios";
 import { toast } from "react-toastify";
+import { makeApi } from "../../../../utils";
 
 export const modalSaved: producer = async ({
   isModalSavePressed = observe.modal.isSavePressed,
@@ -14,6 +14,7 @@ export const modalSaved: producer = async ({
   user = observe.user,
 }) => {
   if (!isModalSavePressed) return;
+  const api = makeApi();
   const modalFormData = getModalFormData.value();
   const usersState = getUsers.value();
   const classesState = getClasses.value();
@@ -46,11 +47,11 @@ export const modalSaved: producer = async ({
       );
       const classesNewTeacher = newTeacher.classes;
       classesNewTeacher.push(classId);
-      await axios.put(`http://localhost:5000/api/teachers/${teacherId}`, {
+      await api.put(`/teachers/${teacherId}`, {
         classes: classesTeacher,
       });
-      await axios.put(
-        `http://localhost:5000/api/teachers/${newTeacher.teacherId}`,
+      await api.put(
+        `/teachers/${newTeacher.teacherId}`,
         {
           classes: classesNewTeacher,
         }
@@ -100,10 +101,10 @@ export const modalSaved: producer = async ({
       newClassSubjects.push(subjectId);
       const newTeacherClasses = teacherFound.classes;
       newTeacherClasses.push(classId);
-      await axios.put(`http://localhost:5000/api/classes/${classId}`, {
+      await api.put(`/classes/${classId}`, {
         subjects: newClassSubjects,
       });
-      await axios.put(`http://localhost:5000/api/teachers/${teacherId}`, {
+      await api.put(`/teachers/${teacherId}`, {
         classes: newTeacherClasses,
       });
       updateIsStateInitiated.set(false);

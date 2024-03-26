@@ -1,9 +1,14 @@
 const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
+const { checkToken } = require("../helpers/tokens");
 
 router.get("/subjects", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const subjects = await knex("subjects");
     res.send(subjects);
   } catch (error) {
@@ -13,6 +18,10 @@ router.get("/subjects", async (req, res, next) => {
 
 router.get("/subjects/:subjectId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { subjectId } = req.params;
     const subjects = await knex("subjects").where({ subjectId });
     if (subjects.length === 0) {
@@ -27,6 +36,10 @@ router.get("/subjects/:subjectId", async (req, res, next) => {
 
 router.put("/subjects/:subjectId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { subjectId } = req.params;
     const data = { ...req.body };
     const subjects = await knex("subjects").where({ subjectId });
@@ -45,6 +58,10 @@ router.put("/subjects/:subjectId", async (req, res, next) => {
 
 router.post("/subjects", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const data = { ...req.body };
     const subjectId = uuid.v4();
     const subjects = await knex("subjects").insert({ ...data, subjectId });
@@ -56,6 +73,10 @@ router.post("/subjects", async (req, res, next) => {
 
 router.delete("/subjects/:subjectId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { subjectId } = req.params;
     const subjects = await knex("subjects").where({ subjectId });
     if (subjects.length === 0) {

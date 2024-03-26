@@ -2,9 +2,29 @@ const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
 const bcrypt = require("bcrypt");
+const Joi = require("joi");
+const jwt = require("jsonwebtoken");
+const { checkToken } = require("../helpers/tokens");
+
+const schema = Joi.object({
+  firstName: Joi.string(),
+  lastName: Joi.string(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net", "ro"] },
+  }),
+
+  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+
+  phoneNumber: Joi.string(),
+});
 
 router.get("/users", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    }
     const users = await knex("users");
     res.send(users);
   } catch (error) {
@@ -15,6 +35,10 @@ router.get("/users", async (req, res, next) => {
 router.get("/users/:userId", async (req, res, next) => {
   try {
     const { userId } = req.params;
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    }
     const users = await knex("users").where({ userId });
     if (users.length === 0) {
       res.status(400);
@@ -29,6 +53,11 @@ router.get("/users/:userId", async (req, res, next) => {
 
 router.post("/users/signUp", async (req, res, next) => {
   try {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      res.status(400);
+      throw new Error(error);
+    }
     const data = { ...req.body };
     const existingUsers = await knex("users").where({
       email: data.email,
@@ -64,6 +93,10 @@ router.post("/users/login/:email", async (req, res, next) => {
       res.status(400);
       throw new Error("Invalid password");
     }
+    const token = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, {
+      expiresIn: "6h",
+    });
+    user.token = token;
     res.send(user);
   } catch (error) {
     next(error);
@@ -73,6 +106,10 @@ router.post("/users/login/:email", async (req, res, next) => {
 router.put("/users/:userId", async (req, res, next) => {
   try {
     const { userId } = req.params;
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    }
     const data = { ...req.body };
     const users = await knex("users").where({ userId });
     if (users.length === 0) {
@@ -91,6 +128,10 @@ router.put("/users/:userId", async (req, res, next) => {
 router.put("/users/director/:userId", async (req, res, next) => {
   try {
     const { userId } = req.params;
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    }
     const users = await knex("users").where({ userId });
     if (users.length === 0) {
       res.status(400);
@@ -109,6 +150,10 @@ router.put("/users/director/:userId", async (req, res, next) => {
 
 router.get("/users/director", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    }
     const users = await knex("users").where("role", "=", "director");
     res.send(users[0]);
   } catch (error) {
@@ -332,6 +377,16 @@ router.delete("/users/delete", async (req, res, next) => {
       await knex("users").where({ userId }).del();
     }
     res.send(userIds);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/users/:userId", async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    await knex("users").where({ userId }).del();
+    res.send(userId);
   } catch (error) {
     next(error);
   }

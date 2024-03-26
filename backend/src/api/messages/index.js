@@ -1,9 +1,15 @@
 const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
+const { checkToken } = require("../helpers/tokens");
 
 router.get("/messages", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    console.log(">>>token: ", token)
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const messages = await knex("messages");
     res.send(messages);
   } catch (error) {
@@ -13,6 +19,10 @@ router.get("/messages", async (req, res, next) => {
 
 router.get("/messages/:messageId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { messageId } = req.params;
     const messages = await knex("messages").where({ messageId });
     if (messages.length === 0) {
@@ -27,6 +37,10 @@ router.get("/messages/:messageId", async (req, res, next) => {
 
 router.put("/messages/:messageId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { messageId } = req.params;
     const data = { ...req.body };
     const messages = await knex("messages").where({ messageId });
@@ -45,6 +59,10 @@ router.put("/messages/:messageId", async (req, res, next) => {
 
 router.post("/messages", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { userId, title, message, date, time } = req.body;
     const newMessage = {
       messageId: uuid.v4(),
@@ -63,6 +81,10 @@ router.post("/messages", async (req, res, next) => {
 
 router.delete("/messages/:messageId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { messageId } = req.params;
     const messages = await knex("messages").where({ messageId });
     if (messages.length === 0) {

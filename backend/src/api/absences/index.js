@@ -1,6 +1,7 @@
 const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
+const { checkToken } = require("../helpers/tokens");
 
 // const getAbsenceResponse = async (absenceData) => {
 //   const { studentId, subjectId, date, isMotivated } = absenceData;
@@ -11,6 +12,10 @@ const uuid = require("uuid");
 
 router.get("/absences", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    }
     const absencesData = await knex("absences");
     const absences = [];
     for (let absenceData of absencesData) {
@@ -25,6 +30,10 @@ router.get("/absences", async (req, res, next) => {
 
 router.get("/absences/:absenceId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    }
     const { absenceId } = req.params;
     const absences = await knex("absences").where({ absenceId });
     if (absences.length === 0) {
@@ -39,6 +48,10 @@ router.get("/absences/:absenceId", async (req, res, next) => {
 
 router.put("/absences/:absenceId", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    }
     const { absenceId } = req.params;
     const data = { ...req.body };
     const absences = await knex("absences").where({ absenceId });
@@ -57,6 +70,10 @@ router.put("/absences/:absenceId", async (req, res, next) => {
 
 router.post("/absences", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    }
     const { date, studentId, subjectId } = req.body;
     const newAbsence = {};
     newAbsence.date = date;

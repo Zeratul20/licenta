@@ -22,7 +22,7 @@ export const General: view = ({
   messages = observe.messages.content,
   currentPage = observe.messages.currentPage,
   updateCurrentPage = update.messages.currentPage,
-  getUser = get.user,
+  user = observe.user,
   getUsers = get.users,
 }) => {
   const [modalType, setModalType] = useState("");
@@ -58,7 +58,6 @@ export const General: view = ({
     message: "",
   };
 
-  const user = getUser.value();
   const users = getUsers.value();
 
   const handleEdit_AddButton = (initalValues: any, type: string) => {
@@ -152,12 +151,19 @@ export const General: view = ({
 
           return (
             <div
-              className="card border-dark mb-5 w-50"
-              style={{ marginLeft: "200px", zIndex: 1 }}
+              className="card mb-5"
+              style={{
+                marginLeft: "50px",
+                zIndex: 1,
+                width: "750px",
+                border: "2px solid",
+                boxShadow: "2px 2px 2px #898989",
+                borderRadius: "10px",
+              }}
             >
               <div
-                className="card-header bg-transparent border-dark"
-                // style={{ display: "flex" }}
+                className="card-header border-dark"
+                style={{ backgroundColor: "#e7e8e9"}}
               >
                 <div className="user-message">
                   {lastName} {firstName} - {capitalize(role)}
@@ -184,7 +190,7 @@ export const General: view = ({
                     >
                       Modifica
                     </button>
-                    <div style={{ paddingLeft: "200px" }}>
+                    <div style={{ paddingLeft: "500px" }}>
                       <button
                         className="btn btn-lg btn-outline-danger py-0 "
                         style={{ fontSize: "1.75rem", border: "none" }}
@@ -206,7 +212,7 @@ export const General: view = ({
         style={{
           position: "absolute",
           bottom: "75px",
-          right: "400px",
+          right: "250px",
         }}
       >
         <button

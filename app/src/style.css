@@ -1,14 +1,16 @@
 .cover {
-    background-color: #e4e4e4;
+    background: linear-gradient(186deg, rgba(232,242,242,1) 16%, rgba(221,240,240,1) 45%, rgba(228,244,244,1) 81%);
 }
 
 .card-container {
-    background-color: #e4e4e4;
+    /* background: linear-gradient(rgba(140, 246, 234, 0.8), rgba(71, 73, 216, 0.8), rgba(140, 246, 234, 0.8)); */
     padding: 4rem;
 }
 
 .card-content {
-    background-color: rgb(243, 247, 248);
+    background-color: white;
+    border: 5px solid #f5e2e2;
+    box-shadow: 0 0 10px rgb(43, 43, 46);
     margin-left: auto;
     margin-right: auto;
     width: 100%;

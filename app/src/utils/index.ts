@@ -1,6 +1,31 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 const bootstrap = require("bootstrap");
+
+export const makeApi = () => {
+  const token = localStorage.getItem("tokenLicenta");
+  const api = axios.create({
+    baseURL: "http://localhost:5000/api",
+  });
+  console.log(">>> token in utils", token);
+  if (token) api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  return api;
+};
+
+export const isTokenValid = () => {
+  const token = localStorage.getItem("tokenLicenta");
+  if (!token) return false;
+  try {
+    const decodedToken = jwtDecode(token);
+    if (!decodedToken.exp) return false;
+    if (decodedToken.exp * 1000 < Date.now()) return false;
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
 export const modalOperation = (name: string, operation: string) => {
   const modal = new bootstrap.Modal(document.getElementById(name), {
@@ -37,7 +62,7 @@ export const sortedClassesByName = (classes: any) => {
     if (a.name > b.name) return 1;
     return 0;
   });
-}
+};
 
 export const getClassName = (className: any) => {
   switch (className) {
@@ -130,7 +155,5 @@ export const getShortClassName = (className: any) => {
       return "XIIC";
     default:
       return "";
-
   }
 };
-

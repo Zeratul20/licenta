@@ -1,4 +1,4 @@
-import axios from "axios";
+import { makeApi } from "../../../utils";
 
 export const initState: producer = ({
   updateSchedules = update.schedules,
@@ -10,9 +10,11 @@ export const initState: producer = ({
   let cnt = 0;
   const cntMaxVal = 1;
 
+  const api = makeApi();
+
   if (user.role !== "teacher") {
     const getSchedules = async () => {
-      const { data } = await axios.get("http://localhost:5000/api/schedules");
+      const { data } = await api.get("/schedules");
       updateSchedules.set(data);
       console.log("data", data);
       cnt++;
@@ -24,8 +26,8 @@ export const initState: producer = ({
       const { teacherId } = teachersState.find(
         (teacher: any) => teacher.userId === user.userId
       );
-      const { data } = await axios.get(
-        `http://localhost:5000/api/schedules/teachers/${teacherId}`
+      const { data } = await api.get(
+        `/schedules/teachers/${teacherId}`
       );
       updateScheduleTeacher.set(data);
       console.log("data", data);

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { makeApi } from "../../../utils";
 
 export const initState: producer = ({
   updateCatalogue = update.catalogue.catalogue,
@@ -14,14 +15,16 @@ export const initState: producer = ({
 
   if (!catalogueClass || !user) return;
 
+  const api = makeApi();
+
   let cnt = 0;
   const cntMaxVal = 2;
 
   if (user.role === "teacher") {
     const getStudents = async () => {
       if (catalogueTeacher) {
-        const { data: students } = await axios.get(
-          `http://localhost:5000/api/students/catalogue/${catalogueTeacher.teacherId}/${catalogueClass.classId}`
+        const { data: students } = await api.get(
+          `/students/catalogue/${catalogueTeacher.teacherId}/${catalogueClass.classId}`
         );
         console.log("students in getStudents: ", students);
         updateCatalogue.set(students);
@@ -32,8 +35,8 @@ export const initState: producer = ({
   }
   if (user.role === "director") {
     const getStudents = async () => {
-      const { data: students } = await axios.get(
-        `http://localhost:5000/api/students/catalogue/${catalogueClass.classId}`
+      const { data: students } = await api.get(
+        `/students/catalogue/${catalogueClass.classId}`
       );
       updateCatalogue.set(students);
       cnt++;
@@ -43,8 +46,8 @@ export const initState: producer = ({
   if (user.role === "student" || user.role === "parent") {
     const getStudents = async () => {
       if (catalogueStudent) {
-        const { data: student } = await axios.get(
-          `http://localhost:5000/api/students/${catalogueStudent.studentId}`
+        const { data: student } = await api.get(
+          `/students/${catalogueStudent.studentId}`
         );
         const studentsList = [student];
         updateCatalogue.set(studentsList);
@@ -55,8 +58,8 @@ export const initState: producer = ({
   }
 
   const getAbsences = async () => {
-    const { data: absences } = await axios.get(
-      `http://localhost:5000/api/absences`
+    const { data: absences } = await api.get(
+      `/absences`
     );
     updateAbsences.set(absences);
     cnt++;

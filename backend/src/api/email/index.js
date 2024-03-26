@@ -2,6 +2,7 @@ const router = require("express").Router({ mergeParams: true });
 const { knex } = require("../../services/pg");
 const uuid = require("uuid");
 const nodemailer = require("nodemailer");
+const { checkToken } = require("../helpers/tokens");
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -17,6 +18,10 @@ const emailFrom = "andriesvladandrei@gmail.com";
 
 router.post("/email/grade", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { emailsTo, ccEmail, studentName, grade, subjectName } = req.body;
     const emailsString = emailsTo.join(", ");
     const html = `
@@ -52,6 +57,10 @@ router.post("/email/grade", async (req, res, next) => {
 
 router.post("/email/absence", async (req, res, next) => {
   try {
+    const token = req.header("Authorization");
+    if (!checkToken(token)) {
+      throw new Error("Unauthorized");
+    };
     const { emailsTo, ccEmail, studentName, date, subjectName } = req.body;
     const emailsString = emailsTo.join(", ");
     const html = `

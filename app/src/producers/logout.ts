@@ -6,7 +6,9 @@ export const Logout: producer = ({
   if (!isLogoutPressed) return;
   updateUser.set({});
   localStorage.removeItem("userIdLicenta");
+  localStorage.removeItem("tokenLicenta");
   console.log("Logout pressed");
   window.location.reload();
+  window.location.href = "/";
   updateIsLogoutPressed.set(false);
 };

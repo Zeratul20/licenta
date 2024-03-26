@@ -24,7 +24,7 @@ import TodayIcon from "@mui/icons-material/Today";
 import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
 import SchoolIcon from "@mui/icons-material/School";
 import ForumIcon from "@mui/icons-material/Forum";
-import AssessmentIcon from '@mui/icons-material/Assessment';
+import AssessmentIcon from "@mui/icons-material/Assessment";
 import SchoolLogo from "../../assets/img/school-logo.png";
 
 const getRoleName = (role: string) => {
@@ -43,59 +43,61 @@ const getRoleName = (role: string) => {
 };
 
 const renderNavPage = (page: string) => {
+  const buttonColor = "#484848"
+  const iconColor = "#56789a"
   if (page === "Acasa") {
     return (
       <div style={{ display: "flex" }}>
-        <HomeIcon fontSize="medium" />
-        <span style={{ paddingLeft: "5px" }}>{page}</span>
+        <HomeIcon style={{color: iconColor}} fontSize="medium" />
+        <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
   }
   if (page === "General") {
     return (
       <div style={{ display: "flex" }}>
-        <MessageIcon fontSize="medium" />
-        <span style={{ paddingLeft: "5px" }}>{page}</span>
+        <MessageIcon style={{color: iconColor}} fontSize="medium" />
+        <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
   }
   if (page === "Orar") {
     return (
       <div style={{ display: "flex" }}>
-        <TodayIcon fontSize="medium" />
-        <span style={{ paddingLeft: "5px" }}>{page}</span>
+        <TodayIcon style={{color: iconColor}} fontSize="medium" />
+        <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
   }
   if (page === "Catalog") {
     return (
       <div style={{ display: "flex" }}>
-        <SortByAlphaIcon fontSize="medium" />
-        <span style={{ paddingLeft: "5px" }}>{page}</span>
+        <SortByAlphaIcon style={{color: iconColor}} fontSize="medium" />
+        <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
   }
   if (page === "Clase") {
     return (
       <div style={{ display: "flex" }}>
-        <SchoolIcon fontSize="medium" />
-        <span style={{ paddingLeft: "5px" }}>{page}</span>
+        <SchoolIcon style={{color: iconColor}} fontSize="medium" />
+        <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
   }
   if (page === "Rapoarte") {
     return (
       <div style={{ display: "flex" }}>
-        <AssessmentIcon fontSize="medium" />
-        <span style={{ paddingLeft: "5px" }}>{page}</span>
+        <AssessmentIcon style={{color: iconColor}} fontSize="medium" />
+        <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
   }
   if (page === "Cereri") {
     return (
       <div style={{ display: "flex" }}>
-        <ForumIcon fontSize="medium" />
-        <span style={{ paddingLeft: "5px" }}>{page}</span>
+        <ForumIcon style={{color: iconColor}} fontSize="medium" />
+        <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
   }
@@ -114,8 +116,7 @@ export const NavBar: view = ({
   if (user?.userId && user?.role !== "user")
     pages.push(...["General", "Orar", "Catalog"]);
   if (user.role === "director") pages.push("Clase");
-  if(user.role === "student" || user.role === "parent")
-    pages.push("Rapoarte");
+  if (user.role === "student" || user.role === "parent") pages.push("Rapoarte");
   if (user?.userId) pages.push("Cereri");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -182,7 +183,7 @@ export const NavBar: view = ({
         navigate("/account");
         break;
       case "Logout":
-        navigate("/");
+        // navigate("/");
         updateIsLogoutPressed.set(true);
         break;
     }
@@ -190,15 +191,16 @@ export const NavBar: view = ({
   };
 
   return (
-    <div style={{ paddingBottom: "100px" }}>
+    <div style={{ paddingBottom: "100px", flexGrow: 1 }}>
       <AppBar
         position="static"
         style={{
-          background:
-            "linear-gradient(to bottom right, #189AB4, #189AB4, #189AB4)",
+          background: "#addefe",
           width: "100%",
           position: "fixed",
-          zIndex: 10,
+          flexGrow: 1,
+          textAlign: 'center',
+          zIndex: 1000,
         }}
       >
         <Container maxWidth="xl">

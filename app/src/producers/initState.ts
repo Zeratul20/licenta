@@ -1,4 +1,4 @@
-import axios from "axios";
+import { makeApi } from "../utils";
 
 export const initState: producer = ({
   updateUser = update.user,
@@ -12,27 +12,32 @@ export const initState: producer = ({
   updateIsStateInitiated = update.isStateInitiated,
 }) => {
   const userId = localStorage.getItem("userIdLicenta");
+  if (!userId) {
+    updateIsStateInitiated.set(true);
+    return;
+  }
+
+  const api = makeApi();
 
   let cnt = 0;
 
   const cntMaxVal = 7;
 
   const getUsers = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/users");
-    updateUsers.set(data);
+    try {
+      const { data } = await api.get("/users");
+      updateUsers.set(data);
+    } catch (e) {
+      console.log("error", e);
+      updateUsers.set([]);
+    }
     cnt++;
   };
   getUsers();
 
   const getUser = async () => {
-    if (!userId) {
-      cnt++;
-      return;
-    }
     try {
-      const { data } = await axios.get(
-        `http://localhost:5000/api/users/${userId}`
-      );
+      const { data } = await api.get(`/users/${userId}`);
       updateUser.set(data);
     } catch (e) {
       console.log("error", e);
@@ -43,39 +48,63 @@ export const initState: producer = ({
   getUser();
 
   const getTeachers = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/teachers");
-    updateTeachers.set(data);
+    try {
+      const { data } = await api.get("/teachers");
+      updateTeachers.set(data);
+    } catch (e) {
+      console.log("error", e);
+      updateTeachers.set([]);
+    }
     cnt++;
   };
   getTeachers();
 
   const getSubjects = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/subjects");
-    updateSubjects.set(data);
+    try {
+      const { data } = await api.get("/subjects");
+      updateSubjects.set(data);
+    } catch (e) {
+      console.log("error", e);
+      updateSubjects.set([]);
+    }
     cnt++;
   };
   getSubjects();
 
   const getClasses = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/classes");
-    updateClasses.set(data);
-    console.log(">>> initState classes", data);
+    try {
+      const { data } = await api.get("/classes");
+      updateClasses.set(data);
+    } catch (e) {
+      console.log("error", e);
+      updateClasses.set([]);
+    }
     cnt++;
   };
   getClasses();
 
   const getStudents = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/students");
-    updateStudents.set(data);
+    try {
+      const { data } = await api.get("/students");
+      updateStudents.set(data);
+    } catch (e) {
+      console.log("error", e);
+      updateStudents.set([]);
+    }
     cnt++;
-  }
+  };
   getStudents();
 
   const getParents = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/parents");
-    updateParents.set(data);
+    try {
+      const { data } = await api.get("/parents");
+      updateParents.set(data);
+    } catch (e) {
+      console.log("error", e);
+      updateParents.set([]);
+    }
     cnt++;
-  }
+  };
   getParents();
 
   if (cnt < cntMaxVal) {

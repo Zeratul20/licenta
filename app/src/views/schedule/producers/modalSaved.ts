@@ -1,23 +1,5 @@
-import React, { useEffect, useState } from "react";
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap";
-
-import { AddIcon, EditIcon, TrashIcon } from "../../../assets/icons";
-import { Modal } from "../../../components/modals/modalForm";
-
-import {
-  getSubjectData,
-  getTeacherData,
-  getUserData,
-  modalOperation,
-} from "../../../utils";
-
-import axios from "axios";
-import { Loader } from "../../../components/helpers/loader";
+import { makeApi } from "../../../utils";
 import { toast } from "react-toastify";
-
-const bootstrap = require("bootstrap");
 
 export const modalSaved: producer = ({
   scheduleClass = observe.schedule.class,
@@ -33,6 +15,7 @@ export const modalSaved: producer = ({
   getSubjectsState = get.subjects,
 }) => {
   if (!isModalSavePressed) return;
+  const api = makeApi();
   const modalFormData = getModalFormData.value();
   const teachersState = getTeachersState.value();
   const subjectsState = getSubjectsState.value();
@@ -42,50 +25,64 @@ export const modalSaved: producer = ({
   const { type } = modalFormData;
   if (type === "add") {
     console.log(">>>add hour");
-    const subjectName = modalFormData.subject;
-    const subjectFound = subjectsState.find((subject: any) => {
-      return subject.name === subjectName;
-    });
-    const { subjectId } = subjectFound;
-    const { day, hour } = modalFormData;
-    const subject = {
-      subjectId,
-      teacherId: "",
-      day,
-      hour,
-    };
-    const { teacherId: subjectTeacherId } = teachersState.find(
-      (teacher: any) => {
-        return (
-          teacher.subjectId === subjectId &&
-          teacher.classes.includes(scheduleClass.classId)
-        );
-      }
-    );
-    subject.teacherId = subjectTeacherId;
-    const newSubjects = [...schedule.subjects, subject];
-    const newSchedule = { ...schedule, subjects: newSubjects };
-    const newSchedules = schedules.map((scheduleEl: any) => {
-      if (scheduleEl.scheduleId === schedule.scheduleId) {
-        return newSchedule;
-      }
-      return scheduleEl;
-    });
-    const updatedSchedule: any = {};
-    updatedSchedule.subjects = newSubjects;
+    let errorInAdd = "";
     try {
-      axios.put(
-        `http://localhost:5000/api/schedules/${schedule.scheduleId}`,
-        updatedSchedule
+      const subjectName = modalFormData.subject;
+      const subjectFound = subjectsState.find((subject: any) => {
+        return subject.name === subjectName;
+      });
+      const { subjectId } = subjectFound;
+      console.log(">>>subjectFound: ", subjectFound);
+      console.log(">>>scheduleClass: ", scheduleClass);
+      const scheduleClassSubjects = scheduleClass.subjects;
+      if (
+        !scheduleClassSubjects.find((subject: any) => subject === subjectId)
+      ) {
+        errorInAdd = "Materia nu este alocata clasei";
+        throw new Error(errorInAdd);
+      }
+      const { day, hour } = modalFormData;
+      const subject = {
+        subjectId,
+        teacherId: "",
+        day,
+        hour,
+      };
+      const { teacherId: subjectTeacherId } = teachersState.find(
+        (teacher: any) => {
+          return (
+            teacher.subjectId === subjectId &&
+            teacher.classes.includes(scheduleClass.classId)
+          );
+        }
       );
+      subject.teacherId = subjectTeacherId;
+      const newSubjects = [...schedule.subjects, subject];
+      const newSchedule = { ...schedule, subjects: newSubjects };
+      const newSchedules = schedules.map((scheduleEl: any) => {
+        if (scheduleEl.scheduleId === schedule.scheduleId) {
+          return newSchedule;
+        }
+        return scheduleEl;
+      });
+      const updatedSchedule: any = {};
+      updatedSchedule.subjects = newSubjects;
+      api.put(`/schedules/${schedule.scheduleId}`, updatedSchedule);
       updateSchedules.set(newSchedules);
       updateSchedule.set(newSchedule);
       toast.success("Ora adaugata cu succes", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.log(">>>error: ", error);
+      if (error?.message === errorInAdd) {
+        toast.error(errorInAdd, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+        });
+        return;
+      }
       toast.error("Eroare la adaugarea orei", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
@@ -93,51 +90,64 @@ export const modalSaved: producer = ({
     }
   } else if (type === "edit") {
     console.log(">>>edit hour");
-    const subjectName = modalFormData.subject;
-    const subjectFound = subjectsState.find((subject: any) => {
-      return subject.name === subjectName;
-    });
-    const { subjectId } = subjectFound;
-    const { day, hour } = modalFormData;
-    const subject = {
-      subjectId,
-      teacherId: "",
-      day,
-      hour,
-    };
-    const { teacherId: subjectTeacherId } = teachersState.find((teacher: any) => {
-      return (
-        teacher.subjectId === subjectId &&
-        teacher.classes.includes(scheduleClass.classId)
-      );
-    });
-    subject.teacherId = subjectTeacherId;
-    const newSubjects = schedule.subjects.map((subjectEl: any) => {
-      if (subjectEl.day === day && subjectEl.hour === hour.toString()) {
-        return subject;
-      }
-      return subjectEl;
-    });
-    const newSchedule = { ...schedule, subjects: newSubjects };
-    const newSchedules = schedules.map((scheduleEl: any) => {
-      if (scheduleEl.scheduleId === schedule.scheduleId) {
-        return newSchedule;
-      }
-      return scheduleEl;
-    });
+    let errorInEdit = "";
     try {
-      axios.put(
-        `http://localhost:5000/api/schedules/${schedule.scheduleId}`,
-        newSchedule
+      const subjectName = modalFormData.subject;
+      const subjectFound = subjectsState.find((subject: any) => {
+        return subject.name === subjectName;
+      });
+      const { subjectId } = subjectFound;
+      if (
+        !scheduleClass.subjects.find((subject: any) => subject === subjectId)
+      ) {
+        errorInEdit = "Materia nu este alocata clasei";
+        throw new Error(errorInEdit);
+      }
+      const { day, hour } = modalFormData;
+      const subject = {
+        subjectId,
+        teacherId: "",
+        day,
+        hour,
+      };
+      const { teacherId: subjectTeacherId } = teachersState.find(
+        (teacher: any) => {
+          return (
+            teacher.subjectId === subjectId &&
+            teacher.classes.includes(scheduleClass.classId)
+          );
+        }
       );
+      subject.teacherId = subjectTeacherId;
+      const newSubjects = schedule.subjects.map((subjectEl: any) => {
+        if (subjectEl.day === day && subjectEl.hour === hour.toString()) {
+          return subject;
+        }
+        return subjectEl;
+      });
+      const newSchedule = { ...schedule, subjects: newSubjects };
+      const newSchedules = schedules.map((scheduleEl: any) => {
+        if (scheduleEl.scheduleId === schedule.scheduleId) {
+          return newSchedule;
+        }
+        return scheduleEl;
+      });
+      api.put(`/schedules/${schedule.scheduleId}`, newSchedule);
       updateSchedules.set(newSchedules);
       updateSchedule.set(newSchedule);
       toast.success("Ora modificata cu succes", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.log(">>>error: ", error);
+      if (error?.message === errorInEdit) {
+        toast.error(errorInEdit, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+        });
+        return;
+      }
       toast.error("Eroare la modificarea orei", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
@@ -157,10 +167,7 @@ export const modalSaved: producer = ({
       return scheduleEl;
     });
     try {
-      axios.put(
-        `http://localhost:5000/api/schedules/${schedule.scheduleId}`,
-        newSchedule
-      );
+      api.put(`/schedules/${schedule.scheduleId}`, newSchedule);
       updateSchedules.set(newSchedules);
       updateSchedule.set(newSchedule);
       toast.success("Ora stearsa cu succes", {

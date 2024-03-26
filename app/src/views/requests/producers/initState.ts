@@ -1,4 +1,4 @@
-import axios from "axios";
+import { makeApi } from "../../../utils";
 
 export const initState: producer = ({
   updateRequests = update.requests.content,
@@ -7,10 +7,11 @@ export const initState: producer = ({
 }) => {
   let cnt = 0;
   const cntMaxVal = 1;
+  const api = makeApi();
   const { userId } = user;
   const getRequestsForUser = async () => {
-    const { data } = await axios.get(
-      `http://localhost:5000/api/requests/users/${userId}`
+    const { data } = await api.get(
+      `/requests/users/${userId}`
     );
     updateRequests.set(data);
     console.log("data", data);
@@ -18,8 +19,8 @@ export const initState: producer = ({
   };
 
   const getRequests = async () => {
-    const { data } = await axios.get(
-      `http://localhost:5000/api/requests`
+    const { data } = await api.get(
+      `/requests`
     );
     updateRequests.set(data);
     console.log("data", data);

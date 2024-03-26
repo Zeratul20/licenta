@@ -7,7 +7,9 @@ import "bootstrap";
 import * as producers from "./producers";
 import { Loader } from "../../components/helpers/loader";
 import { sortedClassesByName } from "../../utils";
-import "../../style.css"
+import ScheduleImg from "../../assets/img/schedule.png";
+import "../../style.css";
+import "./style.css";
 
 export const Schedule: view = ({
   user = observe.user,
@@ -38,7 +40,7 @@ export const Schedule: view = ({
       updateScheduleClass.set(classFound);
     };
     return (
-      <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+      <div className="object-fit-cover" style={{ paddingLeft: "20px" }}>
         <h1 className="font-family">Orar</h1>
         <ClassDropdown classes={sortedClasses} handleClick={handleClick} />
         <Table />
@@ -48,7 +50,7 @@ export const Schedule: view = ({
 
   if (user.role === "teacher") {
     return (
-      <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+      <div className="object-fit-cover" style={{ paddingLeft: "20px" }}>
         <h1 className="font-family">Orar profesor</h1>
         <Table />
       </div>
@@ -70,11 +72,36 @@ export const Schedule: view = ({
     updateSchedule.set(scheduleFound);
     updateScheduleClass.set(studentClass);
     return (
-      <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+      <div className="object-fit-cover" style={{ paddingLeft: "20px" }}>
         <h1 className="font-family">Orar</h1>
         <Table />
       </div>
     );
+    // return (
+    //   <div className="image-container">
+    //     <img
+    //       src={ScheduleImg}
+    //       alt="Schedule"
+    //       style={{
+    //         filter: "blur(1px)",
+    //         height: "auto",
+    //         width: "auto",
+    //         position: "relative",
+
+    //         /* Center and scale the image nicely */
+    //         backgroundPosition: "center",
+    //         backgroundRepeat: "no-repeat",
+    //         backgroundSize: "cover",
+    //       }}
+    //     />
+    //     <div className="overlay-text">
+    //       <div className="object-fit-cover" style={{ paddingLeft: "20px" }}>
+    //         <h1 className="font-family">Orar</h1>
+    //         <Table />
+    //       </div>
+    //     </div>
+    //   </div>
+    // );
   }
 
   const getNameByStudentId = (studentId: string) => {
@@ -123,7 +150,7 @@ export const Schedule: view = ({
     });
   });
   return (
-    <div className="object-fit-cover" style={{paddingLeft: "20px"}}>
+    <div className="object-fit-cover" style={{ paddingLeft: "20px" }}>
       <h1 className="font-family">Orar</h1>
       <StudentsDropdown students={students} handleClick={handleClick} />
       <Table />
