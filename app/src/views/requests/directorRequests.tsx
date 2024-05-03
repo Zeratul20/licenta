@@ -21,6 +21,7 @@ export const DirectorRequests: view = ({
   console.log(">>>requests: ", requests);
   const studentsState = getStudents.value();
   const usersState = getUsers.value();
+  const classesState = getClassesState.value();
   const [requestType, setRequestType] = useState(0);
   const [status, setStatus] = useState("");
   const fieldsTypeReject = [
@@ -50,57 +51,17 @@ export const DirectorRequests: view = ({
       placeholder: "Matematica",
       type: "text",
     },
-    {
-      field: "classes",
-      label: "Clase",
-      className: "form-floating mb-3 col-md-12",
-      placeholder: "5A",
-      type: "text",
-    },
   ];
   const fieldsType4: any = [];
+  const fieldsType5: any = [];
 
   const initialValuesType1 = {
     requestType: 1,
   };
   const initialValuesType2 = { requestType: 2, className: "" };
   const initialValuesType3 = { requestType: 3, subjectName: "", classes: "" };
-  const initialValuesType4 = { requestType: 4};
-
-  // const getFieldsType5 = (request: any) => {
-  //   const fields = [];
-  //   const { userId } = request;
-  //   const teacherState = getTeacherState.value();
-  //   const classesState = getClassesState.value();
-  //   const teacherFound = teacherState.find(
-  //     (teacher: any) => teacher.userId === userId
-  //   );
-  //   const classFound = classesState.find(
-  //     (classState: any) => classState.teacherId === teacherFound.teacherId
-  //   );
-  //   if(classFound) {
-  //     fields.push({
-  //       field: "class",
-  //       label: `Diriginte Clasa ${getClassName(classFound.name)}`,
-  //       className: "form-floating mb-3 col-md-12",
-  //       placeholder: "5A",
-  //       type: "text",
-  //     });
-  //   }
-  //   const classes = teacherFound.classes;
-  //   classes.forEach((classId: any) => {
-  //     const classFound = classesState.find(
-  //       (classState: any) => classState.classId === classId
-  //     );
-  //     fields.push({
-  //       field: `${classId}`,
-  //       label: `Prof. Clasa ${getClassName(classFound.name)}`,
-  //       className: "form-floating mb-3 col-md-12",
-  //       placeholder: "5A",
-  //       type: "text",
-  //     });
-  //   });
-  // };
+  const initialValuesType4 = { requestType: 4 };
+  const initialValuesType5 = { requestType: 5 };
 
   const handleAnswerRequest = (
     initialValues: any,
@@ -113,6 +74,8 @@ export const DirectorRequests: view = ({
     initialValues.userId = userId;
     if (initialValues.requestType === 1)
       initialValues.students = request.students;
+    if (initialValues.requestType === 5)
+      initialValues.classId = request.classId;
     updateModalFormData.set(initialValues);
     console.log(">>>initialValues: ", initialValues);
     setRequestType(initialValues.requestType);
@@ -138,6 +101,9 @@ export const DirectorRequests: view = ({
   } else if (requestType === 4) {
     fieldsType = fieldsType4;
     modalTitle = "Acceptare Cerere stergere elev";
+  } else if (requestType === 5) {
+    fieldsType = fieldsType5;
+    modalTitle = "Acceptare Cerere mutare elev";
   }
 
   const pendingRequests = requests.filter(
@@ -173,15 +139,16 @@ export const DirectorRequests: view = ({
                 style={{ width: "75%", paddingBottom: "50px" }}
               >
                 <div
-                  className="card border-dark mb-5 w-50"
+                  className="card border-dark mb-5 w-75"
                   style={{
-                    marginLeft: "500px",
+                    marginLeft: "250px",
                     zIndex: 1,
                     boxShadow: "4px 4px 15px 2px rgba(0,0,0,0.75)",
                   }}
                 >
                   <div
-                    className="card-header bg-transparent border-dark"
+                    className="card-header border-dark"
+                    style={{ backgroundColor: "#e7e8e9" }}
                     // style={{ display: "flex" }}
                   >
                     <b>Cerere de tipul parinte {`-> elev(i)`}</b>
@@ -189,7 +156,7 @@ export const DirectorRequests: view = ({
                   <div className="card-body">
                     <div>
                       <div className="card-title">
-                        Parintele {parentEmail}{" "}
+                        Parintele <b>{parentEmail}</b>{" "}
                         {`(${parentLastName} ${parentFirstName})`}
                         doreste sa isi asigneze urmatorii elevi:
                       </div>
@@ -237,6 +204,7 @@ export const DirectorRequests: view = ({
                             style={{
                               border: "none",
                               background: "transparent",
+                              paddingLeft: "200px",
                             }}
                             onClick={() =>
                               handleAnswerRequest(
@@ -255,8 +223,7 @@ export const DirectorRequests: view = ({
                 </div>
               </div>
             );
-          }
-          if (request.type == "2") {
+          } else if (request.type == "2") {
             const dataForUser = usersState.find(
               (userState: any) => userState.userId === request.userId
             );
@@ -267,15 +234,16 @@ export const DirectorRequests: view = ({
                 style={{ width: "75%", paddingBottom: "50px" }}
               >
                 <div
-                  className="card border-dark mb-5 w-50"
+                  className="card border-dark mb-5 w-75"
                   style={{
-                    marginLeft: "500px",
+                    marginLeft: "250px",
                     zIndex: 1,
                     boxShadow: "4px 4px 15px 2px rgba(0,0,0,0.75)",
                   }}
                 >
                   <div
-                    className="card-header bg-transparent border-dark"
+                    className="card-header border-dark"
+                    style={{ backgroundColor: "#e7e8e9" }}
                     // style={{ display: "flex" }}
                   >
                     <b>Cerere de tipul elev</b>
@@ -283,7 +251,7 @@ export const DirectorRequests: view = ({
                   <div className="card-body">
                     <div>
                       <div className="card-title">
-                        Utilizatorul {email} {`(${lastName} ${firstName})`}{" "}
+                        Utilizatorul <b>{email}</b> {`(${lastName} ${firstName})`}{" "}
                         doreste sa isi asigneze rolul de elev.
                       </div>
                       <div className="card-text" style={{ display: "flex" }}>
@@ -308,6 +276,7 @@ export const DirectorRequests: view = ({
                           style={{
                             border: "none",
                             background: "transparent",
+                            paddingLeft: "200px",
                           }}
                           onClick={() =>
                             handleAnswerRequest(
@@ -325,8 +294,7 @@ export const DirectorRequests: view = ({
                 </div>
               </div>
             );
-          }
-          if (request.type == "3") {
+          } else if (request.type == "3") {
             const dataForUser = usersState.find(
               (userState: any) => userState.userId === request.userId
             );
@@ -337,15 +305,16 @@ export const DirectorRequests: view = ({
                 style={{ width: "75%", paddingBottom: "50px" }}
               >
                 <div
-                  className="card border-dark mb-5 w-50"
+                  className="card border-dark mb-5 w-75"
                   style={{
-                    marginLeft: "500px",
+                    marginLeft: "250px",
                     zIndex: 1,
                     boxShadow: "4px 4px 15px 2px rgba(0,0,0,0.75)",
                   }}
                 >
                   <div
-                    className="card-header bg-transparent border-dark"
+                    className="card-header border-dark"
+                    style={{ backgroundColor: "#e7e8e9" }}
                     // style={{ display: "flex" }}
                   >
                     <b>Cerere de tipul profesor</b>
@@ -353,7 +322,7 @@ export const DirectorRequests: view = ({
                   <div className="card-body">
                     <div>
                       <div className="card-title">
-                        Utilizatorul {email} {`(${lastName} ${firstName})`}{" "}
+                        Utilizatorul <b>{email}</b> {`(${lastName} ${firstName})`}{" "}
                         doreste sa isi asigneze rolul de profesor.
                       </div>
                       <div className="card-text" style={{ display: "flex" }}>
@@ -378,6 +347,7 @@ export const DirectorRequests: view = ({
                           style={{
                             border: "none",
                             background: "transparent",
+                            paddingLeft: "200px",
                           }}
                           onClick={() =>
                             handleAnswerRequest(
@@ -395,7 +365,7 @@ export const DirectorRequests: view = ({
                 </div>
               </div>
             );
-          } else {
+          } else if (request.type == "4") {
             const dataForUser = usersState.find(
               (userState: any) => userState.userId === request.userId
             );
@@ -406,15 +376,16 @@ export const DirectorRequests: view = ({
                 style={{ width: "75%", paddingBottom: "50px" }}
               >
                 <div
-                  className="card border-dark mb-5 w-50"
+                  className="card border-dark mb-5 w-75"
                   style={{
-                    marginLeft: "500px",
+                    marginLeft: "250px",
                     zIndex: 1,
                     boxShadow: "4px 4px 15px 2px rgba(0,0,0,0.75)",
                   }}
                 >
                   <div
-                    className="card-header bg-transparent border-dark"
+                    className="card-header border-dark"
+                    style={{ backgroundColor: "#e7e8e9" }}
                     // style={{ display: "flex" }}
                   >
                     <b>Cerere de tipul stergere elev</b>
@@ -422,8 +393,9 @@ export const DirectorRequests: view = ({
                   <div className="card-body">
                     <div>
                       <div className="card-title">
-                        Utilizatorul {email} {`(${lastName} ${firstName})`}{" "}
-                        doreste sa isi stearga rolul de elev.
+                        Utilizatorul <b>{email}</b>{" "}
+                        {`(${lastName} ${firstName})`} doreste sa isi stearga
+                        rolul de elev.
                       </div>
                       <div className="card-text" style={{ display: "flex" }}>
                         <button
@@ -447,6 +419,82 @@ export const DirectorRequests: view = ({
                           style={{
                             border: "none",
                             background: "transparent",
+                            paddingLeft: "200px",
+                          }}
+                          onClick={() =>
+                            handleAnswerRequest(
+                              { response: "" },
+                              request,
+                              "rejected"
+                            )
+                          }
+                        >
+                          <RedX />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          } else {
+            const dataForUser = usersState.find(
+              (userState: any) => userState.userId === request.userId
+            );
+            const { email, firstName, lastName } = dataForUser;
+            const { classId } = request;
+            const className = classesState.find(
+              (classState: any) => classState.classId === classId
+            )?.name;
+            return (
+              <div
+                key={request.requestId}
+                style={{ width: "75%", paddingBottom: "50px" }}
+              >
+                <div
+                  className="card border-dark mb-5 w-75"
+                  style={{
+                    marginLeft: "250px",
+                    zIndex: 1,
+                    boxShadow: "4px 4px 15px 2px rgba(0,0,0,0.75)",
+                  }}
+                >
+                  <div
+                    className="card-header border-dark"
+                    style={{ backgroundColor: "#e7e8e9" }}
+                    // style={{ display: "flex" }}
+                  >
+                    <b>Cerere de tipul mutare elev</b>
+                  </div>
+                  <div className="card-body">
+                    <div>
+                      <div className="card-title">
+                        Elevul <b>{email}</b> {`(${lastName} ${firstName})`} doreste sa
+                        se mute in clasa {className}.
+                      </div>
+                      <div className="card-text" style={{ display: "flex" }}>
+                        <button
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            paddingRight: "200px",
+                            // blockSize: "15px",
+                          }}
+                          onClick={() =>
+                            handleAnswerRequest(
+                              initialValuesType5,
+                              request,
+                              "accepted"
+                            )
+                          }
+                        >
+                          <GreenTick />
+                        </button>
+                        <button
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            paddingLeft: "200px",
                           }}
                           onClick={() =>
                             handleAnswerRequest(

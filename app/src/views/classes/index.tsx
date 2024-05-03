@@ -34,6 +34,8 @@ export const Classes: view = ({
   const sortedClasses = sortedClassesByName(classes);
   
   console.log(">>> nrOfStudents", nrOfStudents);
+
+  console.log(">>>sortedClasses: ", sortedClasses);
   
   const [modalType, setModalType] = useState("");
 
@@ -135,7 +137,7 @@ export const Classes: view = ({
                   <TableCell align="center">
                     {firstName} {lastName}
                   </TableCell>
-                  <TableCell align="center">{nrOfStudentsFound.value}</TableCell>
+                  <TableCell align="center">{nrOfStudentsFound?.value || 0}</TableCell>
                   <TableCell align="center">
                     <button
                       className="btn btn-lg btn-outline-primary py-0"

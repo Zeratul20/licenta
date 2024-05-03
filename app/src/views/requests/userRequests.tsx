@@ -7,6 +7,26 @@ import * as producers from "./producers";
 import { GreenTick } from "../../assets/icons/greenTick";
 import { RedX } from "../../assets/icons/redX";
 import "./style.css";
+import { getClassName } from "../../utils";
+
+const getRequestFromType = (type: string) => {
+  switch (type) {
+    case "1":
+      return "parinte -> elev";
+    case "2":
+      return "creare rol elev";
+    case "3":
+      return "creare rol profesor";
+    case "4":
+      return "stergere elev";
+    case "5":
+      return "mutare elev";
+    // case 5:
+    //   return "Cerere stergere profesor";
+    default:
+      return "";
+  }
+};
 
 export const UserRequests: view = ({
   user = observe.user,
@@ -14,10 +34,12 @@ export const UserRequests: view = ({
   updateIsModalOpen = update.modal.isOpen,
   requests = observe.requests.content,
   getUsers = get.users,
+  getClasses = get.classes,
 }) => {
   console.log(">>>user: ", user);
   console.log(">>>requests: ", requests);
   const usersState = getUsers.value();
+  const classesState = getClasses.value();
   const [requestType, setRequestType] = useState(0);
   const fieldsType1 = [
     {
@@ -38,7 +60,15 @@ export const UserRequests: view = ({
   const fieldsType2: any = [];
   const fieldsType3: any = [];
   const fieldsType4: any = [];
-  // const fieldsType5: any = [];
+  const fieldsType5: any = [
+    {
+      field: "className",
+      label: "Clasa",
+      className: "form-floating mb-3 col-md-12",
+      placeholder: "5A",
+      type: "text",
+    },
+  ];
 
   const initialValuesType1 = {
     requestType: 1,
@@ -48,7 +78,7 @@ export const UserRequests: view = ({
   const initialValuesType2 = { requestType: 2 };
   const initialValuesType3 = { requestType: 3 };
   const initialValuesType4 = { requestType: 4 };
-  // const initialValuesType5 = { requestType: 5 };
+  const initialValuesType5 = { requestType: 5, className: "" };
 
   const handleMakeRequest = (initialValues: any) => {
     updateModalFormData.set(initialValues);
@@ -56,6 +86,19 @@ export const UserRequests: view = ({
     setRequestType(initialValues.requestType);
     updateIsModalOpen.set(true);
     modalOperation("modalForm", "show");
+  };
+
+  const getClassNameForRequest5 = (request: any) => {
+    if (request.type !== "5") return null;
+    const { classId } = request;
+    const className = classesState.find(
+      (classItem: any) => classItem.classId === classId
+    )?.name;
+    return (
+      <span>
+        la clasa <i>{getClassName(className)}</i>
+      </span>
+    );
   };
 
   let fieldsType = [];
@@ -70,13 +113,12 @@ export const UserRequests: view = ({
     fieldsType = fieldsType3;
     modalTitle = "Cerere profesor";
   } else if (requestType === 4) {
-    fieldsType = fieldsType3;
+    fieldsType = fieldsType4;
     modalTitle = "Cerere stergere elev";
+  } else if (requestType === 5) {
+    fieldsType = fieldsType5;
+    modalTitle = "Cerere mutare elev";
   }
-  // else if (requestType === 5) {
-  //   fieldsType = fieldsType3;
-  //   modalTitle = "Cerere stergere profesor";
-  // }
 
   const getUserDataById = (userId: any) => {
     const data = usersState.find((user: any) => user.userId === userId);
@@ -137,7 +179,7 @@ export const UserRequests: view = ({
           </button>
         </div>
       )}
-      {user.role !== "student" && user.role !== "teacher" &&(
+      {user.role !== "student" && user.role !== "teacher" && (
         <div className="request">
           <p>
             Pentru cererea de asignare a rolului de profesor, completati
@@ -165,18 +207,20 @@ export const UserRequests: view = ({
           </button>
         </div>
       )}
-      {/* <div className="request">
-        <p>
-          Pentru cererea de stergere a rolului de profesor, completati
-          formularul urmator:
-        </p>
-        <button
-          className="btn btn-primary"
-          onClick={() => handleMakeRequest(initialValuesType5)}
-        >
-          Cerere stergere rol profesor
-        </button>
-      </div> */}
+      {user.role === "student" && (
+        <div className="request">
+          <p>
+            Pentru cererea de mutare a elevului in alta clasa, completati
+            formularul urmator:
+          </p>
+          <button
+            className="btn btn-primary"
+            onClick={() => handleMakeRequest(initialValuesType5)}
+          >
+            Cerere mutare elev
+          </button>
+        </div>
+      )}
       <Modal fields={fieldsType} title={modalTitle} type={"add"} />
       {pendingRequests && pendingRequests.length > 0 && (
         <>
@@ -194,8 +238,8 @@ export const UserRequests: view = ({
                 <div key={request.requestId}>
                   <ul>
                     <li>
-                      Cerere de tipul {request.type} de la {email}{" "}
-                      {`(${lastName} ${firstName})`} in asteptare
+                      Cerere de tipul <b>{getRequestFromType(request.type)}</b> {" "}
+                      {request.type === "5" && getClassNameForRequest5(request)}
                     </li>
                   </ul>
                 </div>
@@ -218,11 +262,18 @@ export const UserRequests: view = ({
               );
               return (
                 <div key={request.requestId}>
-                  <p>
-                    Respinsa: Cerere de tipul {request.type} de la {email}{" "}
-                    {`(${lastName} ${firstName})`}
-                  </p>
-                  <p>Motiv respingere: {request.response}</p>
+                  <ul>
+                    <li>
+                      <p>
+                        Cerere de tipul{" "}
+                        <b>{getRequestFromType(request.type)}</b> {" "}
+                        {request.type === "5" && getClassNameForRequest5(request)}
+                      </p>
+                      <p style={{ paddingLeft: "30px" }}>
+                        Motiv respingere: {request.response}
+                      </p>
+                    </li>
+                  </ul>
                 </div>
               );
             })}
@@ -245,8 +296,8 @@ export const UserRequests: view = ({
                 <div key={request.requestId}>
                   <ul>
                     <li>
-                      Cerere de tipul {request.type} de la {email}{" "}
-                      {`(${lastName} ${firstName})`}
+                      Cerere de tipul <b>{getRequestFromType(request.type)}</b>{" "}
+                      {request.type === "5" && getClassNameForRequest5(request)}
                     </li>
                   </ul>
                 </div>

@@ -20,7 +20,6 @@ export const Catalogue: view = ({
   updateCatalogueStudent = update.catalogue.student,
   updateCurrentPage = update.catalogue.currentPage,
 }) => {
-  console.log(">>>User: ", user);
   if (user.role === "teacher") {
     const teachers = getTeachers.value();
     const classes = getClasses.value();
@@ -32,8 +31,6 @@ export const Catalogue: view = ({
       teacherClassesId.includes(classEl.classId)
     );
     const sortedTeacherClasses = sortedClassesByName(teacherClasses);
-    console.log(">>>Teacher: ", teacher);
-    console.log(">>>Classes: ", classes);
     updateCatalogueTeacher.set(teacher);
     const handleClick = (classId: string) => {
       updateCurrentPage.set(1);

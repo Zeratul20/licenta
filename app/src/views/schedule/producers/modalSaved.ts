@@ -27,10 +27,15 @@ export const modalSaved: producer = ({
     console.log(">>>add hour");
     let errorInAdd = "";
     try {
-      const subjectName = modalFormData.subject;
-      const subjectFound = subjectsState.find((subject: any) => {
+      let subjectName = modalFormData.subject;
+      const prevSubjectName = subjectName
+      if(subjectName === "Psihologie" && scheduleClass.name.startsWith("10"))
+        subjectName = "Logica";
+      let subjectFound = subjectsState.find((subject: any) => {
         return subject.name === subjectName;
       });
+      if(scheduleClass.name.startsWith("10") && prevSubjectName == "Logica")
+        subjectFound = undefined
       const { subjectId } = subjectFound;
       console.log(">>>subjectFound: ", subjectFound);
       console.log(">>>scheduleClass: ", scheduleClass);
@@ -92,10 +97,15 @@ export const modalSaved: producer = ({
     console.log(">>>edit hour");
     let errorInEdit = "";
     try {
-      const subjectName = modalFormData.subject;
-      const subjectFound = subjectsState.find((subject: any) => {
+      let subjectName = modalFormData.subject;
+      const prevSubjectName = subjectName
+      if(subjectName === "Psihologie" && scheduleClass.name.startsWith("10"))
+        subjectName = "Logica";
+      let subjectFound = subjectsState.find((subject: any) => {
         return subject.name === subjectName;
       });
+      if(scheduleClass.name.startsWith("10") && prevSubjectName == "Logica")
+        subjectFound = undefined
       const { subjectId } = subjectFound;
       if (
         !scheduleClass.subjects.find((subject: any) => subject === subjectId)

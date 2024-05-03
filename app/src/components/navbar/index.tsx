@@ -17,6 +17,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from '@mui/icons-material/Logout';
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import HomeIcon from "@mui/icons-material/Home";
 import MessageIcon from "@mui/icons-material/Message";
@@ -43,12 +44,12 @@ const getRoleName = (role: string) => {
 };
 
 const renderNavPage = (page: string) => {
-  const buttonColor = "#484848"
-  const iconColor = "#56789a"
+  const buttonColor = "#484848";
+  const iconColor = "#3A015C";
   if (page === "Acasa") {
     return (
       <div style={{ display: "flex" }}>
-        <HomeIcon style={{color: iconColor}} fontSize="medium" />
+        <HomeIcon style={{ color: iconColor }} fontSize="medium" />
         <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
@@ -56,7 +57,7 @@ const renderNavPage = (page: string) => {
   if (page === "General") {
     return (
       <div style={{ display: "flex" }}>
-        <MessageIcon style={{color: iconColor}} fontSize="medium" />
+        <MessageIcon style={{ color: iconColor }} fontSize="medium" />
         <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
@@ -64,7 +65,7 @@ const renderNavPage = (page: string) => {
   if (page === "Orar") {
     return (
       <div style={{ display: "flex" }}>
-        <TodayIcon style={{color: iconColor}} fontSize="medium" />
+        <TodayIcon style={{ color: iconColor }} fontSize="medium" />
         <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
@@ -72,7 +73,7 @@ const renderNavPage = (page: string) => {
   if (page === "Catalog") {
     return (
       <div style={{ display: "flex" }}>
-        <SortByAlphaIcon style={{color: iconColor}} fontSize="medium" />
+        <SortByAlphaIcon style={{ color: iconColor }} fontSize="medium" />
         <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
@@ -80,7 +81,7 @@ const renderNavPage = (page: string) => {
   if (page === "Clase") {
     return (
       <div style={{ display: "flex" }}>
-        <SchoolIcon style={{color: iconColor}} fontSize="medium" />
+        <SchoolIcon style={{ color: iconColor }} fontSize="medium" />
         <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
@@ -88,7 +89,7 @@ const renderNavPage = (page: string) => {
   if (page === "Rapoarte") {
     return (
       <div style={{ display: "flex" }}>
-        <AssessmentIcon style={{color: iconColor}} fontSize="medium" />
+        <AssessmentIcon style={{ color: iconColor }} fontSize="medium" />
         <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
@@ -96,7 +97,31 @@ const renderNavPage = (page: string) => {
   if (page === "Cereri") {
     return (
       <div style={{ display: "flex" }}>
-        <ForumIcon style={{color: iconColor}} fontSize="medium" />
+        <ForumIcon style={{ color: iconColor }} fontSize="medium" />
+        <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
+      </div>
+    );
+  }
+  if (page === "Înregistrare") {
+    return (
+      <div style={{ display: "flex" }}>
+        <LockOpenIcon style={{ color: iconColor }} fontSize="medium" />
+        <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
+      </div>
+    );
+  }
+  if (page === "Autentificare") {
+    return (
+      <div style={{ display: "flex" }}>
+        <LoginIcon style={{ color: iconColor }} fontSize="medium" />
+        <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
+      </div>
+    );
+  }
+  if (page === "Deconectare") {
+    return (
+      <div style={{ display: "flex" }}>
+        <LogoutIcon style={{ color: iconColor }} fontSize="medium" />
         <span style={{ paddingLeft: "5px", color: buttonColor }}>{page}</span>
       </div>
     );
@@ -167,6 +192,10 @@ export const NavBar: view = ({
       case "Rapoarte":
         navigate("/reports");
         break;
+      case "Logout":
+        // navigate("/");
+        updateIsLogoutPressed.set(true);
+        break;
       default:
         navigate("/");
         break;
@@ -199,7 +228,7 @@ export const NavBar: view = ({
           width: "100%",
           position: "fixed",
           flexGrow: 1,
-          textAlign: 'center',
+          textAlign: "center",
           zIndex: 1000,
         }}
       >
@@ -284,17 +313,9 @@ export const NavBar: view = ({
                       textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                     }}
                   >
-                    {page === "Login" ? (
-                      <div style={{ display: "flex" }}>
-                        <LoginIcon fontSize="medium" />
-                        <span style={{ paddingLeft: "5px" }}>{page}</span>
-                      </div>
-                    ) : (
-                      <div style={{ display: "flex" }}>
-                        <LockOpenIcon fontSize="medium" />
-                        <span style={{ paddingLeft: "5px" }}>{page}</span>
-                      </div>
-                    )}
+                    {page === "Login"
+                      ? renderNavPage("Autentificare")
+                      : renderNavPage("Înregistrare")}
                   </Button>
                 ))}
               </Box>
@@ -302,21 +323,40 @@ export const NavBar: view = ({
               <>
                 <Box sx={{ flexGrow: 1 }} />
                 <Box sx={{ paddingLeft: "1rem" }} />
-                <Box sx={{ flexGrow: 0 }}>
+                <Box sx={{ flexGrow: 0, display: "flex" }}>
                   <Badge
                     sx={{
                       paddingRight: "20px",
                       fontSize: "20px",
+                      paddingTop: "20px",
                       fontFamily: "inherit",
                       textShadow: "inherit",
-                      color: "#FFF5E0",
+                      color: "#02182B",
                     }}
                   >
                     <i>
                       <b>{getRoleName(user.role)}</b>
                     </i>
                   </Badge>
-                  <Tooltip title="Open settings">
+                  <Button
+                    key={"Logout"}
+                    onClick={() => handleCloseNavMenu("Logout")}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                    style={{
+                      paddingLeft: "2rem",
+                      fontSize: "1rem",
+                      fontFamily: "ibarra-regular",
+                      fontWeight: "bold",
+                      textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                    }}
+                  >
+                    {/* <div style={{ display: "flex" }}>
+                      <LockOpenIcon fontSize="medium" />
+                      <span style={{ paddingLeft: "5px" }}>{"Deconectare"}</span>
+                    </div> */}
+                    {renderNavPage("Deconectare")}
+                  </Button>
+                  {/* <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <Avatar
                         alt={user.firstName}
@@ -348,7 +388,7 @@ export const NavBar: view = ({
                         <Typography textAlign="center">{setting}</Typography>
                       </MenuItem>
                     ))}
-                  </Menu>
+                  </Menu> */}
                 </Box>
               </>
             )}

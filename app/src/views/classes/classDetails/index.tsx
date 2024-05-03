@@ -122,6 +122,8 @@ export const ClassDetails: view = ({
     classId,
   };
 
+  const className = classFound?.name;
+
   return (
     <>
       <h2 style={{ textAlign: "center", marginBottom: "30px" }}>
@@ -145,8 +147,11 @@ export const ClassDetails: view = ({
           </TableHead>
           <TableBody>
             {teachers.map((teacher: any, index: number) => {
-              const { teacherId, firstName, lastName, email, subjectName } =
+              const { teacherId, firstName, lastName, email } =
                 teacher;
+              let { subjectName } = teacher;
+              if(className.startsWith("10") && subjectName == "Logica")
+                subjectName = "Psihologie";
               const initialValuesEdit = {
                 subjectName,
                 teacherEmail: email,

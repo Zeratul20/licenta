@@ -103,6 +103,10 @@ router.post("/requests/types/:type", async (req, res, next) => {
       const { students } = data;
       newRequest.students = students;
     }
+    else if (type === "5") {
+      const { classId } = data;
+      newRequest.classId = classId;
+    }
     await knex("requests").insert(newRequest);
     res.send(newRequest);
   } catch (error) {

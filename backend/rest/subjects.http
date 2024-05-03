@@ -26,6 +26,7 @@ Content-Type: application/json
 
 ### GET
 GET {{api}}/subjects
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyMDAxYzMwYS1iMTQ1LTQ0N2UtYjAzZS1kZjY1MTdmNGQ2MTciLCJpYXQiOjE3MTE0NTI2NjEsImV4cCI6MTcxMTQ3NDI2MX0.ZQWdPSEDQy0dt72P7APuzBokmv--BqW8LU5_RqsGvdA
 
 ### DELETE
 DELETE {{api}}/subjects/76ffaeed-0ad9-4562-9a6d-9299d7ff4679

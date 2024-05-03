@@ -35,6 +35,7 @@ Content-Type: application/json
 
 ### GET
 GET {{api}}/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyMDAxYzMwYS1iMTQ1LTQ0N2UtYjAzZS1kZjY1MTdmNGQ2MTciLCJpYXQiOjE3MTE0NTI2NjEsImV4cCI6MTcxMTQ3NDI2MX0.ZQWdPSEDQy0dt72P7APuzBokmv--BqW8LU5_RqsGvdA
 
 ### DELETE
 DELETE {{api}}/users/b7657ff9-98a5-49ed-872f-e14d2e0ee4e8

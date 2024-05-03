@@ -20,6 +20,7 @@ Content-Type: application/json
 
 ### GET
 GET {{api}}/classes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyMDAxYzMwYS1iMTQ1LTQ0N2UtYjAzZS1kZjY1MTdmNGQ2MTciLCJpYXQiOjE3MTE0NTI2NjEsImV4cCI6MTcxMTQ3NDI2MX0.ZQWdPSEDQy0dt72P7APuzBokmv--BqW8LU5_RqsGvdA
 
 ### GET NR_OF_STUDENTS
 GET {{api}}/classes/nrOfStudents
@@ -36,5 +37,7 @@ Content-Type: application/json
 }
 
 ### DELETE
-DELETE {{api}}/classes/01cde1f3-6847-4a22-b671-53cb1ace0e55
+DELETE {{api}}/classes/d32fefb9-5a71-4052-95ab-0ff137c94aab
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyMDAxYzMwYS1iMTQ1LTQ0N2UtYjAzZS1kZjY1MTdmNGQ2MTciLCJpYXQiOjE3MTE0NTI2NjEsImV4cCI6MTcxMTQ3NDI2MX0.ZQWdPSEDQy0dt72P7APuzBokmv--BqW8LU5_RqsGvdA
+
 

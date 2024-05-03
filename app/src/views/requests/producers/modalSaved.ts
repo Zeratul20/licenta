@@ -77,13 +77,46 @@ export const modalSaved: producer = ({
       }
       newRequest.userId = user.userId;
       newRequest.status = "pending";
-      toast.success("Cererea a fost salvata", {
-        position: "top-right",
-        autoClose: 3000,
-      });
       try {
         api.post("/requests", newRequest);
         updateRequests.set([...requests, newRequest]);
+        toast.success("Cererea a fost salvata", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } catch (error) {
+        console.log(">>>error: ", error);
+        toast.error("Cerere invalida", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      return;
+    }
+    if (modalFormData.requestType === 5) {
+      const newRequest: any = {};
+      newRequest.type = "5";
+      const { className } = modalFormData;
+      const classId = classesState.find(
+        (cls: any) => cls.name === className
+      )?.classId;
+      if (!classId) {
+        toast.error("Clasa nu a fost gasita", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return;
+      }
+      newRequest.classId = classId;
+      newRequest.userId = user.userId;
+      newRequest.status = "pending";
+      try {
+        api.post("/requests", newRequest);
+        updateRequests.set([...requests, newRequest]);
+        toast.success("Cererea a fost salvata", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       } catch (error) {
         console.log(">>>error: ", error);
         toast.error("Cerere invalida", {
@@ -192,21 +225,14 @@ export const modalSaved: producer = ({
     }
   } else if (modalFormData.requestType === 3) {
     try {
-      const { subjectName, classes: classesString } = modalFormData;
-      const classes = classesString.split(/(?:,| )+/);
-      console.log(">>>modalForm classes: ", classes);
-      console.log(">>>modalForm subjectName: ", subjectName);
-      const classIds =
-        classes.map(
-          (cls: any) => classesState.find((c: any) => c.name === cls)?.classId
-        ) || [];
+      const { subjectName} = modalFormData;
       const { subjectId } = subjectsState.find(
         (subject: any) => subject.name === subjectName
       );
       api.post("/teachers", {
         userId,
         subjectId,
-        classes: classIds,
+        classes: [],
       });
       api.put(`/requests/${requestId}`, {
         status: "accepted",
@@ -234,6 +260,28 @@ export const modalSaved: producer = ({
       });
       updateIsStateInitiated.set(false);
       toast.success("Elevul a fost sters", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (e) {
+      console.log(">>>error: ", e);
+      toast.error("Elev invalid", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+  } else if (modalFormData.requestType === 5) {
+    try {
+      const { classId } = modalFormData;
+      const studentId = studentsState.find(
+        (student: any) => student.userId === userId
+      )?.studentId;
+      api.put(`/students/${studentId}`, { classId });
+      api.put(`/requests/${requestId}`, {
+        status: "accepted",
+      });
+      updateIsStateInitiated.set(false);
+      toast.success("Elevul a fost mutat", {
         position: "top-right",
         autoClose: 3000,
       });

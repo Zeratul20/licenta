@@ -24,7 +24,6 @@ export const Schedule: view = ({
   isStateInitiated = observe.schedule.isStateInitiated,
 }) => {
   if (!isStateInitiated) return <Loader />;
-  // const schedules = getSchedules.value();
   if (user.role === "director") {
     const classes = getClasses.value();
     const sortedClasses = sortedClassesByName(classes);
@@ -77,31 +76,6 @@ export const Schedule: view = ({
         <Table />
       </div>
     );
-    // return (
-    //   <div className="image-container">
-    //     <img
-    //       src={ScheduleImg}
-    //       alt="Schedule"
-    //       style={{
-    //         filter: "blur(1px)",
-    //         height: "auto",
-    //         width: "auto",
-    //         position: "relative",
-
-    //         /* Center and scale the image nicely */
-    //         backgroundPosition: "center",
-    //         backgroundRepeat: "no-repeat",
-    //         backgroundSize: "cover",
-    //       }}
-    //     />
-    //     <div className="overlay-text">
-    //       <div className="object-fit-cover" style={{ paddingLeft: "20px" }}>
-    //         <h1 className="font-family">Orar</h1>
-    //         <Table />
-    //       </div>
-    //     </div>
-    //   </div>
-    // );
   }
 
   const getNameByStudentId = (studentId: string) => {

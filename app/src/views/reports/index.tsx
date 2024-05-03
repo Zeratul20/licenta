@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import { Loader } from "../../components/helpers/loader";
 import { StudentsDropdown } from "../../components/inputs/studentsDropdown";
+import ReportImg from "../../assets/img/report.jpg";
 
 const getGeneralAvg = (student: any, monthIndex: number) => {
   let generalAvg = 0;
@@ -108,20 +109,25 @@ export const Reports: view = ({
     return (
       <div className="object-fit-cover">
         <h1>Rapoarte</h1>
-        <h2 style={{ textAlign: "center" }}>
-          {studentUser.lastName} {studentUser.firstName}
-        </h2>
-        <LineChart
-          xAxis={[{ data: months, scaleType: "band" }]}
-          series={[
-            {
-              data: generalAvgs,
-              //   area: true,
-            },
-          ]}
-          width={500}
-          height={300}
-        />
+        <div style={{ display: "flex", paddingTop: "20px" }}>
+          <img src={ReportImg} alt="Rapoarte" style={{ width: "50%" }} />
+          <div>
+            <h2 style={{ textAlign: "center" }}>
+              {studentUser.lastName} {studentUser.firstName}
+            </h2>
+            <LineChart
+              xAxis={[{ data: months, scaleType: "band" }]}
+              series={[
+                {
+                  data: generalAvgs,
+                  //   area: true,
+                },
+              ]}
+              width={500}
+              height={300}
+            />
+          </div>
+        </div>
       </div>
     );
   }
@@ -172,21 +178,26 @@ export const Reports: view = ({
     <div className="object-fit-cover">
       <h1>Rapoarte</h1>
       <StudentsDropdown students={students} handleClick={handleClick} />
-      <h2 style={{ textAlign: "center" }}>
-        {studentUser.lastName} {studentUser.firstName}
-      </h2>
-      <LineChart
-        xAxis={[{ data: months, scaleType: "band", label: "Luna" }]}
-        series={[
-          {
-            data: generalAvgs,
-            label: "Media generala",
-            // area: true,
-          },
-        ]}
-        width={500}
-        height={300}
-      />
+      <div style={{ display: "flex", paddingTop: "20px" }}>
+        <img src={ReportImg} alt="Rapoarte" style={{ width: "50%" }} />
+        <div>
+          <h2 style={{ textAlign: "center" }}>
+            {studentUser.lastName} {studentUser.firstName}
+          </h2>
+          <LineChart
+            xAxis={[{ data: months, scaleType: "band", label: "Luna" }]}
+            series={[
+              {
+                data: generalAvgs,
+                label: "Media generala",
+                // area: true,
+              },
+            ]}
+            width={500}
+            height={300}
+          />
+        </div>
+      </div>
     </div>
   );
 };

@@ -4,7 +4,8 @@ import axios from "axios";
 import { Form } from "../../components/form";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import LogInIcon from "../../assets/img/profile.png";
+import LogInIcon from "../../assets/img/login.jpg";
+import ProfileIcon from "../../assets/img/profile.png";
 
 export const Login: view = ({
   updateUser = update.user,
@@ -51,14 +52,14 @@ export const Login: view = ({
     {
       field: "email",
       label: "E-mail",
-      className: "form-floating mb-3 col-md-6",
+      className: "form-floating mb-3 col-md-8 pb-4",
       placeholder: "nume@exemplu.com",
       type: "email",
     },
     {
       field: "password",
       label: "Parola",
-      className: "form-floating mb-3 col-md-6",
+      className: "form-floating mb-3 col-md-8",
       placeholder: "",
       type: "password",
     },
@@ -66,31 +67,65 @@ export const Login: view = ({
 
   return (
     <>
-      <img
-        src={LogInIcon}
-        style={{
-          width: "150px",
-          height: "150px",
-          display: "block",
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}
-      />
-      <div
-        className="container"
-        style={{
-          height: "600px",
-          paddingTop: "50px",
-          paddingLeft: "150px",
-          paddingRight: "150px",
-        }}
-      >
-        <Form
-          fields={fields}
-          setData={setData}
-          buttonMessage={"Log in"}
-          setIsButtonPressed={setIsButtonPressed}
+      <div style={{ display: "flex" }}>
+        <img
+          src={LogInIcon}
+          style={{
+            width: "47%",
+            height: "auto",
+            display: "block",
+            marginLeft: "auto",
+            marginRight: "auto",
+            boxShadow: "0 10px 10px 0 rgba(0, 0, 0, 0.5)",
+            border: "5px solid #989796",
+          }}
         />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "#f0f0f0",
+          }}
+        >
+          <img
+            src={ProfileIcon}
+            style={{
+              width: "30%",
+              height: "auto",
+              display: "block",
+              marginLeft: "175px",
+              marginRight: "auto",
+              flexDirection: "column",
+            }}
+          />
+          <h2
+            style={{
+              justifyContent: "center",
+              paddingLeft: "160px",
+              paddingTop: "25px",
+            }}
+          >
+            <b>Autentificare</b>
+          </h2>
+          <div
+            className="container"
+            style={{
+              height: "auto",
+              paddingTop: "25px",
+              paddingLeft: "100px",
+              flexDirection: "column",
+              paddingBottom: "20px",
+            }}
+          >
+            <Form
+              fields={fields}
+              setData={setData}
+              buttonMessage={"Autentificare"}
+              buttonWidth={"340px"}
+              setIsButtonPressed={setIsButtonPressed}
+            />
+          </div>
+        </div>
       </div>
     </>
   );

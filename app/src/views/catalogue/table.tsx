@@ -22,6 +22,7 @@ const subjectsOrder = [
   "Fizica",
   "Chimie",
   "Biologie",
+  "Logica",
   "Informatica",
   "Geografie",
   "Ed. Fizica",
@@ -357,7 +358,9 @@ export const Table: view = ({
               <div className="text-center"> </div>
             </th> */}
               {sortedSubjects.map((subject: string, index: number) => {
-                const { name: subjectName } = getSubject(subject);
+                let { name: subjectName } = getSubject(subject);
+                if(catalogueClass.name.startsWith("10") && subjectName === "Logica")
+                  subjectName = "Psihologie"
                 return (
                   <th scope="col" key={index} colSpan={2}>
                     <div className="text-center">{subjectName}</div>

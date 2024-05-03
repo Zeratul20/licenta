@@ -6,6 +6,7 @@ export const Form = ({
   fields,
   setData,
   buttonMessage,
+  buttonWidth,
   setIsButtonPressed,
   initalValues = {},
 }: any) => {
@@ -50,8 +51,12 @@ export const Form = ({
         console.log(">>>field: ", field);
         return input(fieldName, label, className, placeholder, type);
       })}
-      <div className="col-12">
-        <button onClick={handleClick} className="btn btn-outline-primary">
+      <div className="col-12 pt-4">
+        <button
+          onClick={handleClick}
+          className="btn btn-outline-primary"
+          style={{ width: buttonWidth }}
+        >
           {buttonMessage}
         </button>
       </div>

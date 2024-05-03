@@ -6,6 +6,7 @@ import { Form } from "../../components/form";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import SchoolEnteringIcon from "../../assets/img/school-entering.jpg";
 import SignUpIcon from "../../assets/img/sign-up.png";
 
 export const SignUp = () => {
@@ -82,31 +83,65 @@ export const SignUp = () => {
   if (!isButtonPressed) {
     return (
       <>
-        <img
-          src={SignUpIcon}
-          style={{
-            width: "150px",
-            height: "150px",
-            display: "block",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        />
-        <div
-          className="container"
-          style={{
-            height: "600px",
-            paddingTop: "50px",
-            paddingLeft: "150px",
-            paddingRight: "150px",
-          }}
-        >
-          <Form
-            fields={fields}
-            setData={setData}
-            buttonMessage={"Sign up"}
-            setIsButtonPressed={setIsButtonPressed}
+        <div style={{ display: "flex" }}>
+          <img
+            src={SchoolEnteringIcon}
+            style={{
+              width: "50%",
+              height: "auto",
+              display: "block",
+              marginLeft: "auto",
+              marginRight: "auto",
+              boxShadow: "0 10px 10px 0 rgba(0, 0, 0, 0.5)",
+              border: "5px solid #989796",
+            }}
           />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "#f0f0f0",
+            }}
+          >
+            <img
+              src={SignUpIcon}
+              style={{
+                width: "30%",
+                height: "auto",
+                display: "block",
+                marginLeft: "200px",
+                marginRight: "auto",
+                flexDirection: "column",
+              }}
+            />
+            <h2
+              style={{
+                justifyContent: "center",
+                textAlign: "center",
+                paddingTop: "25px",
+              }}
+            >
+              <b>Înregistrare</b>
+            </h2>
+            <div
+              className="container"
+              style={{
+                height: "auto",
+                paddingTop: "25px",
+                // paddingLeft: "50px",
+                flexDirection: "column",
+                paddingBottom: "10px",
+              }}
+            >
+              <Form
+                fields={fields}
+                setData={setData}
+                buttonMessage={"Înregistrare"}
+                buttonWidth={"600px"}
+                setIsButtonPressed={setIsButtonPressed}
+              />
+            </div>
+          </div>
         </div>
       </>
     );

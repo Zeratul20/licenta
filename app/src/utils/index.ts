@@ -58,6 +58,23 @@ export const capitalize = (str: string) => {
 
 export const sortedClassesByName = (classes: any) => {
   return classes.sort((a: any, b: any) => {
+    console.log(">>>a.name", a.name);
+    if (a.name.length < b.name.length) {
+      console.log(
+        ">>>a.name.length < b.name.length",
+        a.name.length,
+        b.name.length
+      );
+      return -1;
+    }
+    if (a.name.length > b.name.length) {
+      console.log(
+        ">>>a.name.length > b.name.length",
+        a.name.length,
+        b.name.length
+      );
+      return 1;
+    }
     if (a.name < b.name) return -1;
     if (a.name > b.name) return 1;
     return 0;

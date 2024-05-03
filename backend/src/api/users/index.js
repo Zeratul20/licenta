@@ -14,7 +14,7 @@ const schema = Joi.object({
     tlds: { allow: ["com", "net", "ro"] },
   }),
 
-  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
+  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9_.!*()]{3,30}$")),
 
   phoneNumber: Joi.string(),
 });

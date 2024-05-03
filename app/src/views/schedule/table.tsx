@@ -8,6 +8,10 @@ import { Modal } from "../../components/modals/modalForm";
 
 import { getClassName, getShortClassName } from "../../utils";
 
+import { generatePDF } from "../../utils/pdf";
+
+import DownloadIcon from "../../assets/img/download.png";
+
 import {
   getSubjectData,
   getTeacherData,
@@ -15,13 +19,8 @@ import {
   modalOperation,
 } from "../../utils";
 
-import { Loader } from "../../components/helpers/loader";
-import { toast } from "react-toastify";
-
-const bootstrap = require("bootstrap");
-
 const colors = [
-  "#ddeeff", 
+  "#ddeeff",
   "#ddccff",
   "#ffddcc",
   "#ffccdd",
@@ -33,6 +32,7 @@ const colors = [
   "#c3f6f6",
   "#c3f6c3",
   "#c3c3f6",
+  "#f4c5c5",
 ];
 
 export const Table: view = ({
@@ -63,10 +63,29 @@ export const Table: view = ({
   console.log(">>>Schedule: ", schedule);
   console.log(">>>Schedules: ", schedules);
 
+  const schedulePdfData: any = [];
+
   const startHour = 8;
   const endHour = 19;
   const days = ["Lu", "Ma", "Mi", "Jo", "Vi"];
 
+  const handleDownloadClick = async (
+    schedulePdfData: any,
+    type: string,
+    schedulePdfGeneralData: any
+  ) => {
+    const pdfData = await generatePDF(
+      schedulePdfData,
+      type,
+      schedulePdfGeneralData
+    );
+    const blob = new Blob([pdfData], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Orar.pdf";
+    a.click();
+  };
 
   if (user.role === "teacher") {
     if (!scheduleTeacher) {
@@ -82,6 +101,9 @@ export const Table: view = ({
     classesState.forEach((classEl: any, index: number) => {
       colorsForClasses[classEl.classId] = colors[index];
     });
+    const schedulePdfGeneralData = {
+      teacherName: ` ${user.firstName} ${user.lastName}`,
+    };
     return (
       <div className="schedule">
         <div className="d-flex justify-content-center">
@@ -123,21 +145,24 @@ export const Table: view = ({
                       );
 
                       if (hourFound) {
-                        console.log(">>>hourFound: ", hourFound);
                         const { classId } = hourFound;
-
                         const backgroundClr = colorsForClasses[classId];
-
                         const { name: className } = classesState.find(
                           (classEl: any) => classEl.classId === classId
                         );
 
-                        console.log(">>>className", className);
+                        const subjectData = {
+                          hour,
+                          day,
+                          className: getShortClassName(className),
+                          backgroundColor: backgroundClr,
+                        };
+                        schedulePdfData.push(subjectData);
 
                         return (
-                          <td style={{backgroundColor: backgroundClr}}>
+                          <td style={{ backgroundColor: backgroundClr }}>
                             <div className="text-center d-flex justify-content-center">
-                              {getClassName(className)}
+                              {getShortClassName(className)}
                             </div>
                           </td>
                         );
@@ -149,6 +174,28 @@ export const Table: view = ({
               })}
             </tbody>
           </table>
+        </div>
+        <div style={{ paddingLeft: "1000px" }}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() =>
+              handleDownloadClick(
+                schedulePdfData,
+                "teacher",
+                schedulePdfGeneralData
+              )
+            }
+          >
+            <div className="d-flex">
+              <span>Descărcați orarul</span>
+              <img
+                src={DownloadIcon}
+                alt="Download"
+                style={{ width: "30px", marginLeft: "10px" }}
+              />
+            </div>
+          </button>
         </div>
       </div>
     );
@@ -212,6 +259,10 @@ export const Table: view = ({
     colorsForSubjects[subject.subjectId] = colors[index];
   });
 
+  const schedulePdfGeneralData = {
+    className: getClassName(scheduleClass.name),
+  };
+
   return (
     <div className="schedule">
       <div>
@@ -235,7 +286,6 @@ export const Table: view = ({
                 { length: endHour - startHour + 1 },
                 (_, i) => i + startHour
               ).map((hour) => {
-                
                 return (
                   <th className="text-center" scope="col" style={{}}>
                     {hour}
@@ -260,7 +310,9 @@ export const Table: view = ({
                       );
                     });
 
-                    const backgroundClr = subjectFound ? colorsForSubjects[subjectFound.subjectId] : "#ffffff";
+                    const backgroundClr = subjectFound
+                      ? colorsForSubjects[subjectFound.subjectId]
+                      : "#ffffff";
 
                     const initialValuesAdd = {
                       subject: "",
@@ -287,10 +339,13 @@ export const Table: view = ({
 
                       console.log(">>>subjectsState", subjectsState);
 
-                      const { name: subjectName } = getSubjectData(
+                      let { name: subjectName } = getSubjectData(
                         subjectsState,
                         subjectFound.subjectId
                       );
+
+                      if(subjectName === "Logica" && scheduleClass.name.startsWith("10"))
+                        subjectName = "Psihologie";
 
                       console.log(">>>subjectName: ", subjectName);
 
@@ -300,8 +355,18 @@ export const Table: view = ({
                         day,
                       };
 
+                      const subjectData = {
+                        subject: subjectName,
+                        hour,
+                        day,
+                        teacherName: `${firstName} ${lastName}`,
+                        backgroundColor: backgroundClr,
+                      };
+
+                      schedulePdfData.push(subjectData);
+
                       return (
-                        <td style={{backgroundColor: backgroundClr}}>
+                        <td style={{ backgroundColor: backgroundClr }}>
                           <div className="text-center d-flex justify-content-center">
                             {firstName} {lastName}
                           </div>
@@ -327,7 +392,10 @@ export const Table: view = ({
                                 className="btn btn-lg btn-outline-danger py-0"
                                 style={{ fontSize: "1rem", border: "none" }}
                                 onClick={() =>
-                                  handleEdit_AddButton(initialValuesAdd, "delete")
+                                  handleEdit_AddButton(
+                                    initialValuesAdd,
+                                    "delete"
+                                  )
                                 }
                               >
                                 <TrashIcon />
@@ -360,6 +428,28 @@ export const Table: view = ({
             })}
           </tbody>
         </table>
+        <div style={{ paddingLeft: "950px", paddingTop: "20px" }}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() =>
+              handleDownloadClick(
+                schedulePdfData,
+                "class",
+                schedulePdfGeneralData
+              )
+            }
+          >
+            <div className="d-flex">
+              <span>Descărcați orarul</span>
+              <img
+                src={DownloadIcon}
+                alt="Download"
+                style={{ width: "30px", marginLeft: "10px" }}
+              />
+            </div>
+          </button>
+        </div>
       </div>
       <Modal fields={fields} title={modalTitle} type={modalType} />
     </div>
