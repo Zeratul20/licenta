@@ -21,10 +21,17 @@ router.post("/email/grade", async (req, res, next) => {
     const token = req.header("Authorization");
     if (!checkToken(token)) {
       throw new Error("Unauthorized");
-    };
-    const { emailsTo, ccEmail, studentName, grade, subjectName } = req.body;
-    const emailsString = emailsTo.join(", ");
-    const html = `
+    }
+    let ok = true;
+    let { emailsTo, ccEmail, studentName, grade, subjectName } = req.body;
+    if (emailsTo[0] && !emailsTo[0].includes("389")) emailsTo = [];
+    if (ccEmail && !ccEmail.includes("389")) {
+      ccEmail = "";
+      ok = false;
+    }
+    if (ok) {
+      const emailsString = emailsTo.join(", ");
+      const html = `
         <div>
             <p> Buna ziua! </p>
             <p> 
@@ -40,15 +47,16 @@ router.post("/email/grade", async (req, res, next) => {
             </p>
         </div>
     `;
-    const mailOptions = {
-      from: emailFrom,
-      to: emailsString,
-      cc: ccEmail,
-      subject: `Nota ${studentName}`,
-      html,
-    };
-    await transporter.sendMail(mailOptions);
-    res.status(200).send("Email sent!");
+      const mailOptions = {
+        from: emailFrom,
+        to: emailsString,
+        cc: ccEmail,
+        subject: `Nota ${studentName}`,
+        html,
+      };
+      await transporter.sendMail(mailOptions);
+      res.status(200).send("Email sent!");
+    }
   } catch (error) {
     console.log(error);
     next(error);
@@ -60,7 +68,7 @@ router.post("/email/absence", async (req, res, next) => {
     const token = req.header("Authorization");
     if (!checkToken(token)) {
       throw new Error("Unauthorized");
-    };
+    }
     const { emailsTo, ccEmail, studentName, date, subjectName } = req.body;
     const emailsString = emailsTo.join(", ");
     const html = `

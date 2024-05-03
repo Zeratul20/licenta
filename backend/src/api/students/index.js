@@ -73,7 +73,7 @@ router.get("/students", async (req, res, next) => {
     const token = req.header("Authorization");
     if (!checkToken(token)) {
       throw new Error("Unauthorized");
-    };
+    }
     const studentsData = await knex("students");
     const students = [];
     for (let studentData of studentsData) {
@@ -91,7 +91,7 @@ router.get("/students/catalogue/:classId", async (req, res, next) => {
     const token = req.header("Authorization");
     if (!checkToken(token)) {
       throw new Error("Unauthorized");
-    };
+    }
     const { classId } = req.params;
     const studentsData = await knex("students").where({ classId });
     const students = [];
@@ -111,8 +111,8 @@ router.get(
     try {
       const token = req.header("Authorization");
       if (!checkToken(token)) {
-      throw new Error("Unauthorized");
-    };
+        throw new Error("Unauthorized");
+      }
       const { teacherId, classId } = req.params;
       const studentsData = await knex("students").where({ classId });
       const students = [];
@@ -135,7 +135,7 @@ router.get("/students/:studentId", async (req, res, next) => {
     const token = req.header("Authorization");
     if (!checkToken(token)) {
       throw new Error("Unauthorized");
-    };
+    }
     const { studentId } = req.params;
     const studentsData = await knex("students").where({ studentId });
 
@@ -156,7 +156,7 @@ router.put("/students/:studentId", async (req, res, next) => {
     const token = req.header("Authorization");
     if (!checkToken(token)) {
       throw new Error("Unauthorized");
-    };
+    }
     const { studentId } = req.params;
     const data = { ...req.body };
     const { classId, grades } = data;
@@ -190,7 +190,7 @@ router.put("/students/:studentId/:teacherId/grades", async (req, res, next) => {
     const token = req.header("Authorization");
     if (!checkToken(token)) {
       throw new Error("Unauthorized");
-    };
+    }
     const { studentId, teacherId } = req.params;
     const data = { ...req.body };
     const { value, date } = data;
@@ -220,7 +220,7 @@ router.post("/students", async (req, res, next) => {
     const token = req.header("Authorization");
     if (!checkToken(token)) {
       throw new Error("Unauthorized");
-    };
+    }
     const data = { ...req.body };
     const { userId, classId } = data;
     const newStudent = {};
@@ -241,22 +241,26 @@ router.delete("/students/:studentId", async (req, res, next) => {
     const token = req.header("Authorization");
     if (!checkToken(token)) {
       throw new Error("Unauthorized");
-    };
+    }
     const { studentId } = req.params;
     const userIdData = await knex("students")
       .where({ studentId })
       .select("userId");
     const { userId } = userIdData[0];
     const students = await knex("students").where({ studentId }).del();
-    const parent = await knex("parents").whereIn("studentId", "students");
-    const parentStudents = parent[0].students;
-    const parentId = parent[0].parentId;
-    const newParentStudents = parentStudents.filter(
-      (student) => student !== studentId
+    const parent = await knex("parents").whereRaw(
+      `'${studentId}' = ANY (students)`
     );
-    await knex("parents")
-      .where({ parentId })
-      .update({ students: newParentStudents });
+    if (parent.length > 0) {
+      const parentStudents = parent[0].students;
+      const parentId = parent[0].parentId;
+      const newParentStudents = parentStudents.filter(
+        (student) => student !== studentId
+      );
+      await knex("parents")
+        .where({ parentId })
+        .update({ students: newParentStudents });
+    }
     await knex("users").where({ userId }).update({ role: "user" });
     res.send(studentId);
   } catch (error) {

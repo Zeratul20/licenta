@@ -4,6 +4,9 @@ import { makeApi } from "../../../utils";
 
 const isGrade = (grade: string) => {
   // if(grade < "1" || grade > "9") return false;
+  // cannot accept anything unless 1-10
+  const reg = new RegExp("^[1-9]$");
+  if(!grade.match(reg)) return false;
   const parsedGrade = parseFloat(grade);
   console.log(">>>parsedGrade: ", parsedGrade);
   if (Number.isNaN(parsedGrade) || parsedGrade < 1 || parsedGrade > 10 || !Number.isInteger(parsedGrade)) {
