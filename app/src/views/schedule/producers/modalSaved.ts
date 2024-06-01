@@ -20,22 +20,51 @@ export const modalSaved: producer = ({
   const teachersState = getTeachersState.value();
   const subjectsState = getSubjectsState.value();
   const schedules = getSchedules.value();
+  console.log(">>>Schedules: ", schedules);
   console.log(">>>modalFormData: ", modalFormData);
   updateIsModalSavePressed.set(false);
   const { type } = modalFormData;
+  const teacherAlreadyHasHour = (
+    teacherId: string,
+    day: string,
+    hour: string
+  ) => {
+    const teacherFound = teachersState.find((teacher: any) => {
+      return teacher.teacherId === teacherId;
+    });
+    const teacherSchedules = schedules.filter((schedule: any) => {
+      return teacherFound.classes.includes(schedule.classId);
+    });
+    const subjectDayHour = teacherSchedules.find((s: any) => {
+      if (s.scheduleId === schedule.scheduleId) return false;
+      return s.subjects.find((subject: any) => {
+        return (
+          subject.day === day &&
+          subject.hour === hour &&
+          subject.teacherId === teacherId
+        );
+      });
+    });
+    if (subjectDayHour) return true;
+    return false;
+  };
   if (type === "add") {
     console.log(">>>add hour");
     let errorInAdd = "";
     try {
       let subjectName = modalFormData.subject;
-      const prevSubjectName = subjectName
-      if(subjectName === "Psihologie" && scheduleClass.name.startsWith("10"))
+      const prevSubjectName = subjectName;
+      if (subjectName === "Psihologie" && scheduleClass.name.startsWith("10"))
         subjectName = "Logica";
       let subjectFound = subjectsState.find((subject: any) => {
         return subject.name === subjectName;
       });
-      if(scheduleClass.name.startsWith("10") && prevSubjectName == "Logica")
-        subjectFound = undefined
+      if (scheduleClass.name.startsWith("10") && prevSubjectName == "Logica")
+        subjectFound = undefined;
+      if(!subjectFound) {
+        errorInAdd = "Materia nu există";
+        throw new Error(errorInAdd);
+      }
       const { subjectId } = subjectFound;
       console.log(">>>subjectFound: ", subjectFound);
       console.log(">>>scheduleClass: ", scheduleClass);
@@ -43,7 +72,7 @@ export const modalSaved: producer = ({
       if (
         !scheduleClassSubjects.find((subject: any) => subject === subjectId)
       ) {
-        errorInAdd = "Materia nu este alocata clasei";
+        errorInAdd = "Materia nu este alocată clasei";
         throw new Error(errorInAdd);
       }
       const { day, hour } = modalFormData;
@@ -61,6 +90,10 @@ export const modalSaved: producer = ({
           );
         }
       );
+      if(teacherAlreadyHasHour(subjectTeacherId, day, hour)) {
+        errorInAdd = "Profesorul are deja o oră în calendar la altă clasă!";
+        throw new Error(errorInAdd);
+      }
       subject.teacherId = subjectTeacherId;
       const newSubjects = [...schedule.subjects, subject];
       const newSchedule = { ...schedule, subjects: newSubjects };
@@ -75,7 +108,7 @@ export const modalSaved: producer = ({
       api.put(`/schedules/${schedule.scheduleId}`, updatedSchedule);
       updateSchedules.set(newSchedules);
       updateSchedule.set(newSchedule);
-      toast.success("Ora adaugata cu succes", {
+      toast.success("Oră adăugată cu succes", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });
@@ -98,19 +131,23 @@ export const modalSaved: producer = ({
     let errorInEdit = "";
     try {
       let subjectName = modalFormData.subject;
-      const prevSubjectName = subjectName
-      if(subjectName === "Psihologie" && scheduleClass.name.startsWith("10"))
+      const prevSubjectName = subjectName;
+      if (subjectName === "Psihologie" && scheduleClass.name.startsWith("10"))
         subjectName = "Logica";
       let subjectFound = subjectsState.find((subject: any) => {
         return subject.name === subjectName;
       });
-      if(scheduleClass.name.startsWith("10") && prevSubjectName == "Logica")
-        subjectFound = undefined
+      if (scheduleClass.name.startsWith("10") && prevSubjectName == "Logica")
+        subjectFound = undefined;
+      if(!subjectFound) {
+        errorInEdit = "Materia nu există";
+        throw new Error(errorInEdit);
+      }
       const { subjectId } = subjectFound;
       if (
         !scheduleClass.subjects.find((subject: any) => subject === subjectId)
       ) {
-        errorInEdit = "Materia nu este alocata clasei";
+        errorInEdit = "Materia nu este alocată clasei";
         throw new Error(errorInEdit);
       }
       const { day, hour } = modalFormData;
@@ -128,6 +165,10 @@ export const modalSaved: producer = ({
           );
         }
       );
+      if(teacherAlreadyHasHour(subjectTeacherId, day, hour)) {
+        errorInEdit = "Profesorul are deja o oră în calendar la altă clasă!";
+        throw new Error(errorInEdit);
+      }
       subject.teacherId = subjectTeacherId;
       const newSubjects = schedule.subjects.map((subjectEl: any) => {
         if (subjectEl.day === day && subjectEl.hour === hour.toString()) {
@@ -145,7 +186,7 @@ export const modalSaved: producer = ({
       api.put(`/schedules/${schedule.scheduleId}`, newSchedule);
       updateSchedules.set(newSchedules);
       updateSchedule.set(newSchedule);
-      toast.success("Ora modificata cu succes", {
+      toast.success("Oră modificată cu succes", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });
@@ -180,13 +221,13 @@ export const modalSaved: producer = ({
       api.put(`/schedules/${schedule.scheduleId}`, newSchedule);
       updateSchedules.set(newSchedules);
       updateSchedule.set(newSchedule);
-      toast.success("Ora stearsa cu succes", {
+      toast.success("Ora ștearsă cu succes", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });
     } catch (error) {
       console.log(">>>error: ", error);
-      toast.error("Eroare la stergerea orei", {
+      toast.error("Eroare la ștergerea orei", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });

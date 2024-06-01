@@ -62,6 +62,25 @@ const getTeacherCatalogueResponse = async (studentData, teacherId) => {
       }
       // const gradeObj = { subjectId, value: gradeValue, date: gradeDate };
       // student.grades.push(gradeObj);
+    } else {
+      const classs = await knex("classes").where({ classId });
+      const classTeacherId = classs[0].teacherId;
+      if (teacherId === classTeacherId) {
+        if (!student.grades.find((grade) => grade.subjectId === subjectId)) {
+          student.grades.push({
+            subjectId,
+            grades: [{ value: gradeValue, date: gradeDate }],
+          });
+        } else {
+          const subjectIndex = student.grades.findIndex(
+            (grade) => grade.subjectId === subjectId
+          );
+          student.grades[subjectIndex].grades.push({
+            value: gradeValue,
+            date: gradeDate,
+          });
+        }
+      }
     }
   }
   const studentResponse = { ...student };

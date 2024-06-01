@@ -27,7 +27,7 @@ export const Form = ({
     label: string,
     className: string = "",
     placeholder: string = "",
-    type = "text"
+    type = "text",
   ) => {
     console.log(">>>Form field: ", field);
     return (

@@ -6,6 +6,15 @@ const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const { checkToken } = require("../helpers/tokens");
 
+// const passRegex = new RegExp(
+//   "^(?=(?:[^A-Z]*[A-Z]){2,})(?=(?:[^a-z]*[a-z]){3,})(?=(?:\D*\d){2,})(?=[^!?#]*[!?#]).{8,}$"
+// );
+const passRegex = new RegExp(
+  "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!$()^&*-]).{8,}$"
+);
+
+const phoneRegex = new RegExp("^[0-9]{10}$");
+
 const schema = Joi.object({
   firstName: Joi.string(),
   lastName: Joi.string(),
@@ -14,9 +23,9 @@ const schema = Joi.object({
     tlds: { allow: ["com", "net", "ro"] },
   }),
 
-  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9_.!*()]{3,30}$")),
+  password: Joi.string().regex(passRegex),
 
-  phoneNumber: Joi.string(),
+  phoneNumber: Joi.string().regex(phoneRegex),
 });
 
 router.get("/users", async (req, res, next) => {
@@ -55,7 +64,9 @@ router.post("/users/signUp", async (req, res, next) => {
   try {
     const { error } = schema.validate(req.body);
     if (error) {
+      console.log(">>>error: ", error.message);
       res.status(400);
+      res.send(error.message);
       throw new Error(error);
     }
     const data = { ...req.body };

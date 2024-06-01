@@ -5,6 +5,7 @@ import "bootstrap";
 import { Loader } from "../../components/helpers/loader";
 import { StudentsDropdown } from "../../components/inputs/studentsDropdown";
 import ReportImg from "../../assets/img/report.jpg";
+import { Forbidden } from "../../components/helpers/forbidden";
 
 const getGeneralAvg = (student: any, monthIndex: number) => {
   let generalAvg = 0;
@@ -42,7 +43,7 @@ export const Reports: view = ({
   getUsers = get.users,
   getParents = get.parents,
 }) => {
-  if (!user || (user.role !== "student" && user.role !== "parent")) return null;
+  if (!user || (user.role !== "student" && user.role !== "parent")) return <Forbidden />;
   const users = getUsers.value();
 
   const getNameByStudentId = (studentId: string) => {
@@ -110,7 +111,7 @@ export const Reports: view = ({
       <div className="object-fit-cover">
         <h1>Rapoarte</h1>
         <div style={{ display: "flex", paddingTop: "20px" }}>
-          <img src={ReportImg} alt="Rapoarte" style={{ width: "50%" }} />
+          <img src={ReportImg} alt="Rapoarte" style={{ width: "45%" }} />
           <div>
             <h2 style={{ textAlign: "center" }}>
               {studentUser.lastName} {studentUser.firstName}
@@ -120,11 +121,12 @@ export const Reports: view = ({
               series={[
                 {
                   data: generalAvgs,
+                  label: "Media generală",
                   //   area: true,
                 },
               ]}
-              width={500}
-              height={300}
+              width={650}
+              height={400}
             />
           </div>
         </div>
@@ -179,7 +181,7 @@ export const Reports: view = ({
       <h1>Rapoarte</h1>
       <StudentsDropdown students={students} handleClick={handleClick} />
       <div style={{ display: "flex", paddingTop: "20px" }}>
-        <img src={ReportImg} alt="Rapoarte" style={{ width: "50%" }} />
+        <img src={ReportImg} alt="Rapoarte" style={{ width: "45%" }} />
         <div>
           <h2 style={{ textAlign: "center" }}>
             {studentUser.lastName} {studentUser.firstName}
@@ -189,12 +191,12 @@ export const Reports: view = ({
             series={[
               {
                 data: generalAvgs,
-                label: "Media generala",
+                label: "Media generală",
                 // area: true,
               },
             ]}
-            width={500}
-            height={300}
+            width={650}
+            height={400}
           />
         </div>
       </div>

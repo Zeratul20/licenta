@@ -14,10 +14,13 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { alpha, styled } from "@mui/material/styles";
+import { pink } from "@mui/material/colors";
+import Switch from "@mui/material/Switch";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LoginIcon from "@mui/icons-material/Login";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import HomeIcon from "@mui/icons-material/Home";
 import MessageIcon from "@mui/icons-material/Message";
@@ -37,9 +40,9 @@ const getRoleName = (role: string) => {
     case "student":
       return "Elev";
     case "parent":
-      return "Parinte";
+      return "Părinte";
     default:
-      return "Guest";
+      return "Vizitator";
   }
 };
 
@@ -129,14 +132,31 @@ const renderNavPage = (page: string) => {
   return null;
 };
 
+const PinkSwitch = styled(Switch)(({ theme }) => ({
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: pink[600],
+    "&:hover": {
+      backgroundColor: alpha(pink[600], theme.palette.action.hoverOpacity),
+    },
+  },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+    backgroundColor: pink[600],
+  },
+}));
+
 export const NavBar: view = ({
   user = observe.user,
+  updateUser = update.user,
+  teachers = observe.teachers,
+  parents = observe.parents,
   updateIsLogoutPressed = update.isLogoutPressed,
+  updateCatalogueClass = update.catalogue.class,
 }) => {
   const pages = ["Acasa"];
   const guestPages = ["Sign Up", "Login"];
   const settings = ["Account", "Logout"];
   const { userId } = user;
+
   console.log(">>>user in nav: ", user);
   if (user?.userId && user?.role !== "user")
     pages.push(...["General", "Orar", "Catalog"]);
@@ -149,6 +169,41 @@ export const NavBar: view = ({
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  const checkIsTeacherParent = () => {
+    if (
+      !user ||
+      !user.role ||
+      (user.role !== "teacher" && user.role !== "parent")
+    )
+      return false;
+    if (user.role === "teacher") {
+      const parentFound = parents.find(
+        (parent: any) => parent.userId === user.userId
+      );
+      if (!parentFound) return false;
+    } else if (user.role === "parent") {
+      console.log(">>>HEREEEEEEEE");
+      const teacherFound = teachers.find(
+        (teacher: any) => teacher.userId === user.userId
+      );
+      if (!teacherFound) return false;
+    }
+    console.log(">>>HEREEEEEEEE2222");
+    return true;
+  };
+
+  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("event.target.checked: ", event.target.checked);
+    const currentPath = window.location.pathname;
+    if(currentPath === "/catalog")
+      updateCatalogueClass.set(null);
+    if (event.target.checked) {
+      updateUser.set({ ...user, role: "teacher" });
+    } else {
+      updateUser.set({ ...user, role: "parent" });
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -323,21 +378,59 @@ export const NavBar: view = ({
               <>
                 <Box sx={{ flexGrow: 1 }} />
                 <Box sx={{ paddingLeft: "1rem" }} />
+                {checkIsTeacherParent() && (
+                  <Box sx={{ flexGrow: 1, display: "flex" }}>
+                    <div style={{ display: "flex" }}>
+                      <span
+                        style={{
+                          fontSize: "20px",
+                          paddingTop: "2px",
+                          fontFamily: "inherit",
+                          textShadow: "inherit",
+                          color: "#02182B",
+                        }}
+                      >
+                        <i>
+                          <b>Părinte</b>
+                        </i>
+                      </span>
+                      <PinkSwitch
+                        defaultChecked
+                        onChange={handleSwitchChange}
+                      />
+                      <span
+                        style={{
+                          fontSize: "20px",
+                          paddingTop: "2px",
+                          fontFamily: "inherit",
+                          textShadow: "inherit",
+                          color: "#02182B",
+                        }}
+                      >
+                        <i>
+                          <b>Profesor</b>
+                        </i>
+                      </span>
+                    </div>
+                  </Box>
+                )}
                 <Box sx={{ flexGrow: 0, display: "flex" }}>
-                  <Badge
-                    sx={{
-                      paddingRight: "20px",
-                      fontSize: "20px",
-                      paddingTop: "20px",
-                      fontFamily: "inherit",
-                      textShadow: "inherit",
-                      color: "#02182B",
-                    }}
-                  >
-                    <i>
-                      <b>{getRoleName(user.role)}</b>
-                    </i>
-                  </Badge>
+                  {!checkIsTeacherParent() && (
+                    <Badge
+                      sx={{
+                        paddingRight: "20px",
+                        fontSize: "20px",
+                        paddingTop: "20px",
+                        fontFamily: "inherit",
+                        textShadow: "inherit",
+                        color: "#02182B",
+                      }}
+                    >
+                      <i>
+                        <b>{getRoleName(user.role)}</b>
+                      </i>
+                    </Badge>
+                  )}
                   <Button
                     key={"Logout"}
                     onClick={() => handleCloseNavMenu("Logout")}

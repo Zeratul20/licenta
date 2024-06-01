@@ -10,6 +10,7 @@ import { sortedClassesByName } from "../../utils";
 import ScheduleImg from "../../assets/img/schedule.png";
 import "../../style.css";
 import "./style.css";
+import { Forbidden } from "../../components/helpers/forbidden";
 
 export const Schedule: view = ({
   user = observe.user,
@@ -24,6 +25,7 @@ export const Schedule: view = ({
   isStateInitiated = observe.schedule.isStateInitiated,
 }) => {
   if (!isStateInitiated) return <Loader />;
+  if(!user || !user.userId) return <Forbidden />;
   if (user.role === "director") {
     const classes = getClasses.value();
     const sortedClasses = sortedClassesByName(classes);

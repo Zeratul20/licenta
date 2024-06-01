@@ -2,6 +2,7 @@ import React from "react";
 import * as producers from "./producers";
 import { UserRequests } from "./userRequests";
 import { DirectorRequests } from "./directorRequests";
+import { Forbidden } from "../../components/helpers/forbidden";
 
 // type 1 -> parent to student
 // type 2 -> student role
@@ -10,6 +11,8 @@ import { DirectorRequests } from "./directorRequests";
 export const Requests: view = ({
   user = observe.user,
 }) => {
+
+  if(!user || !user.userId) return <Forbidden />;
 
   return (
     <>

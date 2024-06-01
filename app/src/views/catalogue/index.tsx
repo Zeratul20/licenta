@@ -6,6 +6,11 @@ import "bootstrap";
 import * as producers from "./producers";
 import { getClassName, sortedClassesByName } from "../../utils";
 import { StudentsDropdown } from "../../components/inputs/studentsDropdown";
+import { Forbidden } from "../../components/helpers/forbidden";
+import DownloadIcon from "../../assets/img/download.png";
+import axios from "axios";
+import { PDFDocument } from "pdf-lib";
+import { getDocument } from "pdfjs-dist";
 
 export const Catalogue: view = ({
   user = observe.user,
@@ -20,6 +25,16 @@ export const Catalogue: view = ({
   updateCatalogueStudent = update.catalogue.student,
   updateCurrentPage = update.catalogue.currentPage,
 }) => {
+  if (!user || !user.userId) return <Forbidden />;
+  const handleDownloadClick = async () => {
+    const pdfFile = await PDFDocument.load("../../assets/pdfs/Ghid_Catalog.pdf");
+    const pdfData = await pdfFile.save();
+    const blob = new Blob([pdfData], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "Ghid_Catalog.pdf";
+    link.click();
+  };
   if (user.role === "teacher") {
     const teachers = getTeachers.value();
     const classes = getClasses.value();
@@ -43,10 +58,42 @@ export const Catalogue: view = ({
     return (
       <div className="object-fit-cover">
         <h1>Catalog</h1>
-        <ClassDropdown
-          classes={sortedTeacherClasses}
-          handleClick={handleClick}
-        />
+        <div style={{ display: "flex" }}>
+          <ClassDropdown
+            classes={sortedTeacherClasses}
+            handleClick={handleClick}
+          />
+          <div style={{ paddingLeft: "1000px" }}>
+            {/* <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() =>
+                handleDownloadClick()
+              }
+            >
+              <div className="d-flex">
+                <span>Ghid Profesor</span>
+                <img
+                  src={DownloadIcon}
+                  alt="Download"
+                  style={{ width: "30px", marginLeft: "10px" }}
+                />
+              </div>
+            </button> */}
+            <a href="Ghid_Catalog.pdf" download>
+              <button type="button" className="btn btn-primary">
+                <div className="d-flex">
+                  <span>Ghid Catalog</span>
+                  <img
+                    src={DownloadIcon}
+                    alt="Download"
+                    style={{ width: "30px", marginLeft: "10px" }}
+                  />
+                </div>
+              </button>
+            </a>
+          </div>
+        </div>
         {catalogueClass && (
           <h2 style={{ textAlign: "center" }}>
             Clasa {getClassName(catalogueClass.name)}

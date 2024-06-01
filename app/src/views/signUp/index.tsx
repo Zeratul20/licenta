@@ -12,13 +12,19 @@ import SignUpIcon from "../../assets/img/sign-up.png";
 export const SignUp = () => {
   const [data, setData]: any = useState({});
   const [isButtonPressed, setIsButtonPressed] = useState(false);
-  const [errorSingUp, setErrorSignUp] = useState(false);
 
   let userAlreadyExists = false;
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isButtonPressed) {
+      if(!data.email || !data.password || !data.firstName || !data.lastName || !data.phoneNumber) {
+        toast.error("Toate câmpurile sunt obligatorii", {
+          position: "top-left",
+        });
+        setIsButtonPressed(false);
+        return;
+      }
       axios
         .post("http://localhost:5000/api/users/signUp", data)
         .then((response) => {
@@ -26,17 +32,34 @@ export const SignUp = () => {
           navigate("/login");
         })
         .catch((error) => {
-          console.log(error);
-          if (error.response.status === 400) {
-            toast.error("User already exists", {
+          // console.log(error);
+          const message: string = error.response.data;
+          console.log(message);
+          if (message.includes("lastName")) {
+            toast.error("Nume de familie invalid", {
+              position: "top-left",
+            });
+          } else if (message.includes("firstName")) {
+            toast.error("Prenume invalid", {
+              position: "top-left",
+            });
+          } else if (message.includes("email")) {
+            toast.error("Email invalid", {
+              position: "top-left",
+            });
+          } else if (message.includes("password")) {
+            toast.error("Parolă invalidă", {
+              position: "top-left",
+            });
+          } else if (message.includes("phoneNumber")) {
+            toast.error("Număr de telefon invalid", {
               position: "top-left",
             });
           } else {
-            toast.error("Something went wrong. Please try again", {
+            toast.error("Utilizator deja înregistrat", {
               position: "top-left",
             });
           }
-          setErrorSignUp(true);
         });
       setIsButtonPressed(false);
     }
@@ -73,7 +96,7 @@ export const SignUp = () => {
     },
     {
       field: "phoneNumber",
-      label: "Numar de telefon",
+      label: "Număr de telefon",
       className: "form-floating mb-3 col-md-6",
       placeholder: "07********",
       type: "text",

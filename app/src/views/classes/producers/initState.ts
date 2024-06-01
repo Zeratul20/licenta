@@ -9,12 +9,15 @@ export const initState: producer = ({
   const cntMaxVal = 1;
   const api = makeApi();
   const getClassNrOfStudents = async () => {
-    const { data } = await api.get(
-      `/classes/nrOfStudents`
-    );
-    console.log(">>>nrOfStudents initState: ", data);
-    updateNrOfStudents.set(data);
-    cnt++;
+    try {
+      const { data } = await api.get(`/classes/nrOfStudents`);
+      console.log(">>>nrOfStudents initState: ", data);
+      updateNrOfStudents.set(data);
+      cnt++;
+    } catch (e) {
+      console.log("error", e);
+      updateNrOfStudents.set([]);
+    }
   };
   getClassNrOfStudents();
   if (cnt < cntMaxVal) {

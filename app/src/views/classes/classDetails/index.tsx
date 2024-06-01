@@ -13,6 +13,7 @@ import { getClassName, modalOperation } from "../../../utils";
 import * as producers from "./producers";
 import { AddIcon, EditIcon, TrashIcon } from "../../../assets/icons";
 import { Modal } from "../../../components/modals/modalForm";
+import { Forbidden } from "../../../components/helpers/forbidden";
 
 export const ClassDetails: view = ({
   getClassesState = get.classes,
@@ -31,6 +32,7 @@ export const ClassDetails: view = ({
     navigate("/home");
     return null;
   }
+  if(!user || !user.userId || (user.role !== "director")) return <Forbidden />;
   const [modalType, setModalType] = useState("");
   const classesState = getClassesState.value();
   const subjectsState = getSubjectsState.value();
@@ -74,7 +76,7 @@ export const ClassDetails: view = ({
   let fields: any = [];
 
   if (modalType === "add") {
-    modalTitle = "Adauga materie";
+    modalTitle = "Adaugă materie";
     fields = [
       {
         field: "subjectName",
@@ -93,7 +95,7 @@ export const ClassDetails: view = ({
     ];
   }
   if (modalType === "edit") {
-    modalTitle = "Modifica profesor";
+    modalTitle = "Modifică profesor";
     fields = [
       {
         field: "subjectName",

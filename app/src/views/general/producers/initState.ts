@@ -9,13 +9,18 @@ export const initState: producer = ({
 
   const api = makeApi();
 
-  const getSchedules = async () => {
-    const { data } = await api.get("/messages");
-    updateMessages.set(data);
-    console.log("data", data)
-    cnt++;
+  const getMessages = async () => {
+    try {
+      const { data } = await api.get("/messages");
+      updateMessages.set(data);
+      console.log("data", data);
+      cnt++;
+    } catch (e) {
+      console.log("error", e);
+      updateMessages.set([]);
+    }
   };
-  getSchedules();
+  getMessages();
 
   if (cnt < cntMaxVal) {
     let retries = 5;

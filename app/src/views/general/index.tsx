@@ -15,6 +15,7 @@ import * as producers from "./producers";
 import { EditIcon } from "../../assets/icons/pen";
 import { TrashIcon } from "../../assets/icons/trash";
 import { Paginate } from "../../components/modules/pagination";
+import { Forbidden } from "../../components/helpers/forbidden";
 
 export const General: view = ({
   updateModalFormData = update.modal.formData,
@@ -26,6 +27,7 @@ export const General: view = ({
   getUsers = get.users,
 }) => {
   const [modalType, setModalType] = useState("");
+  if(!user || !user.userId) return <Forbidden />;
   if (!messages) return null;
   let fields: any = [];
   let modalTitle = "";
@@ -47,11 +49,11 @@ export const General: view = ({
       },
     ];
     if (modalType === "edit") {
-      modalTitle = "Modifica mesajul";
+      modalTitle = "Modifică mesajul";
     } else {
-      modalTitle = "Adauga mesaj";
+      modalTitle = "Adaugă mesaj";
     }
-  } else if (modalType === "delete") modalTitle = "Sterge mesajul";
+  } else if (modalType === "delete") modalTitle = "Șterge mesajul";
 
   const initialValuesAdd = {
     title: "",
@@ -188,7 +190,7 @@ export const General: view = ({
                         handleEdit_AddButton(initialValuesEdit, "edit")
                       }
                     >
-                      Modifica
+                      Modifică
                     </button>
                     <div style={{ paddingLeft: "500px" }}>
                       <button

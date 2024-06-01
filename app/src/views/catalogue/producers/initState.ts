@@ -7,11 +7,13 @@ export const initState: producer = ({
   updateAbsences = update.catalogue.absences,
   user = observe.user,
   catalogueClass = observe.catalogue.class,
-  getCatalogueTeacher = get.catalogue.teacher,
-  getCatalogueStudent = get.catalogue.student,
+  // getCatalogueTeacher = get.catalogue.teacher,
+  // getCatalogueStudent = get.catalogue.student,
+  catalogueTeacher = observe.catalogue.teacher,
+  catalogueStudent = observe.catalogue.student,
 }) => {
-  const catalogueTeacher = getCatalogueTeacher.value();
-  const catalogueStudent = getCatalogueStudent.value();
+  // const catalogueTeacher = getCatalogueTeacher.value();
+  // const catalogueStudent = getCatalogueStudent.value();
 
   if (!catalogueClass || !user) return;
 
@@ -23,11 +25,16 @@ export const initState: producer = ({
   if (user.role === "teacher") {
     const getStudents = async () => {
       if (catalogueTeacher) {
-        const { data: students } = await api.get(
-          `/students/catalogue/${catalogueTeacher.teacherId}/${catalogueClass.classId}`
-        );
-        console.log("students in getStudents: ", students);
-        updateCatalogue.set(students);
+        try {
+          const { data: students } = await api.get(
+            `/students/catalogue/${catalogueTeacher.teacherId}/${catalogueClass.classId}`
+          );
+          console.log("students in getStudents: ", students);
+          updateCatalogue.set(students);
+        } catch (e) {
+          console.log("error", e);
+          updateCatalogue.set([]);
+        }
       }
       cnt++;
     };
@@ -35,22 +42,32 @@ export const initState: producer = ({
   }
   if (user.role === "director") {
     const getStudents = async () => {
-      const { data: students } = await api.get(
-        `/students/catalogue/${catalogueClass.classId}`
-      );
-      updateCatalogue.set(students);
-      cnt++;
+      try {
+        const { data: students } = await api.get(
+          `/students/catalogue/${catalogueClass.classId}`
+        );
+        updateCatalogue.set(students);
+        cnt++;
+      } catch (e) {
+        console.log("error", e);
+        updateCatalogue.set([]);
+      }
     };
     getStudents();
   }
   if (user.role === "student" || user.role === "parent") {
     const getStudents = async () => {
       if (catalogueStudent) {
-        const { data: student } = await api.get(
-          `/students/${catalogueStudent.studentId}`
-        );
-        const studentsList = [student];
-        updateCatalogue.set(studentsList);
+        try {
+          const { data: student } = await api.get(
+            `/students/${catalogueStudent.studentId}`
+          );
+          const studentsList = [student];
+          updateCatalogue.set(studentsList);
+        } catch (e) {
+          console.log("error", e);
+          updateCatalogue.set([]);
+        }
       }
       cnt++;
     };
@@ -58,11 +75,14 @@ export const initState: producer = ({
   }
 
   const getAbsences = async () => {
-    const { data: absences } = await api.get(
-      `/absences`
-    );
-    updateAbsences.set(absences);
-    cnt++;
+    try {
+      const { data: absences } = await api.get(`/absences`);
+      updateAbsences.set(absences);
+      cnt++;
+    } catch (e) {
+      console.log("error", e);
+      updateAbsences.set([]);
+    }
   };
   getAbsences();
 

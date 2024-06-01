@@ -17,6 +17,7 @@ import { ClassDetails } from "./views/classes/classDetails";
 import "react-toastify/dist/ReactToastify.css";
 import "./style.css";
 import { Reports } from "./views/reports";
+import { NotFound } from "./components/helpers/notFound";
 
 export const App: view = ({ isStateInitiated = observe.isStateInitiated }) => {
   if (!isStateInitiated) {
@@ -33,13 +34,14 @@ export const App: view = ({ isStateInitiated = observe.isStateInitiated }) => {
               <Route path={"/general"} element={<General />} />
               <Route path={"/orar"} element={<Schedule />} />
               <Route path={"/catalog"} element={<Catalogue />} />
-              <Route path={"/teme"} element={<Teme />} />
+              {/* <Route path={"/teme"} element={<Teme />} /> */}
               <Route path={"/requests"} element={<Requests />} />
               <Route path={"/classes"} element={<Classes />} />
               <Route path={"/classes/:classId"} element={<ClassDetails />} />
               <Route path={"/reports"} element={<Reports />} />
               <Route path={"/sign-up"} element={<SignUp />} />
               <Route path={"/login"} element={<Login />} />
+              <Route path={"*"} element={<NotFound />} />
             </Routes>
           </div>
         </div>

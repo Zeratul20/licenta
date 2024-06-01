@@ -16,6 +16,7 @@ import { modalOperation, sortedClassesByName } from "../../utils";
 import { Modal } from "../../components/modals/modalForm";
 import * as producers from "./producers";
 import { Loader } from "../../components/helpers/loader";
+import { Forbidden } from "../../components/helpers/forbidden";
 
 export const Classes: view = ({
   classes = observe.classes,
@@ -38,10 +39,11 @@ export const Classes: view = ({
   console.log(">>>sortedClasses: ", sortedClasses);
   
   const [modalType, setModalType] = useState("");
-
+  
   if(!isStateInitiated) return <Loader />;
-
-  if (user.role !== "director") return null;
+  if(!user || !user.userId) return <Forbidden />;
+  
+  if (user.role !== "director") return <Forbidden />;
 
   const handleEdit_AddButton = (initalValues: any, type: string) => {
     console.log(">>>initalValues: ", initalValues);
@@ -53,8 +55,8 @@ export const Classes: view = ({
   };
 
   let modalTitle = "";
-  if (modalType === "add") modalTitle = "Adauga clasa";
-  if (modalType === "edit") modalTitle = "Modifica datele clasei";
+  if (modalType === "add") modalTitle = "Adaugă clasă";
+  if (modalType === "edit") modalTitle = "Modifică datele clasei";
 
   const fields = [
     {
@@ -95,7 +97,7 @@ export const Classes: view = ({
                 <b>Diriginte</b>
               </TableCell>
               <TableCell align="center">
-                <b>Numar Elevi&nbsp;</b>
+                <b>Număr Elevi&nbsp;</b>
               </TableCell>
               <TableCell align="center"></TableCell>
             </TableRow>

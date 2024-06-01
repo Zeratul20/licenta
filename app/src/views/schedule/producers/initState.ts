@@ -14,10 +14,15 @@ export const initState: producer = ({
 
   if (user.role !== "teacher") {
     const getSchedules = async () => {
-      const { data } = await api.get("/schedules");
-      updateSchedules.set(data);
-      console.log("data", data);
-      cnt++;
+      try {
+        const { data } = await api.get("/schedules");
+        updateSchedules.set(data);
+        console.log("data", data);
+        cnt++;
+      } catch (e) {
+        console.log("error", e);
+        updateSchedules.set([]);
+      }
     };
     getSchedules();
   } else {
@@ -26,12 +31,15 @@ export const initState: producer = ({
       const { teacherId } = teachersState.find(
         (teacher: any) => teacher.userId === user.userId
       );
-      const { data } = await api.get(
-        `/schedules/teachers/${teacherId}`
-      );
-      updateScheduleTeacher.set(data);
-      console.log("data", data);
-      cnt++;
+      try {
+        const { data } = await api.get(`/schedules/teachers/${teacherId}`);
+        updateScheduleTeacher.set(data);
+        console.log("data", data);
+        cnt++;
+      } catch (e) {
+        console.log("error", e);
+        updateScheduleTeacher.set([]);
+      }
     };
     getScheduleForTeacher();
   }

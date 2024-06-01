@@ -36,7 +36,8 @@ export const Table: view = ({
   currentPage = observe.catalogue.currentPage,
   updateCurrentPage = update.catalogue.currentPage,
   updateIsModalOpen = update.modal.isOpen,
-  getCatalogueTeacher = get.catalogue.teacher,
+  catalogueTeacher = observe.catalogue.teacher,
+  // getCatalogueTeacher = get.catalogue.teacher,
   getUser = get.user,
   getUsers = get.users,
   getStudents = get.students,
@@ -49,7 +50,7 @@ export const Table: view = ({
 
   const user = getUser.value();
 
-  const catalogueTeacher = getCatalogueTeacher.value();
+  // const catalogueTeacher = getCatalogueTeacher.value();
   const users = getUsers.value();
   const studentsState = getStudents.value();
 
@@ -58,7 +59,7 @@ export const Table: view = ({
   let fields: any = [];
 
   if (modalType === "addGrade") {
-    modalTitle = "Adauga nota";
+    modalTitle = "Adaugă nota";
     fields = [
       {
         field: "name",
@@ -114,7 +115,7 @@ export const Table: view = ({
         isDate: true,
       },
     ];
-    modalTitle = "Adauga absenta";
+    modalTitle = "Adaugă absență";
   } else if (modalType === "editAbsence") {
     fields = [
       {
@@ -144,7 +145,7 @@ export const Table: view = ({
         isDate: true,
       },
     ];
-    modalTitle = "Motiveaza absenta";
+    modalTitle = "Motivează absența";
   }
 
   const getSubject = (subjectId: string) => {
@@ -269,7 +270,7 @@ export const Table: view = ({
                 handleEdit_AddButton(initialValuesEdit, "editAbsence")
               }
             >
-              Motiveaza
+              Motivează
             </button>
           )}
         </div>
@@ -279,6 +280,7 @@ export const Table: view = ({
 
   const calculateAverage = (grades: any) => {
     let sum = 0;
+    if (grades.length === 1) return 0;
     grades.forEach((grade: any) => {
       sum += parseInt(grade.value);
     });
@@ -342,7 +344,7 @@ export const Table: view = ({
           currentPage={currentPage}
         />
       </div>
-      <div className="p-5">
+      <div className="p-5" style={{overflowX: "scroll"}}>
         <table className="table table-bordered" style={{ border: "1px" }}>
           <thead>
             <tr>
@@ -351,16 +353,16 @@ export const Table: view = ({
               </th>
               {(user.role !== "teacher" || isDiriginte) && (
                 <th scope="col" colSpan={1}>
-                  <div className="text-center">Media generala</div>
+                  <div className="text-center">Media generală</div>
                 </th>
               )}
-              {/* <th scope="col" colSpan={1}>
-              <div className="text-center"> </div>
-            </th> */}
               {sortedSubjects.map((subject: string, index: number) => {
                 let { name: subjectName } = getSubject(subject);
-                if(catalogueClass.name.startsWith("10") && subjectName === "Logica")
-                  subjectName = "Psihologie"
+                if (
+                  catalogueClass.name.startsWith("10") &&
+                  subjectName === "Logica"
+                )
+                  subjectName = "Psihologie";
                 return (
                   <th scope="col" key={index} colSpan={2}>
                     <div className="text-center">{subjectName}</div>
@@ -372,9 +374,6 @@ export const Table: view = ({
               <th scope="col" key={"catalog-name"} colSpan={2}>
                 <div className="text-center">Nume</div>
               </th>
-              {/* <th scope="col" key={"catalog-name"} colSpan={1}>
-              <div className="text-center"> </div>
-            </th> */}
               {(user.role !== "teacher" || isDiriginte) && (
                 <th scope="col" key={"catalog-name"} colSpan={1}>
                   <div className="text-center"> </div>
@@ -387,7 +386,7 @@ export const Table: view = ({
                       <div className="text-center">Note</div>
                     </th>
                     <th scope="col" key={index} colSpan={1}>
-                      <div className="text-center">Absente</div>
+                      <div className="text-center">Absențe</div>
                     </th>
                   </>
                 );
@@ -400,31 +399,26 @@ export const Table: view = ({
               const { lastName, firstName } = getUserById(student.userId);
               let crAvg = 0;
               const gradesForAvg = student.grades;
+              let len = 0;
               gradesForAvg.forEach((grade: any) => {
+                const avg = calculateAverage(grade.grades);
+                if (avg === 0) return;
                 crAvg += Math.round(calculateAverage(grade.grades));
+                len++;
               });
-              crAvg = crAvg / gradesForAvg.length;
+              crAvg = crAvg / len;
               const generalAvg = crAvg.toFixed(2);
+              console.log(">>>student.grades: ", student.grades);
               return (
                 <>
                   <tr key={index}>
-                    <th
-                      scope="row"
-                      key={index}
-                      colSpan={2}
-                      // style={{ borderBottom: "hidden" }}
-                    >
+                    <th scope="row" key={index} colSpan={2}>
                       <div className="text-center">
                         {lastName} {firstName}
                       </div>
                     </th>
                     {(user.role !== "teacher" || isDiriginte) && (
-                      <td
-                        scope="col"
-                        key={index}
-                        colSpan={1}
-                        // style={{ borderBottom: "hidden" }}
-                      >
+                      <td scope="col" key={index} colSpan={1}>
                         {" "}
                       </td>
                     )}
@@ -558,7 +552,7 @@ export const Table: view = ({
                               <i
                                 style={{ color: "red", fontFamily: "cursive" }}
                               >
-                                {Math.round(avg)}
+                                {avg === 0 ? <div style={{fontSize: "20px"}}>-</div> : Math.round(avg)}
                               </i>
                             ) : (
                               ""

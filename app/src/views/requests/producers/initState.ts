@@ -10,21 +10,27 @@ export const initState: producer = ({
   const api = makeApi();
   const { userId } = user;
   const getRequestsForUser = async () => {
-    const { data } = await api.get(
-      `/requests/users/${userId}`
-    );
-    updateRequests.set(data);
-    console.log("data", data);
-    cnt++;
+    try {
+      const { data } = await api.get(`/requests/users/${userId}`);
+      updateRequests.set(data);
+      console.log("data", data);
+      cnt++;
+    } catch (e) {
+      console.log("error", e);
+      updateRequests.set([]);
+    }
   };
 
   const getRequests = async () => {
-    const { data } = await api.get(
-      `/requests`
-    );
-    updateRequests.set(data);
-    console.log("data", data);
-    cnt++;
+    try {
+      const { data } = await api.get(`/requests`);
+      updateRequests.set(data);
+      console.log("data", data);
+      cnt++;
+    } catch (e) {
+      console.log("error", e);
+      updateRequests.set([]);
+    }
   };
 
   if (user.role !== "director") getRequestsForUser();

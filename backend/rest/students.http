@@ -2,6 +2,7 @@
 
 ### GET 
 GET {{api}}/students
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1MmNlZDU0MS01OGM0LTRiZWItODY4OS01MDAxNGY2MTRhNmIiLCJpYXQiOjE3MTU2MTIyOTgsImV4cCI6MTcxNTYzMzg5OH0.dnBoPo3X2h9Epju9QwSUMSV_R6oOnwSNsPH6tzaqTCQ
 
 ### POST
 POST {{api}}/students
@@ -13,12 +14,13 @@ Content-Type: application/json
 }
 
 ### PUT
-PUT {{api}}/students/176ce013-1dda-4a05-8d58-ab149cee54c0/f6ea7e6d-7d7b-461c-977b-4d056043e149/grades
+PUT {{api}}/students/4cdab489-aa8e-4f25-b220-d1a594c60b88/f8094069-f80e-4911-8aab-a96804853ac4/grades
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1MmNlZDU0MS01OGM0LTRiZWItODY4OS01MDAxNGY2MTRhNmIiLCJpYXQiOjE3MTU2MTIyOTgsImV4cCI6MTcxNTYzMzg5OH0.dnBoPo3X2h9Epju9QwSUMSV_R6oOnwSNsPH6tzaqTCQ
 Content-Type: application/json
 
 {
-    "value": "8",
-    "date": "23.01"
+    "value": "10",
+    "date": "05.04"
 }
 
 ### DELETE

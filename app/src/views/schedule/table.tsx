@@ -95,6 +95,10 @@ export const Table: view = ({
         </div>
       );
     }
+    const teacher = teachersState.find(
+      (teacher: any) => teacher.userId === user.userId
+    );
+    const subjectName = getSubjectData(subjectsState, teacher.subjectId).name;
     const classesState = getClassesState.value();
     console.log(">>>scheduleTeacher: ", scheduleTeacher);
     const colorsForClasses: any = {};
@@ -159,10 +163,17 @@ export const Table: view = ({
                         };
                         schedulePdfData.push(subjectData);
 
+                        console.log(">>>SecheduleTeacher: ", scheduleTeacher);
+                        let actualSubjectName = subjectName;
+                        if(className.startsWith("10") && actualSubjectName === "Logica")
+                          actualSubjectName = "Psihologie";
                         return (
                           <td style={{ backgroundColor: backgroundClr }}>
                             <div className="text-center d-flex justify-content-center">
-                              {getShortClassName(className)}
+                              <div style={{display: "flex", flexDirection: "column"}}>
+                                <span><b>{getShortClassName(className)}</b></span>
+                                <span style={{fontSize: "13px"}}>{actualSubjectName}</span>
+                              </div>
                             </div>
                           </td>
                         );
@@ -246,8 +257,8 @@ export const Table: view = ({
     },
   ];
 
-  if (modalType === "add") modalTitle = "Adauga ora";
-  else if (modalType === "edit") modalTitle = "Modifica ora";
+  if (modalType === "add") modalTitle = "Adaugă oră";
+  else if (modalType === "edit") modalTitle = "Modifică ora";
   else if (modalType === "delete") {
     fields = [];
     modalTitle = "Sterge ora";
@@ -344,7 +355,10 @@ export const Table: view = ({
                         subjectFound.subjectId
                       );
 
-                      if(subjectName === "Logica" && scheduleClass.name.startsWith("10"))
+                      if (
+                        subjectName === "Logica" &&
+                        scheduleClass.name.startsWith("10")
+                      )
                         subjectName = "Psihologie";
 
                       console.log(">>>subjectName: ", subjectName);

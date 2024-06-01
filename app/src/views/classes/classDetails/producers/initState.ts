@@ -10,17 +10,22 @@ export const initState: producer = ({
   const cntMaxVal = 1;
   const api = makeApi();
   const getClassTeachers = async () => {
-    console.log(">>>currentClass", currentClass)
+    console.log(">>>currentClass", currentClass);
     if (!currentClass) {
       cnt++;
       return;
     }
-    const { data } = await api.get(
-      `/classes/${currentClass.classId}/teachers`
-    );
-    console.log(">>>currentClassTeachers: ", data)
-    updateClassTeachers.set(data);
-    cnt++;
+    try {
+      const { data } = await api.get(
+        `/classes/${currentClass.classId}/teachers`
+      );
+      console.log(">>>currentClassTeachers: ", data);
+      updateClassTeachers.set(data);
+      cnt++;
+    } catch (e) {
+      console.log("error", e);
+      updateClassTeachers.set([]);
+    }
   };
   getClassTeachers();
   if (cnt < cntMaxVal) {
